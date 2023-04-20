@@ -27,3 +27,7 @@
 .table-style{
     border:solid 2px black;
 }
+
+td {
+    height: 100px !important;
+}
