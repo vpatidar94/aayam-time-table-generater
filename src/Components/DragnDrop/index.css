@@ -1,0 +1,29 @@
+.F-style{
+    border:solid 2px rgb(74, 71, 71);
+    width:100px;
+    height:40px;
+    text-align: center;
+    /* padding-top:20px; */
+}
+
+.for-time{
+    display:flex;
+    flex-direction: row;
+}
+.teacher-style{
+    display: flex;
+    flex-direction: row;
+    
+}
+
+
+.each-faculty-box{
+    border:solid 2px black;
+    margin-right:30px;
+    width:120px;
+    text-align: center;
+    margin-top:30px;
+}
+.table-style{
+    border:solid 2px black;
+}
