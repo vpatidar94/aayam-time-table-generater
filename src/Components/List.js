@@ -1,8 +1,55 @@
 import {v4 as uuidv4} from "uuid"
+import parse from "html-react-parser";
 
 
 
-export const teachers_list = ['MYK','KPS','MRS','MAS','RSS','NMS','HDS','MNM','SJ','AJ','DMPS','PSJ','YBS','AKS','AMS']; 
+export const teachers_list = [
+{name:'MYK',
+className:"style-myk",
+},
+
+{name:'KPS',
+className:"style-kps",
+},
+
+{name:'MRS',
+className:"style-mrs"},
+
+{name:'MAS',
+className:"style-mas"},
+
+{name:'RSS',
+className:"style-rss"},
+
+{name:'NMS',
+className:"style-nms"},
+
+{name:'HDS',
+className:"style-hds"},
+
+{name:'MNM',
+className:"style-mnm"},
+
+{name:'SJ',
+className:"style-sj"},
+
+{name:'AJ',
+className:"style-aj"},
+
+{name:'DMPS',
+className:"style-dmps"},
+
+{name:'PSJ',
+className:"style-psj"},
+
+{name:'YBS',
+className:"style-ybs"},
+
+{name:'AKS',
+className:"style-aks"},
+
+{name:'AMS',
+className:"style-ams"}]; 
 
 
 export const batch = [
@@ -41,36 +88,3 @@ export const time = [
     {id:uuidv4(),
     classtime:'06:15-07:30 PM'}];
 
-// const teacher_assignment = {};
-
-
-// time.forEach((t) => {
-// 	batch.forEach((b) => {
-// 		const key = t.id + '_' + b.id;
-// 		teacher_assignment[key] = null;
-// 	});
-// });
-
-
-
-
-{/* <tr>
-
-map() {
-	<td>b1</td>
-}
-
-</tr>
-
-<tr key='t1'>
-
-map() {
-	<td>teacher_assignment[t.id + '_' + b.id]</td>
-	<td>b2</td>
-	<td>b3</td>
-	<td>b4</td>
-	<td>b5</td>
-
-}
-
-</tr>  */}
