@@ -5,50 +5,75 @@ import {v4 as uuidv4} from "uuid"
 export const teachers_list = [
 {name:'MYK',
 className:"style-myk",
+bgColor:"bg-myk"
 },
 
 {name:'KPS',
 className:"style-kps",
+bgColor:"bg-myk"
 },
 
 {name:'MRS',
-className:"style-mrs"},
+className:"style-mrs",
+bgColor:"bg-myk"
+},
 
 {name:'MAS',
-className:"style-mas"},
+className:"style-mas",
+bgColor:"bg-myk"
+},
 
 {name:'RSS',
-className:"style-rss"},
+className:"style-rss",
+bgColor:"bg-myk"
+},
 
 {name:'NMS',
-className:"style-nms"},
+className:"style-nms",
+bgColor:"bg-myk"
+},
 
 {name:'HDS',
-className:"style-hds"},
+className:"style-hds",
+bgColor:"bg-myk"
+},
 
 {name:'MNM',
-className:"style-mnm"},
+className:"style-mnm",
+bgColor:"bg-myk"
+},
 
 {name:'SJ',
-className:"style-sj"},
+className:"style-sj",
+bgColor:"bg-myk"},
 
 {name:'AJ',
-className:"style-aj"},
+className:"style-aj",
+bgColor:"bg-myk"
+},
 
 {name:'DMPS',
-className:"style-dmps"},
+className:"style-dmps",
+bgColor:"bg-myk"
+},
 
 {name:'PSJ',
-className:"style-psj"},
+className:"style-psj",
+bgColor:"bg-myk"
+},
 
 {name:'YBS',
-className:"style-ybs"},
+className:"style-ybs",
+bgColor:"bg-myk"
+},
 
 {name:'AKS',
-className:"style-aks"},
+className:"style-aks",
+bgColor:"bg-myk"},
 
 {name:'AMS',
-className:"style-ams"}]; 
+className:"style-ams",
+bgColor:"bg-myk"}]; 
 
 
 export const batch = [
@@ -87,3 +112,4 @@ export const time = [
     {id:uuidv4(),
     classtime:'06:15-07:30 PM'}];
 
+    
