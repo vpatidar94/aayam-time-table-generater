@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import "./Header.css"
 import {
   Navbar,
   Collapse,
@@ -28,7 +29,7 @@ const Header = () => {
     document.getElementById("sidebarArea").classList.toggle("showSidebar");
   };
   return (
-    <Navbar color="primary" dark expand="md">
+    <Navbar  className="navbar-color" dark expand="md">
       <div className="d-flex align-items-center">
         <NavbarBrand href="/" className="d-lg-none">
           <LogoWhite />
@@ -58,7 +59,31 @@ const Header = () => {
 
       <Collapse navbar isOpen={isOpen}>
         <Nav className="me-auto" navbar>
-          <NavItem>
+
+            <NavItem>
+            <>
+            <div className="date-btn-style">
+            <div className="date-style">
+          <div className="from-date">
+            <div className="date-label">
+              <p className='label-style'>From:</p>
+              <input type="date" className="date-input"/>
+              
+            </div>
+            <div className="date-label">
+              <p className='label-style'>To:</p>
+                <input type="date" className="date-input"/>
+            </div>
+          </div>
+      </div>
+      <button className='btn-style style-space'>Save</button>
+      <button className='btn-style'>Post</button>
+    </div>
+    </>
+    
+    </NavItem>
+
+          {/* <NavItem>
             <Link to="/starter" className="nav-link">
               Starter
             </Link>
@@ -78,9 +103,9 @@ const Header = () => {
               <DropdownItem divider />
               <DropdownItem>Reset</DropdownItem>
             </DropdownMenu>
-          </UncontrolledDropdown>
+          </UncontrolledDropdown> */}
         </Nav>
-        <Dropdown isOpen={dropdownOpen} toggle={toggle}>
+        {/* <Dropdown isOpen={dropdownOpen} toggle={toggle}>
           <DropdownToggle color="primary">
             <img
               src={user1}
@@ -98,7 +123,7 @@ const Header = () => {
             <DropdownItem>Inbox</DropdownItem>
             <DropdownItem>Logout</DropdownItem>
           </DropdownMenu>
-        </Dropdown>
+        </Dropdown> */}
       </Collapse>
     </Navbar>
   );

@@ -1,5 +1,11 @@
 import { lazy } from "react";
 import { Navigate } from "react-router-dom";
+// import AddBatch from "../views/ui/TTPages/AddBatch/AddBatch.js";
+// import PreviousTimeTable from "../views/ui/TTPages/PreviousTimeTable/PreviousTimeTable.js";
+// import Admin from "../views/ui/TTPages/Admin/Admin.js";
+// import Teachers from "../views/ui/TTPages/Teachers/Teachers.js";
+// import Students from "../views/ui/TTPages/Students/Students.js";
+// import DragnDrop from "../views/ui/DragnDrop/index.js";
 
 /****Layouts*****/
 const FullLayout = lazy(() => import("../layouts/FullLayout.js"));
@@ -16,7 +22,12 @@ const Grid = lazy(() => import("../views/ui/Grid"));
 const Tables = lazy(() => import("../views/ui/Tables"));
 const Forms = lazy(() => import("../views/ui/Forms"));
 const Breadcrumbs = lazy(() => import("../views/ui/Breadcrumbs"));
-
+const TimeTable= lazy(()=> import("../views/ui/TTPages/TimeTable/TimeTable.js"));
+const Students= lazy(()=> import("../views/ui/TTPages/Students/Students.js"));
+const Teachers= lazy(()=> import("../views/ui/TTPages/Teachers/Teachers.js"));
+const Admin= lazy(()=> import("../views/ui/TTPages/Admin/Admin.js"));
+const PreviousTimeTable= lazy(()=> import("../views/ui/TTPages/PreviousTimeTable/PreviousTimeTable.js"));
+const AddBatch= lazy(()=> import("../views/ui/TTPages/AddBatch/AddBatch.js"));
 /*****Routes******/
 
 const ThemeRoutes = [
@@ -35,6 +46,16 @@ const ThemeRoutes = [
       { path: "/table", exact: true, element: <Tables /> },
       { path: "/forms", exact: true, element: <Forms /> },
       { path: "/breadcrumbs", exact: true, element: <Breadcrumbs /> },
+      
+    
+      { path: "/dragndrop", exact: true, element: <TimeTable /> },
+
+      { path: "/students", exact: true, element: <Students />},
+      { path: "/teachers", exact: true, element: <Teachers />},
+      { path: "/admin", exact: true, element: <Admin />},
+      { path: "/previoustimetable", exact: true, element: <PreviousTimeTable />},
+      { path: "/addbatch", exact: true, element: <AddBatch />}
+
     ],
   },
 ];

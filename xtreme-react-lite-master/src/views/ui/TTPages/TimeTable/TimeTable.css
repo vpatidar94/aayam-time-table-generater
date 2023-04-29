@@ -1,0 +1,245 @@
+.bg-container{
+    background-image: url("D:\aayam\web\aayam-time-table-generater\xtreme-react-lite-master\src\assets\images\bg\ttbgimage.jpg");
+    background-size: cover;
+    /* background-color:#cfd5d8; */
+    height:100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+.heading-style{
+    margin-top:0px;
+    margin-bottom:0px;
+}
+
+
+.F-style{
+    border:solid 2px rgb(74, 71, 71);
+    min-width:80px;
+    max-width: 80px;
+    
+    min-height: 30px;
+    max-height:30px;
+    
+    text-align: center;
+    
+}
+
+.each-block {
+    border: solid 2px black;
+    width: 80px;
+    height: 30px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    font-weight:900;
+    font-size:12px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    
+  }
+  .each-block > div {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-break: break-word;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    line-height: 30px; /* Match the height of the .each-block */
+  }
+.batch-style{
+    background-color: #c4cac9;
+
+    padding-bottom:-12px;
+    width:100px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+
+}
+
+.for-time{
+    display:flex;
+    flex-direction: row;
+}
+
+.time-style{
+    background-color: rgb(225, 210, 210);
+    color:rgb(2, 2, 2);
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size:12px;
+
+}
+
+
+.table-style{
+    border:solid 1px black;
+    
+}
+
+.cross-style{
+    border:none;
+    background-color:transparent;
+    color:transparent;
+    font-size:5px;
+    margin-left:-22px;
+    
+}
+.cross-style:hover{
+    color:rgb(242, 9, 9);
+    font-size: 18px;
+    margin-left:-22px;
+    margin-top:-20px;
+    font-weight: 900;
+}
+.style-faculty{
+    margin-right:10px;
+    width:80px;
+    text-align: center;
+    font-size:12px;
+    font-weight: 900;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    cursor: move;
+    height:20px;
+}
+
+.bg-myk{
+    background-color: #D4E6F1;
+}
+.bg-kps{
+    background-color: #E8DAEF;
+}
+
+
+.bg-mrs{
+    background-color: #FADBD8;
+}
+
+.bg-mas{
+    background-color: #CA6F1E;
+}
+
+
+
+.bg-rss{
+    background-color: #C39BD3;
+}
+
+.bg-nms{
+    background-color: #76D7C4;
+}
+
+.bg-hds{
+    background-color: #3498DB;
+}
+
+.bg-mnm{
+    background-color: #358b79;
+}
+
+.bg-sj{
+    background-color: #847f86;
+}
+
+.bg-aj{
+    background-color: rgb(251, 235, 9);
+}
+
+.bg-dmps{
+    background-color: #F4D03F;
+}
+
+.bg-psj{
+    background-color: rgb(199, 185, 84);
+}
+
+.bg-ybs{
+    background-color: #979A9A;
+}
+
+.bg-aks{
+    background-color: #F0B27A;
+}
+
+.bg-ams{
+    background-color: rgb(117, 98, 179);
+}
+
+
+.counter-style{
+    display: flex;
+    flex-direction: row;
+    
+}
+.blink {
+    animation: blinker 1s linear infinite;
+  }
+  
+  @keyframes blinker {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  .teacher-item{
+    
+    position: relative;
+    width: 92px; 
+    height: 40px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    
+  }
+
+.counter-item {
+    position: absolute;
+    right:-5px;
+    width: 15px; 
+    height: 20px; 
+    border-radius: 10%; 
+    background-color: none; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color:black;
+    border:solid 1px rgb(92, 87, 87);
+   
+  }
+  
+
+.teacher-item h3 {
+  font-size: 12px; 
+  margin: 0;
+  padding: 0;
+}
+
+.teacher-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  .teacher-style,
+  .counter-style {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  

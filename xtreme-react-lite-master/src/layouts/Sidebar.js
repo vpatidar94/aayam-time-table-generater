@@ -13,6 +13,43 @@ const navigation = [
     href: "/alerts",
     icon: "bi bi-bell",
   },
+
+  {
+    title: "Create Time Table",
+    href: "/dragndrop",
+    icon: "bi bi-bell",
+  },
+  
+  {
+    title: "Previous Time Table",
+    href: "/previoustimetable",
+    icon: "bi bi-bell",
+  },
+  {
+    title: "Teachers",
+    href: "/teachers",
+    icon: "bi bi-bell",
+  },
+
+  {
+    title: "Students",
+    href: "/students",
+    icon: "bi bi-bell",
+  },
+  {
+    title: "Add Batch",
+    href: "/addbatch",
+    icon: "bi bi-bell",
+  },
+
+  {
+    title: "Admin",
+    href: "/admin",
+    icon: "bi bi-bell",
+  },
+
+
+
   {
     title: "Badges",
     href: "/badges",
@@ -64,7 +101,9 @@ const Sidebar = () => {
   return (
     <div className="p-3">
       <div className="d-flex align-items-center">
-        <Logo />
+        {/* <Logo /> */}
+        <img src="/ttimages/aayamlogo.jpg" className="aayam-logo" alt="Logo"/>
+        
         <Button
           close
           size="sm"

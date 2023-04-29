@@ -1,0 +1,62 @@
+.date-btn-style{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    
+}
+
+
+
+
+/* .logo-date{
+    display:flex;
+} */
+
+
+.aayam-logo{
+    width:150px;
+   
+    height:80px;
+    
+    /* margin-right:50px; */
+    margin-left:40px;
+}
+
+.date-style{
+    display:flex;
+    flex-direction: row;
+    margin-right:120px;
+    margin-left:120px;
+    
+}
+.from-date{
+   
+    display: flex;
+}
+.date-label{
+    display:flex;
+    margin-right:20px;
+}
+.date-input{
+    height:20px;
+    margin-top:12px;
+}
+
+.label-style{
+    margin-right:12px;
+    color:white;
+    margin-top:10px;
+}
+
+.btn-style{
+    background-color: white;
+    height:40px;
+    width:80px;
+}
+.style-space{
+    margin-right:20px;
+    margin-left:20px;
+}
+.navbar-color{
+    background-color:rgb(7, 31, 151);
+}
