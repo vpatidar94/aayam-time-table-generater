@@ -206,11 +206,12 @@
 
 .counter-item {
     position: absolute;
-    right:-5px;
-    width: 15px; 
-    height: 20px; 
-    border-radius: 10%; 
-    background-color: none; 
+    right:0px;
+    bottom:24px;
+    width: 18px; 
+    height: 15px; 
+    border-radius: 50%; 
+    background-color: red; 
     display: flex;
     justify-content: center;
     align-items: center;
