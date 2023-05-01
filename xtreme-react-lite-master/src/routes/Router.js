@@ -22,12 +22,12 @@ const Grid = lazy(() => import("../views/ui/Grid"));
 const Tables = lazy(() => import("../views/ui/Tables"));
 const Forms = lazy(() => import("../views/ui/Forms"));
 const Breadcrumbs = lazy(() => import("../views/ui/Breadcrumbs"));
-const TimeTable= lazy(()=> import("../views/ui/TTPages/TimeTable/TimeTable.js"));
-const Students= lazy(()=> import("../views/ui/TTPages/Students/Students.js"));
-const Teachers= lazy(()=> import("../views/ui/TTPages/Teachers/Teachers.js"));
-const Admin= lazy(()=> import("../views/ui/TTPages/Admin/Admin.js"));
-const PreviousTimeTable= lazy(()=> import("../views/ui/TTPages/PreviousTimeTable/PreviousTimeTable.js"));
-const AddBatch= lazy(()=> import("../views/ui/TTPages/AddBatch/AddBatch.js"));
+const TimeTable= lazy(()=> import("../pages/TTPages/TimeTable/TimeTable.js"));
+const Students= lazy(()=> import("../pages/TTPages/Students/Students.js"));
+const Teachers= lazy(()=> import("../pages/TTPages/Teachers/Teachers.js"));
+const Admin= lazy(()=> import("../pages/TTPages/Admin/Admin.js"));
+const PreviousTimeTable= lazy(()=> import("../pages/TTPages/PreviousTimeTable/PreviousTimeTable.js"));
+const AddBatch= lazy(()=> import("../pages/TTPages/AddBatch/AddBatch.js"));
 /*****Routes******/
 
 const ThemeRoutes = [
@@ -48,7 +48,7 @@ const ThemeRoutes = [
       { path: "/breadcrumbs", exact: true, element: <Breadcrumbs /> },
       
     
-      { path: "/dragndrop", exact: true, element: <TimeTable /> },
+      { path: "/tt", exact: true, element: <TimeTable /> },
 
       { path: "/students", exact: true, element: <Students />},
       { path: "/teachers", exact: true, element: <Teachers />},

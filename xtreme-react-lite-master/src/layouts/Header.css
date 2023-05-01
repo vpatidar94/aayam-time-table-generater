@@ -1,3 +1,9 @@
+/* @include media-breakpoint-down(lg) {
+    .sidebar-lg {
+        display: none;
+    }
+} */
+
 .date-btn-style{
     display: flex;
     flex-direction: row;

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { batch, teachers_list, time } from '../List/List';
-import "./TimeTable.css";
+import "./TimeTable.scss";
 // import { RxCross2 } from "react-icons/rx";
 import { RiDeleteBin2Line } from "react-icons/ri";
 

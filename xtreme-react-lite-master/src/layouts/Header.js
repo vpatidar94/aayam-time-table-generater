@@ -19,6 +19,8 @@ import user1 from "../assets/images/users/user1.jpg";
 
 const Header = () => {
   const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpenSidebar, setIsOpenSidebar] = React.useState(true);
+
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
 
   const toggle = () => setDropdownOpen((prevState) => !prevState);
@@ -28,6 +30,14 @@ const Header = () => {
   const showMobilemenu = () => {
     document.getElementById("sidebarArea").classList.toggle("showSidebar");
   };
+
+  const toggleSideBar = () => {
+    const sidebarArea = document.getElementById('sidebarArea');
+    const display = window.getComputedStyle(sidebarArea).display;
+    sidebarArea.style.display = display == 'block' ? 'none' : 'block';
+
+  };
+
   return (
     <Navbar  className="navbar-color" dark expand="md">
       <div className="d-flex align-items-center">
@@ -38,6 +48,13 @@ const Header = () => {
           color="primary"
           className="d-lg-none"
           onClick={() => showMobilemenu()}
+        >
+          <i className="bi bi-list"></i>
+        </Button>
+        <Button
+          color="primary"
+          className="d-none d-md-block"
+          onClick={toggleSideBar}
         >
           <i className="bi bi-list"></i>
         </Button>
