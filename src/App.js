@@ -1,12 +1,10 @@
-import React from 'react'
-import DragnDrop from './Components/DragnDrop'
+import { useRoutes } from "react-router-dom";
+import Themeroutes from "./routes/Router";
 
 const App = () => {
-  return (
-    <>
-      <DragnDrop/>
-    </>
-  )
-}
+  const routing = useRoutes(Themeroutes);
 
-export default App
+  return <div className="dark">{routing}</div>;
+};
+
+export default App;
