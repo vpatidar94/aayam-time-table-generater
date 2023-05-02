@@ -1,5 +1,5 @@
 import { Button, Nav, NavItem } from "reactstrap";
-import Logo from "../assets/ttImages/aayamlogo.jpg";
+import Logo from "../assets/images/logos/aayamlogo.jpg";
 import { Link, useLocation } from "react-router-dom";
 
 const navigation = [
