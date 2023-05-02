@@ -24,12 +24,12 @@ app.use((req, res, next) => {
 /* **********************************Initializing Routes ********************************* */
 
 // if (process.env.NODE_ENV === 'production') {
-    // Set static folder
-    app.use(express.static('web/build'));
+// Set static folder
+app.use(express.static('web/build'));
 
-    app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, 'web', 'build', 'index.html'));
-    });
+app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'web', 'build', 'index.html'));
+});
 // }
 
 module.exports = app;
