@@ -1,5 +1,5 @@
 import { Button, Nav, NavItem } from "reactstrap";
-import logo_img from "../assets/images/logos/aayamlogo.jpg";
+import Logo from "./Logo";
 import { Link, useLocation } from "react-router-dom";
 
 const navigation = [
@@ -102,7 +102,7 @@ const Sidebar = () => {
     <div className="p-3">
       <div className="d-flex align-items-center">
         {/* <Logo /> */}
-        <img src={logo_img} className="aayam-logo" alt="Logo"/>
+        <img src="/ttimages/aayamlogo.jpg" className="aayam-logo" alt="Logo"/>
         
         <Button
           close
