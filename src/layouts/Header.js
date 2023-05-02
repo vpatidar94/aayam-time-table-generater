@@ -41,9 +41,9 @@ const Header = () => {
   return (
     <Navbar  className="navbar-color" dark expand="md">
       <div className="d-flex align-items-center">
-        <NavbarBrand href="/" className="d-lg-none">
+        {/* <NavbarBrand href="/" className="d-lg-none">
           <LogoWhite />
-        </NavbarBrand>
+        </NavbarBrand> */}
         <Button
           color="primary"
           className="d-lg-none"
@@ -72,12 +72,13 @@ const Header = () => {
             <i className="bi bi-three-dots-vertical"></i>
           )}
         </Button>
+        <h3 style={{color:"white", marginTop:"10px",marginLeft:"15px"}}>AAYAM</h3>
       </div>
 
       <Collapse navbar isOpen={isOpen}>
         <Nav className="me-auto" navbar>
 
-            <NavItem>
+            {/* <NavItem>
             <>
             <div className="date-btn-style">
             <div className="date-style">
@@ -98,7 +99,7 @@ const Header = () => {
     </div>
     </>
     
-    </NavItem>
+    </NavItem> */}
 
           {/* <NavItem>
             <Link to="/starter" className="nav-link">

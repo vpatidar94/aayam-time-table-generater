@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import { EmployeeList, employeeList } from '../List/EmployeeList';
+import "./Teachers.css";
 import {
     Card,
     Row,
@@ -12,9 +14,163 @@ import {
     Input,
     FormText,
   } from "reactstrap";
+  import ProjectTables from '../../../components/dashboard/ProjectTable';
+import {  Table} from "reactstrap";
+import TeacherForm from '../TeacherForm/TeacherForm';
+
+
+//     <Row>
+//       {/* --------------------------------------------------------------------------------*/}
+//       {/* table-1*/}
+//       {/* --------------------------------------------------------------------------------*/}
+//       <Col lg="12">
+//         <ProjectTables />
+//       </Col>
+//       {/* --------------------------------------------------------------------------------*/}
+//       {/* table-2*/}
+//       {/* --------------------------------------------------------------------------------*/}
+//       <Col lg="12">
+//         <Card>
+//           <CardTitle tag="h6" className="border-bottom p-3 mb-0">
+//             <i className="bi bi-card-text me-2"> </i>
+//             Table with Border
+//           </CardTitle>
+//           <CardBody className="">
+//             <Table bordered>
+//               <thead>
+//                 <tr>
+//                   <th>#</th>
+//                   <th>First Name</th>
+//                   <th>Last Name</th>
+//                   <th>Username</th>
+//                 </tr>
+//               </thead>
+//               <tbody>
+//                 <tr>
+//                   <th scope="row">1</th>
+//                   <td>Mark</td>
+//                   <td>Otto</td>
+//                   <td>@mdo</td>
+//                 </tr>
+//                 <tr>
+//                   <th scope="row">2</th>
+//                   <td>Jacob</td>
+//                   <td>Thornton</td>
+//                   <td>@fat</td>
+//                 </tr>
+//                 <tr>
+//                   <th scope="row">3</th>
+//                   <td>Larry</td>
+//                   <td>the Bird</td>
+//                   <td>@twitter</td>
+//                 </tr>
+//               </tbody>
+//             </Table>
+//           </CardBody>
+//         </Card>
+//       </Col>
+//       {/* --------------------------------------------------------------------------------*/}
+//       {/* table-3*/}
+//       {/* --------------------------------------------------------------------------------*/}
+//       <Col lg="12">
+//         <Card>
+//           <CardTitle tag="h6" className="border-bottom p-3 mb-0">
+//             <i className="bi bi-card-text me-2"> </i>
+//             Table with Striped
+//           </CardTitle>
+//           <CardBody className="">
+//             <Table bordered striped>
+//               <thead>
+//                 <tr>
+//                   <th>#</th>
+//                   <th>First Name</th>
+//                   <th>Last Name</th>
+//                   <th>Username</th>
+//                 </tr>
+//               </thead>
+//               <tbody>
+//                 <tr>
+//                   <th scope="row">1</th>
+//                   <td>Mark</td>
+//                   <td>Otto</td>
+//                   <td>@mdo</td>
+//                 </tr>
+//                 <tr>
+//                   <th scope="row">2</th>
+//                   <td>Jacob</td>
+//                   <td>Thornton</td>
+//                   <td>@fat</td>
+//                 </tr>
+//                 <tr>
+//                   <th scope="row">3</th>
+//                   <td>Larry</td>
+//                   <td>the Bird</td>
+//                   <td>@twitter</td>
+//                 </tr>
+//               </tbody>
+//             </Table>
+//           </CardBody>
+//         </Card>
+//       </Col>
+//       {/* --------------------------------------------------------------------------------*/}
+//       {/* table-3*/}
+//       {/* --------------------------------------------------------------------------------*/}
+//       <Col lg="12">
+//         <Card>
+//           <CardTitle tag="h6" className="border-bottom p-3 mb-0">
+//             <i className="bi bi-card-text me-2"> </i>
+//             Table with Hover
+//           </CardTitle>
+//           <CardBody className="">
+//             <Table bordered hover>
+//               <thead>
+//                 <tr>
+//                   <th>#</th>
+//                   <th>First Name</th>
+//                   <th>Last Name</th>
+//                   <th>Username</th>
+//                 </tr>
+//               </thead>
+//               <tbody>
+//                 <tr>
+//                   <th scope="row">1</th>
+//                   <td>Mark</td>
+//                   <td>Otto</td>
+//                   <td>@mdo</td>
+//                 </tr>
+//                 <tr>
+//                   <th scope="row">2</th>
+//                   <td>Jacob</td>
+//                   <td>Thornton</td>
+//                   <td>@fat</td>
+//                 </tr>
+//                 <tr>
+//                   <th scope="row">3</th>
+//                   <td>Larry</td>
+//                   <td>the Bird</td>
+//                   <td>@twitter</td>
+//                 </tr>
+//               </tbody>
+//             </Table>
+//           </CardBody>
+//         </Card>
+//       </Col>
+//     </Row>
+//   );
+// };
+
+
+
   
   const Teachers = () => {
-    const[addTeacher,setAddTeacher]=useState(null)
+    
+    const[addTeacher,setAddTeacher]=useState(null);
+    
+
+    
+  
+
+
 
 const onChangeName=(e,key)=>{
     key=e.target.name;
@@ -24,109 +180,68 @@ const onChangeName=(e,key)=>{
 const onAddTeacher=()=>{
 alert("the teacher will added as per api call")
 }
+  
+
 
 
     return (
+      <>
+     
+
+
+    <div className="table-plus-button">
       <Row>
-        <Col>
-          {/* --------------------------------------------------------------------------------*/}
-          {/* Card-1*/}
-          {/* --------------------------------------------------------------------------------*/}
-          <Card>
-            <CardTitle tag="h6" className="border-bottom p-3 mb-0">
-              {/* <i className="bi bi-bell me-2"> </i> */}
-              Add Teacher
-            </CardTitle>
-            <CardBody>
-              <Form>
-                <FormGroup>
-                  <Label for="teachersname">Teacher's Name</Label>
-                  <Input
-                    id="teachersname"
-                    name="teachername"
-                    placeholder="write teacher's name"
-                    type="text"
-                    
-                    onChange={onChangeName}
-                    
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <Label for="bgcolor">Background Color</Label>
-                  <Input
-                    id="bgcolor"
-                    name="color"
-                    placeholder="add color"
-                    type="color"
-                  />
-                </FormGroup>
-                {/* <FormGroup>
-                  <Label for="exampleSelect">Select</Label>
-                  <Input id="exampleSelect" name="select" type="select">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                  </Input>
-                </FormGroup>
-                <FormGroup>
-                  <Label for="exampleSelectMulti">Select Multiple</Label>
-                  <Input
-                    id="exampleSelectMulti"
-                    multiple
-                    name="selectMulti"
-                    type="select"
-                  >
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                  </Input>
-                </FormGroup>
-                <FormGroup>
-                  <Label for="exampleText">Text Area</Label>
-                  <Input id="exampleText" name="text" type="textarea" />
-                </FormGroup>
-                <FormGroup>
-                  <Label for="exampleFile">File</Label>
-                  <Input id="exampleFile" name="file" type="file" />
-                  <FormText>
-                    This is some placeholder block-level help text for the above
-                    input. It's a bit lighter and easily wraps to a new line.
-                  </FormText>
-                </FormGroup>
-                <FormGroup tag="fieldset">
-                  <legend>Radio Buttons</legend>
-                  <FormGroup check>
-                    <Input name="radio1" type="radio" />{" "}
-                    <Label check>
-                      Option one is this and that—be sure to include why it's
-                      great
-                    </Label>
-                  </FormGroup>
-                  <FormGroup check>
-                    <Input name="radio1" type="radio" />{" "}
-                    <Label check>
-                      Option two can be something else and selecting it will
-                      deselect option one
-                    </Label>
-                  </FormGroup>
-                  <FormGroup check disabled>
-                    <Input disabled name="radio1" type="radio" />{" "}
-                    <Label check>Option three is disabled</Label>
-                  </FormGroup>
-                </FormGroup>
-                <FormGroup check>
-                  <Input type="checkbox" /> <Label check>Check me out</Label>
-                </FormGroup> */}
-                <Button onClick={onAddTeacher}>Submit</Button>
-              </Form>
-            </CardBody>
-          </Card>
-        </Col>
-      </Row>
+      <Col lg="12">
+        <Card>
+          <CardTitle tag="h6" className="border-bottom p-3 mb-0">
+            <i className="bi bi-card-text me-2"> </i>
+            Teacher List
+          </CardTitle>
+          <CardBody className="">
+            <Table bordered hover>
+              <thead>
+                <tr>
+                  <th>S.NO.</th>
+                  <th>Teacher Name</th>
+                  <th>Employee ID</th>
+                  <th>Mobile No.</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">1</th>
+                  <td>Mark</td>
+                  <td>AAYAM1</td>
+                  <td>9999999999</td>
+                </tr>
+                <tr>
+                  <th scope="row">2</th>
+                  <td>Jacob</td>
+                  <td>AAYAM2</td>
+                  <td>8888888888</td>
+                </tr>
+                <tr>
+                  <th scope="row">3</th>
+                  <td>Larry</td>
+                  <td>AAYAM3</td>
+                  <td>7777777777</td>
+                </tr>
+              </tbody>
+            </Table>
+          </CardBody>
+        </Card>
+      </Col>
+    </Row>
+    
+    <header>
+    <TeacherForm/>
+    </header>
+  </div>
+     
+
+  
+
+            </>
     );
   };
   

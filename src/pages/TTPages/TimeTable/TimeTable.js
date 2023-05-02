@@ -1,15 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { batch, teachers_list, time } from '../List/List';
 import "./TimeTable.scss";
-// import { RxCross2 } from "react-icons/rx";
-import { RiDeleteBin2Line } from "react-icons/ri";
+import { RxCross2 } from "react-icons/rx";
+// import { RiDeleteBin2Line } from "react-icons/ri";
+import htmlToCanvas from 'html-to-canvas';
+import html2canvas from 'html2canvas';
 
 
 
 
 const TimeTable = () => {
 
-
+  
   
   const [tableWidth, setTableWidth] = useState(0);
   const [draggedCellKey, setDraggedCellKey] = useState(null);
@@ -19,7 +21,23 @@ const TimeTable = () => {
   const [teacherCounter, setTeacherCounter] = useState({}); // key: teacherId, value: counter
   const [teacherAssignment, setTeacherAssignment] = useState({});
   
+  
+  const [image, setImage] = useState(null);   //  for div to image conversion
+  const divRef = useRef(null);
 
+  const convertToImage = () => {
+    html2canvas(divRef.current).then(canvas => {
+      const imgData = canvas.toDataURL();
+      setImage(imgData);
+    }).catch(error => {
+      console.error(error);
+    });
+  };                                        // for div to image conversion
+
+  
+  
+  
+  
   const dragItem = useRef();
   // const dragOverItem = useRef();
   // const ref=useRef();
@@ -179,8 +197,9 @@ const TimeTable = () => {
       <>
       <div className="bg-container">
       
-        <h1 className='heading-style'>CLASS SCHEDULE</h1>
-      
+       <h1 className='heading-style'>CLASS SCHEDULE</h1>
+      <div>
+       <div ref={divRef}>
         <table className='table-style'>
           <tbody>
             <div className="for-time">
@@ -216,19 +235,26 @@ const TimeTable = () => {
                       className={`each-block ${duplicateElements[key] ? "blink" : ""}`}        
                       // className={`each-block ${duplicateElements[key]}`}
                     >
+                    
                       {teacherAssignment[key] && (
-                        <div className={teacherAssignment[key]?.className}>
+                        <div className={`teacname-cross-style ${teacherAssignment[key]?.className} `}>
+
+                        <div className="teacher-name">
                           {teacherAssignment[key]?.teacher}
+                        </div>
+                        <div className="cross-btn-container">
                           {teacherAssignment[key]?.teacher ? (
                             <button
                               className="cross-style"
                               onClick={() => removeTeacher(key)}
                             >
-                              <RiDeleteBin2Line />
+                              {/* <RiDeleteBin2Line /> */}
+                              <RxCross2/>
                             </button>
                           ) : (
                             ''
                           )}
+                        </div>
                         </div>
                       )}
                     </td>
@@ -245,30 +271,36 @@ const TimeTable = () => {
             </tr>
           </tbody>
         </table>
+       </div>
+       <button onClick={convertToImage}>Convert to Image</button>
+      {image && <img src={image} alt="table" />}
+      
+    </div>
+    
 
         <div className='teacher-container'style={{ maxWidth: tableWidth}}>
           {teachers_list.map((teacher, index) => {
-          const { name,bgColor,className } = teacher;
+          const { name, bgColor, className } = teacher;
           return (
-          <div style={{ maxWidth: tableWidth}}
+          <div
+            style={{ maxWidth: tableWidth }}
             key={name}
             className={`teacher-item  ${bgColor} ${className}`}
             draggable={true}
             onDragStart={(e) => dragStart(e, index)}
-            onDragEnter={(e) => dragEnter(e, index, name, bgColor,className)}
-          >
-          <h3>{name}</h3>
-          <span
-            className={`counter-item ${bgColor}`}
-            draggable={false}
-          >
-            {teacherCounter[name]}
-          </span>
+            onDragEnter={(e) => dragEnter(e, index, name, bgColor, className)}
+            >
+            <h3>{name}</h3>
+            {teacherCounter[name] > 0 && (
+              <span className={`counter-item ${bgColor}`} draggable={false}>
+                {teacherCounter[name]}
+              </span>
+            )}
+          </div>
+            );
+          })}
         </div>
-        );
-      })}
-    </div>
-  </div>
+      </div>
   </>
   )
   }
