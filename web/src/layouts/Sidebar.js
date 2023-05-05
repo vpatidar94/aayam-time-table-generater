@@ -100,9 +100,9 @@ const Sidebar = () => {
 
   return (
     <div className="p-3">
-      <div className="d-flex align-items-center">
-        {/* <Logo /> */}
-        <img src="/ttimages/aayamlogo.jpg" className="aayam-logo" alt="Logo"/>
+      <div className="d-flex align-items-center justify-content-center">
+        <Logo />
+        {/* <img src="/ttimages/aayamlogo.jpg" className="aayam-logo" alt="Logo"/> */}
         
         <Button
           close
