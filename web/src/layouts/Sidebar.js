@@ -1,6 +1,7 @@
 import { Button, Nav, NavItem } from "reactstrap";
-import Logo from "./Logo";
+// import Logo from "./Logo";
 import { Link, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const navigation = [
   {
@@ -49,7 +50,6 @@ const navigation = [
   },
 
 
-
   // {
   //   title: "Badges",
   //   href: "/badges",
@@ -92,17 +92,28 @@ const navigation = [
   // },
 ];
 
+
 const Sidebar = () => {
   const showMobilemenu = () => {
     document.getElementById("sidebarArea").classList.toggle("showSidebar");
   };
   let location = useLocation();
+  const [image, setImage] = useState(null);
+
+  useEffect(() => {
+    import('../assets/images/logos/aayamlogo.jpg').then(img => {
+      console.log(img);
+      setImage(img);
+    });
+  }, []);
 
   return (
     <div className="p-3">
       <div className="d-flex align-items-center justify-content-center">
-        <Logo />
-        {/* <img src="/ttimages/aayamlogo.jpg" className="aayam-logo" alt="Logo"/> */}
+        {/* <Logo /> */}
+        {
+          image ? <img loading="lazy" src="ttimages/aayamlogo.jpg" className="aayam-logo" alt="Logo" /> : <span></span>
+        }
         
         <Button
           close
