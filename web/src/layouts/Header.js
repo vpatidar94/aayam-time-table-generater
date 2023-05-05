@@ -60,7 +60,7 @@ const Header = () => {
         </Button>
       </div>
       <div className="hstack gap-2">
-        <Button
+        {/* <Button
           color="primary"
           size="sm"
           className="d-sm-block d-md-none"
@@ -71,7 +71,7 @@ const Header = () => {
           ) : (
             <i className="bi bi-three-dots-vertical"></i>
           )}
-        </Button>
+        </Button> */}
         <h3 style={{color:"white", marginTop:"10px",marginLeft:"15px"}}>AAYAM</h3>
       </div>
 

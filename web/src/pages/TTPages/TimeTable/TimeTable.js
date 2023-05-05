@@ -3,7 +3,7 @@ import { batch, teachers_list, time } from '../List/List';
 import "./TimeTable.scss";
 import { RxCross2 } from "react-icons/rx";
 // import { RiDeleteBin2Line } from "react-icons/ri";
-import htmlToCanvas from 'html-to-canvas';
+// import htmlToCanvas from 'html-to-canvas';
 import html2canvas from 'html2canvas';
 
 
@@ -32,7 +32,7 @@ const TimeTable = () => {
     }).catch(error => {
       console.error(error);
     });
-  };                                        // for div to image conversion
+  };             // for div to image conversion
 
   
   
@@ -42,16 +42,20 @@ const TimeTable = () => {
   // const dragOverItem = useRef();
   // const ref=useRef();
 
-  const dragStart = (e, position) => {
-    dragItem.current = position;
-    // console.log(e.target.innerHTML);
+  // const dragStart = (e, position) => {
+  //   dragItem.current = position;
+  //   // console.log(e.target.innerHTML);
+  // };
+  
+  const dragStart = (e, teacherInfo) => {
+    dragItem.current = teacherInfo;
   };
 
-  const dragEnter = (e, position, teacherDragged, className) => {
-    if (!teacher || !teacher.teacher) {
-      setTeacher({teacher: teacherDragged, className});
-    }
-  };
+  // const dragEnter = (e, position, teacherDragged, className) => {
+  //   if (!teacher || !teacher.teacher) {
+  //     setTeacher({teacher: teacherDragged, className});
+  //   }
+  // };
 
   const handleTableCellDragStart = (e, key) => {
     setDraggedCellKey(key);
@@ -121,38 +125,34 @@ const TimeTable = () => {
 
   
     const handleDrop = (e, key) => {
-      if (draggedCellKey) {
-        // Move table item
-        const sourceAssignment = teacherAssignment[draggedCellKey];
-        const targetAssignment = teacherAssignment[key];
-    
-        setTeacherAssignment({
-          ...teacherAssignment,
-          [draggedCellKey]: targetAssignment,
-          [key]: sourceAssignment,
-        });
-    
-        setDraggedCellKey(null);
-      } else {
-    
-    
-    // console.log(teacher);
-        const teacher_assignment = teacherAssignment;
-        teacherAssignment[key] = teacher;
-        // console.log(teacherAssignment);
-        setTeacherAssignment({ ...teacher_assignment });
-        setTeacher({});
-        const teacherCount = teacherCounter;
-        if (!teacherCount[teacher.teacher]) {
-          teacherCount[teacher.teacher] = 1;
-        } else {
-          teacherCount[teacher.teacher] += 1;
-        }
-        setTeacherCounter({...teacherCount});
-        // console.log(teacherAssignment);
-        checkForDuplicateInRow(key);
-      }
+  if (draggedCellKey) {
+    // Move table item
+    const sourceAssignment = teacherAssignment[draggedCellKey];
+    const targetAssignment = teacherAssignment[key];
+
+    setTeacherAssignment({
+      ...teacherAssignment,
+      [draggedCellKey]: targetAssignment,
+      [key]: sourceAssignment,
+    });
+
+    setDraggedCellKey(null);
+  } else {
+    // Assign teacher to the cell
+    const teacher_assignment = teacherAssignment;
+    teacherAssignment[key] = dragItem.current;
+    setTeacherAssignment({ ...teacher_assignment });
+    setTeacher({});
+    const teacherCount = teacherCounter;
+    if (!teacherCount[dragItem.current.teacher]) {
+      teacherCount[dragItem.current.teacher] = 1;
+    } else {
+      teacherCount[dragItem.current.teacher] += 1;
     }
+    setTeacherCounter({ ...teacherCount });
+    checkForDuplicateInRow(key);
+  }
+};
 
     useEffect(() => {
       if (duplicateDetected) {
@@ -191,7 +191,7 @@ const TimeTable = () => {
     // setTeacherCounter({...teacherCounter});
     setTeacherCounter(teacherCount);
     }
-
+    
   
     return (
       <>
@@ -273,7 +273,7 @@ const TimeTable = () => {
         </table>
        </div>
        <button onClick={convertToImage}>Convert to Image</button>
-      {image && <img src={image} alt="table" />}
+      {image && <img src={image} alt="table" style={{ maxWidth: tableWidth}}/>}
       
     </div>
     
@@ -282,22 +282,20 @@ const TimeTable = () => {
           {teachers_list.map((teacher, index) => {
           const { name, bgColor, className } = teacher;
           return (
-          <div
-            style={{ maxWidth: tableWidth }}
-            key={name}
-            className={`teacher-item  ${bgColor} ${className}`}
-            draggable={true}
-            onDragStart={(e) => dragStart(e, index)}
-            onDragEnter={(e) => dragEnter(e, index, name, bgColor, className)}
-            >
-            <h3>{name}</h3>
-            {teacherCounter[name] > 0 && (
-              <span className={`counter-item ${bgColor}`} draggable={false}>
-                {teacherCounter[name]}
-              </span>
-            )}
-          </div>
-            );
+            <div
+  style={{ maxWidth: tableWidth }}
+  key={name}
+  className={`teacher-item  ${bgColor} ${className}`}
+  draggable={true}
+  onDragStart={(e) => dragStart(e, { teacher: name, className: bgColor })}
+>
+  <h3>{name}</h3>
+  {teacherCounter[name] > 0 && (
+    <span className={`counter-item ${bgColor}`} draggable={false}>
+      {teacherCounter[name]}
+    </span>
+  )}
+</div>            );
           })}
         </div>
       </div>
