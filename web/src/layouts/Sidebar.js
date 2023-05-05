@@ -102,7 +102,7 @@ const Sidebar = () => {
       <div className="d-flex align-items-center justify-content-center">
         {/* <Logo /> */}
         {
-         <img src="ttimages/aayamlogo.jpg" className="aayam-logo" alt="Logo" />
+          <img src="assets/aayamlogo.jpg" className="aayam-logo" alt="Logo" />
         }
         
         <Button
