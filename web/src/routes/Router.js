@@ -1,5 +1,7 @@
 import { lazy } from "react";
 import { Navigate } from "react-router-dom";
+// import NewTT from "../pages/TTPages/NewTT/NewTT.js";
+
 // import AddBatch from "../views/ui/TTPages/AddBatch/AddBatch.js";
 // import PreviousTimeTable from "../views/ui/TTPages/PreviousTimeTable/PreviousTimeTable.js";
 // import Admin from "../views/ui/TTPages/Admin/Admin.js";
@@ -28,6 +30,9 @@ const Teachers= lazy(()=> import("../pages/TTPages/Teachers/Teachers.js"));
 const Admin= lazy(()=> import("../pages/TTPages/Admin/Admin.js"));
 const PreviousTimeTable= lazy(()=> import("../pages/TTPages/PreviousTimeTable/PreviousTimeTable.js"));
 const AddBatch= lazy(()=> import("../pages/TTPages/AddBatch/AddBatch.js"));
+const NewTT=lazy(()=>import("../pages/TTPages/NewTT/NewTT.js"));
+
+
 /*****Routes******/
 
 const ThemeRoutes = [
@@ -54,7 +59,8 @@ const ThemeRoutes = [
       { path: "/teachers", exact: true, element: <Teachers />},
       { path: "/admin", exact: true, element: <Admin />},
       { path: "/previoustimetable", exact: true, element: <PreviousTimeTable />},
-      { path: "/addbatch", exact: true, element: <AddBatch />}
+      { path: "/addbatch", exact: true, element: <AddBatch />},
+      {path: "/newtt", exact: true, element: <NewTT/>}
 
     ],
   },
