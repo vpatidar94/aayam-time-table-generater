@@ -24,7 +24,8 @@ const Grid = lazy(() => import("../views/ui/Grid"));
 const Tables = lazy(() => import("../views/ui/Tables"));
 const Forms = lazy(() => import("../views/ui/Forms"));
 const Breadcrumbs = lazy(() => import("../views/ui/Breadcrumbs"));
-const TimeTable= lazy(()=> import("../pages/TTPages/TimeTable/TimeTable.js"));
+const TimeTable = lazy(() => import("../pages/TTPages/TimeTable/TimeTable.js"));
+const TimeTableV2 = lazy(() => import("../pages/TTPages/TimeTableV2/TimeTableV2.js"));
 const Students= lazy(()=> import("../pages/TTPages/Students/Students.js"));
 const Teachers= lazy(()=> import("../pages/TTPages/Teachers/Teachers.js"));
 const Admin= lazy(()=> import("../pages/TTPages/Admin/Admin.js"));
@@ -54,6 +55,7 @@ const ThemeRoutes = [
       
     
       { path: "/tt", exact: true, element: <TimeTable /> },
+      { path: "/tt-v2", exact: true, element: <TimeTableV2 /> },
 
       { path: "/students", exact: true, element: <Students />},
       { path: "/teachers", exact: true, element: <Teachers />},
