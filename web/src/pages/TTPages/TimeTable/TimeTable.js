@@ -7,7 +7,15 @@ import { RxCross2 } from "react-icons/rx";
 // import htmlToCanvas from 'html-to-canvas';
 import html2canvas from 'html2canvas';
 import AddBatch from '../AddBatch/AddBatch';
-
+import {
+  Button,
+  ButtonGroup,
+  Card,
+  CardBody,
+  CardTitle,
+  Row,
+  Col,
+} from "reactstrap";
 
 
 
@@ -299,7 +307,23 @@ const TimeTable = () => {
       <div className="bg-container">
 
         <h1 className='heading-style'>CLASS SCHEDULE</h1>
-        
+        <div className="button-group added-style">
+          <Button className="btn " color="info" onClick={onAddBatch}>
+            Add Batches
+          </Button>
+          {addBatch}
+          <Button className="btn" color="info">
+            Add Teachers
+          </Button>
+          <Button className="btn" color="info" onClick={saveTable}>
+            Save
+          </Button>
+          <Button className="btn" color="info" onClick={convertToImage}>
+            Convert to Image
+          </Button>
+
+
+        </div>
 
         <div>
           <div ref={divRef}>
