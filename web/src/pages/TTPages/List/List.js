@@ -84,16 +84,41 @@ import {v4 as uuidv4} from "uuid"
 
 export const teachers_list = [
         {
-            "FacultyID": 4,
-            "Faculty": "MYK ",
+            "FacultyID": 1,
+            "Faculty": "MYK",
             "subject": "Physics"
         },
         
         {
+            "FacultyID": 2,
+            "Faculty": "KPS",
+            "subject":"chemistry"
+        },
+
+        {
+            "FacultyID": 3,
+            "Faculty": "RSS",
+            "subject":"chemistry"
+        },
+
+        {
+            "FacultyID": 4,
+            "Faculty": "MNM",
+            "subject":"chemistry"
+        },
+
+        {
             "FacultyID": 5,
-            "Faculty": "KPS ",
+            "Faculty": "AJ",
+            "subject":"chemistry"
+        },
+        {
+            "FacultyID": 5,
+            "Faculty": "SJ",
             "subject":"chemistry"
         }
+
+        
     ]; 
     
 

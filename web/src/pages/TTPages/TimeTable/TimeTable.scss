@@ -10,6 +10,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    overflow: auto;
 }
 
 
@@ -17,7 +18,7 @@
 .heading-style{
     // margin-top:0px;
     // margin-bottom:5px;
-    padding:10px 0;
+    // padding:10px 0;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 30px;
 }
@@ -263,12 +264,12 @@
     width: 18px; 
     height: 15px; 
     border-radius: 50%; 
-    background-color: red; 
+    background-color:none; 
     display: flex;
     justify-content: center;
     align-items: center;
     color:black;
-    border:solid 1px rgb(92, 87, 87);
+    border:solid 1px none;
    
   }
   
@@ -288,6 +289,13 @@
     flex-wrap: wrap;
     gap: 10px;
   }
+
+  .added-style{
+    padding:5px 2px;
+  }
+
+
+  
 
   /* ... Your existing CSS ... */
 
@@ -495,7 +503,7 @@
         width: 10px; 
         height: 8px; 
         border-radius: 50%; 
-        background-color: red; 
+        background-color: none; 
         display: flex;
         justify-content: center;
         align-items: center;
