@@ -140,7 +140,7 @@ const TimeTable = () => {
       const fileDetail = data.Object.reverse().find(obj=>{return obj.Title?.indexOf(imageName)>=0});
       console.log("gggg",fileDetail);
 
-      const wattsapp=await new UploadApi().getWattsappApi(fileDetail.LongURL,"time table","917898118503",fileName);
+      const wattsapp = await new UploadApi().getWattsappApi(fileDetail.LongURL, "time table", 917898118503,fileName);
       console.log("xxxx",wattsapp);
       console.log("76666",imageName);
 // egl472231551896.jpg
