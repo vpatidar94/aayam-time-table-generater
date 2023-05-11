@@ -17,7 +17,8 @@ import {
   Col,
 } from "reactstrap";
 
-
+import UploadApi from '../../../api/upload.api';
+import {v4 as uuidv4} from "uuid"
 
 
 
@@ -25,7 +26,7 @@ import {
 
 const TimeTable = () => {
   /**************************************** Use Effect Section ************************************/
- 
+
 
 
 
@@ -81,16 +82,95 @@ const TimeTable = () => {
   const divRef = useRef(null);
 
 
-  const color = ["blue", "green", "yellow", "white", "red", "pink"]
+  const color = ["#D4E6F1", "#E8DAEF", "#FADBD8", "#CA6F1E", "#C39BD3", "#76D7C4", "#3498DB", "#358b79", "#847f86", "rgb(251, 235, 9)", "#CCCCFF", "#F4D03F", "rgb(199, 185, 84)", "#979A9A", "#F0B27A", "rgb(117, 98, 179)", "#CD5C5C", "#40E0D0", "#DAF7A6", "#008080", "#808000", "green", "yellow", "white", "red", "pink"]
 
-  const convertToImage = () => {
-    html2canvas(divRef.current).then(canvas => {
-      const imgData = canvas.toDataURL();
-      setImage(imgData);
-    }).catch(error => {
-      console.error(error);
-    });
-  };             // for div to image conversion
+  // const convertToImage = () => {
+  //   html2canvas(divRef.current).then(canvas => {
+  //     const imgData = canvas.toDataURL();
+  //     setImage(imgData);
+  //     console.log("55555555555555",imgData)
+  //   }).catch(error => {
+  //     console.error(error);
+  //   });
+  // };   
+
+  // const convertToImage = () => {
+  //   html2canvas(divRef.current).then(canvas => {
+  //     canvas.toBlob((blob) => {
+  //       const url = URL.createObjectURL(blob);
+  //       // You now have a URL you can use
+  //       console.log(url);
+  //     });
+  //   }).catch(error => {
+  //     console.error(error);
+  //   });
+  // };// for div to image conversion
+
+  const generateUID=()=> {
+    // I generate the UID from two parts here 
+    // to ensure the random number provide enough bits.
+    var firstPart = (Math.random() * 46656) | 0;
+    var secondPart = (Math.random() * 46656) | 0;
+    firstPart = ("000" + firstPart.toString(36)).slice(-3);
+    secondPart = ("000" + secondPart.toString(36)).slice(-3);
+    return firstPart + secondPart;
+}
+  const convertToImage = async () => {
+    const canvas = await html2canvas(divRef.current);
+    const imgData = canvas.toDataURL();
+    setImage(imgData);
+
+    const byteString = atob(imgData.split(',')[1]);
+    const mimeString = imgData.split(',')[0].split(':')[1].split(';')[0];
+
+    const ia = new Uint8Array(byteString.length);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+
+    const blob = new Blob([ia], { type: mimeString });
+    const imageName= generateUID();
+    const file = new File([blob], imageName + ".jpg");
+    const fileName=imageName + ".jpg";
+    const result = await new UploadApi().uplaodFile(file);
+    if(result=="Success"){
+    const data = await new UploadApi().getUploadedFile();
+    console.log("7777",data.Object);
+    if(data.Object?.length>0){
+      const fileDetail = data.Object.reverse().find(obj=>{return obj.Title?.indexOf(imageName)>=0});
+      console.log("gggg",fileDetail);
+
+      const wattsapp=await new UploadApi().getWattsappApi(fileDetail.LongURL,"time table","917898118503",fileName);
+      console.log("xxxx",wattsapp);
+      console.log("76666",imageName);
+// egl472231551896.jpg
+    }
+
+    } 
+    // html2canvas(divRef.current).then(canvas => {
+    //   const imgData = canvas.toDataURL();
+    //   setImage(imgData);
+
+    //   const byteString = atob(imgData.split(',')[1]);
+    //   const mimeString = imgData.split(',')[0].split(':')[1].split(';')[0];
+
+    //   const ia = new Uint8Array(byteString.length);
+    //   for (let i = 0; i < byteString.length; i++) {
+    //     ia[i] = byteString.charCodeAt(i);
+    //   }
+
+    //   const blob = new Blob([ia], { type: mimeString });
+    //   const file = new File([blob], "image.jpg");
+
+
+
+
+  }
+
+
+
+
+
 
 
 
@@ -273,7 +353,7 @@ const TimeTable = () => {
       "SessionID": 5,
       "Session": "string",
       "BatchID": [
-        1, 6, 10, 7, 8, 9, 2, 3
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
       ],
       "LectureID": [
         1, 2, 3, 4, 5, 6, 7, 8
@@ -300,6 +380,21 @@ const TimeTable = () => {
   };
 
 
+  const callWattsappApi = (url) => {
+    var requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+    };
+
+    // fetch("https://ziper.io/api/send.php?number=917898118503&type=text&message=JITULOLO&instance_id=6453479F141A2&access_token=0a3e27126c2c239bdf7f9128943ef9c0", requestOptions)
+    fetch("https://ziper.io/api/send.php?number=917898118503&type=media&message=test%20message&media_url=https://api.aayamcareerinstitute.co.in//Uploads/Files/File_3431223213168.pdf&filename=file_test.jpg&instance_id=6453479F141A2&access_token=0a3e27126c2c239bdf7f9128943ef9c0", requestOptions)
+
+      .then(response => console.log(response))
+      .then(result => console.log(result))
+      .catch(error => console.log('error', error));
+  }
+
+
 
   /**************************************** Template Section *****************************************/
   return (
@@ -320,6 +415,9 @@ const TimeTable = () => {
           </Button>
           <Button className="btn" color="info" onClick={convertToImage}>
             Convert to Image
+          </Button>
+          <Button className="btn" color="info" onClick={callWattsappApi}>
+            Post
           </Button>
 
 

@@ -92,33 +92,103 @@ export const teachers_list = [
         {
             "FacultyID": 2,
             "Faculty": "KPS",
-            "subject":"chemistry"
+            "subject":"Chemistry"
         },
 
         {
             "FacultyID": 3,
-            "Faculty": "RSS",
-            "subject":"chemistry"
+            "Faculty": "MRS",
+            "subject":"Chemistry"
         },
 
         {
             "FacultyID": 4,
-            "Faculty": "MNM",
-            "subject":"chemistry"
+            "Faculty": "MAS",
+            "subject":"Physics"
         },
 
         {
             "FacultyID": 5,
-            "Faculty": "AJ",
-            "subject":"chemistry"
+            "Faculty": "RSS",
+            "subject":"Physics"
         },
         {
-            "FacultyID": 5,
+            "FacultyID": 6,
+            "Faculty": "NMS",
+            "subject":"Biology"
+        },
+        {
+            "FacultyID": 7,
+            "Faculty": "HDS",
+            "subject":"Chemistry"
+        },
+        {
+            "FacultyID": 8,
+            "Faculty": "MNM",
+            "subject": "Biology"
+        },
+        
+        {
+            "FacultyID": 9,
             "Faculty": "SJ",
-            "subject":"chemistry"
-        }
+            "subject":"Biology"
+        },
+
+        {
+            "FacultyID": 10,
+            "Faculty": "AJ",
+            "subject":"Biology"
+        },
+
+        {
+            "FacultyID": 11,
+            "Faculty": "DMPS",
+            "subject":"Chemistry"
+        },
 
         
+       
+        
+        {
+            "FacultyID": 12,
+            "Faculty": "PSJ",
+            "subject":"Physics"
+        },
+        {
+            "FacultyID": 13,
+            "Faculty": "YBS",
+            "subject":"Biology"
+        },
+        {
+            "FacultyID": 14,
+            "Faculty": "AKS",
+            "subject":"Chemistry"
+        },
+        {
+            "FacultyID": 15,
+            "Faculty": "AMS",
+            "subject":"Maths"
+        },
+        {
+            "FacultyID": 16,
+            "Faculty": "NDS",
+            "subject":"Physics"
+        },
+        {
+            "FacultyID": 17,
+            "Faculty": "HWS",
+            "subject":"Physics"
+        },
+        {
+            "FacultyID": 18,
+            "Faculty": "JRS",
+            "subject":"Chemistry"
+        },
+        {
+            "FacultyID": 19,
+            "Faculty": "HTS",
+            "subject":"Chemistry"
+        },
     ]; 
     
 
@@ -149,42 +219,74 @@ export const batch= [
     {
         "BatchID": 1,
         "Batch": "A1",
-        "CourseID": 3
-    },
-    {
-        "BatchID": 6,
-        "Batch": "A2",
-        "CourseID": 3
-    },
-    {
-        "BatchID": 10,
-        "Batch": "A3",
-        "CourseID": 3
-    },
-    {
-        "BatchID": 7,
-        "Batch": "A4",
-        "CourseID": 3
-    },
-    {
-        "BatchID": 8,
-        "Batch": "A5",
-        "CourseID": 3
-    },
-    {
-        "BatchID": 9,
-        "Batch": "A6",
-        "CourseID": 3
+        "CourseID": 1
     },
     {
         "BatchID": 2,
-        "Batch": "B1",
+        "Batch": "A2",
         "CourseID": 2
     },
     {
         "BatchID": 3,
+        "Batch": "A3",
+        "CourseID": 3
+    },
+    {
+        "BatchID": 4,
+        "Batch": "A4",
+        "CourseID": 4
+    },
+    {
+        "BatchID": 5,
         "Batch": "C1",
-        "CourseID": 1
+        "CourseID": 5
+    },
+    {
+        "BatchID": 6,
+        "Batch": "C2",
+        "CourseID": 6
+    },
+    {
+        "BatchID": 7,
+        "Batch": "B1",
+        "CourseID": 7
+    },
+    {
+        "BatchID": 8,
+        "Batch": "B2",
+        "CourseID": 8
+    },
+    //MORE BATCHES ADDED WITH A FAKE BATCHID AND FAKE COURSEID NEED TO CHANGE LATER
+
+    {
+        "BatchID": 9,
+        "Batch": "JO1",
+        "CourseID": 9
+    },
+    {
+        "BatchID": 10,
+        "Batch": "JXI-1",
+        "CourseID": 10
+    },
+    {
+        "BatchID": 11,
+        "Batch": "JXI-2",
+        "CourseID": 11
+    },
+    {
+        "BatchID": 12,
+        "Batch": "JXII-1",
+        "CourseID": 12
+    },
+    {
+        "BatchID": 13,
+        "Batch": "JEXL",
+        "CourseID": 13
+    },
+    {
+        "BatchID": 14,
+        "Batch": "JEE Adv",
+        "CourseID": 14
     }
 ]
 
