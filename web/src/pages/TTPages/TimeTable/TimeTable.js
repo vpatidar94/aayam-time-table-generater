@@ -15,12 +15,8 @@ import UploadApi from '../../../api/upload.api';
 
 
 
-
-
 const TimeTable = () => {
   /**************************************** Use Effect Section ************************************/
-
-
 
 
   /**************************************** State Section *****************************************/
@@ -33,8 +29,8 @@ const TimeTable = () => {
   const [teacherAssignment, setTeacherAssignment] = useState({});
   const [lectureList, setLectureList] = useState([]);
   const [addBatch, setAddBatch] = useState(null);
-  const [numberList, setNumberList] = useState([918989529107, 917898118503, 918871688429, 918349215747]);
-
+  // const [numberList, setNumberList] = useState([918989529107, 917898118503, 918871688429, 918349215747,919826362001,918349215747,917314058393,917869597239,919977116612,918085390900,918302184021,918358810742,919893640561,919713519598,919713030834,919827274005,919691938832,917043127836,919977711607,917298519996,919713191848,918871841238,917007794323,919669889020,918770153381]);
+  const [numberList, setNumberList] = useState([917898118503]);
 
   const [batchList, setBatchList] = useState(batch);
   const [image, setImage] = useState(null);   //  for div to image conversion
@@ -68,38 +64,12 @@ const TimeTable = () => {
   }, [duplicateDetected]);
 
 
-
-
-
-
   /**************************************** Component Method Section *********************************/
 
   const divRef = useRef(null);
 
+  const color = ["#D4E6F1", "#E8DAEF", "#008080", "#808000", "#C39BD3", "#76D7C4", "#3498DB", "#358b79", "#847f86", "rgb(251, 235, 9)", "#CA6F1E", "#CCCCFF", "#F4D03F", "rgb(199, 185, 84)", "#979A9A", "#F0B27A", "rgb(117, 98, 179)", "#CD5C5C", "#40E0D0", "#DAF7A6", "#008080", "#808000", "#FADBD8", "green", "yellow", "white", "red", "pink"]
 
-  const color = ["#D4E6F1", "#E8DAEF", "#FADBD8", "#CA6F1E", "#C39BD3", "#76D7C4", "#3498DB", "#358b79", "#847f86", "rgb(251, 235, 9)", "#CCCCFF", "#F4D03F", "rgb(199, 185, 84)", "#979A9A", "#F0B27A", "rgb(117, 98, 179)", "#CD5C5C", "#40E0D0", "#DAF7A6", "#008080", "#808000", "green", "yellow", "white", "red", "pink"]
-
-  // const convertToImage = () => {
-  //   html2canvas(divRef.current).then(canvas => {
-  //     const imgData = canvas.toDataURL();
-  //     setImage(imgData);
-  //     console.log("55555555555555",imgData)
-  //   }).catch(error => {
-  //     console.error(error);
-  //   });
-  // };   
-
-  // const convertToImage = () => {
-  //   html2canvas(divRef.current).then(canvas => {
-  //     canvas.toBlob((blob) => {
-  //       const url = URL.createObjectURL(blob);
-  //       // You now have a URL you can use
-  //       console.log(url);
-  //     });
-  //   }).catch(error => {
-  //     console.error(error);
-  //   });
-  // };// for div to image conversion
 
   const generateUID = () => {
     // I generate the UID from two parts here 
@@ -111,6 +81,7 @@ const TimeTable = () => {
     return firstPart + secondPart;
   }
   const convertToImage = async () => {
+    // alert("Time table image sent successfully")
     const canvas = await html2canvas(divRef.current);
     const imgData = canvas.toDataURL();
     setImage(imgData);
@@ -136,6 +107,7 @@ const TimeTable = () => {
           try {
             const cell = numberList[i];
             await new UploadApi().getWattsappApi(fileDetail.LongURL, "time table", cell, fileName);
+            // await new UploadApi().getWattsappGroupApi(fileDetail.LongURL, "time table", fileName);
           } catch (e) {
             continue;
           }
@@ -143,35 +115,23 @@ const TimeTable = () => {
       }
 
     }
+    alert("Time table image sent successfully")
   }
 
-
-
-
-
-
-
-
-
-
   const dragItem = teacher;
-
 
   const dragStart = (e, teacherInfo) => {
     dragItem.current = teacherInfo;
     console.log(teacherInfo)
   };
 
-
   const handleTableCellDragStart = (e, key) => {
     setDraggedCellKey(key);
   };
 
-
   const checkForDuplicateInRow = (key) => {
     const rowId = key.split('_')[0];
     const teacherInCurrentRow = [];
-
     for (const cellKey in teacherAssignment) {
       if (cellKey.startsWith(rowId)) {
         teacherInCurrentRow.push({
@@ -195,7 +155,6 @@ const TimeTable = () => {
       .flat();
 
     const oldDuplicateKeys = Object.keys(duplicateElements);
-
     const isNewDuplicate = !oldDuplicateKeys.includes(key) && newDuplicateKeys.includes(key);
 
     if (isNewDuplicate) {
@@ -208,7 +167,6 @@ const TimeTable = () => {
       );
     }
   };
-
 
   const handleDrop = (e, key) => {
     console.log(key)
@@ -243,17 +201,13 @@ const TimeTable = () => {
       const teacher = teacherAssignment[key];
       const batchId = key.split("_")[1];
       const lectureId = key.split("_")[0];
-
       const batchVo = batch.find(it => it.BatchID == batchId);
       console.log('xxxx xx xx teacher ', teacher);
       console.log('xxxx xx xx batchId ', batchId);
       console.log('xxxx xx xx lectureId', lectureId);
-
       console.log('xxxx xx xx teacherAssignment', teacherAssignment);
 
-
       // making lectureVO 
-
       const lectureVo = time.find(it => it.LectureID == lectureId);
 
       const lecture = {};
@@ -269,15 +223,11 @@ const TimeTable = () => {
       lecture.CreatedOnDate = "02/05/2023";
       console.log("fff", lecture);
 
-
-
       const lecture_list = lectureList;
       lecture_list.push(lecture);
       setLectureList([...lecture_list])
-
     }
   }
-
   const allowDrop = (ev) => {
     let t = ev.target;
     while (t && (!t.classList || !t.classList.contains("each-block"))) {
@@ -289,9 +239,6 @@ const TimeTable = () => {
     }
     ev.preventDefault();
   };
-
-
-
   const removeTeacher = (key) => {
     const teacher_assignment = teacherAssignment;
     setTeacherAssignment({ ...teacher_assignment });
@@ -308,19 +255,16 @@ const TimeTable = () => {
     // setTeacherCounter({...teacherCounter});
     setTeacherCounter(teacherCount);
   }
-
   const onAddBatch = () => {
     setAddBatch(<AddBatch batchList={batchList} />)
   }
   const onAddTeacher = () => {
     alert("add")
   }
-
   const saveTable = () => {
     // localStorage.setItem("teacherA", JSON.stringify(teacherAssignment));
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-
     var raw = JSON.stringify({
       "TimeTableID": 0,
       "Description": "time table save",
@@ -340,10 +284,7 @@ const TimeTable = () => {
       "CreatedByUserID": 1,
       "CreatedOnDate": "09/05/2023",
       "LectureList": lectureList
-
-
     });
-
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
@@ -356,8 +297,6 @@ const TimeTable = () => {
       .then(result => console.log(result))
       .catch(error => console.log('error', error));
   };
-
-
   const callWattsappApi = (url) => {
     var requestOptions = {
       method: 'GET',
@@ -371,17 +310,14 @@ const TimeTable = () => {
       .then(result => console.log(result))
       .catch(error => console.log('error', error));
   }
-
-
-
   /**************************************** Template Section *****************************************/
   return (
     <>
       <div className="bg-container">
-
         <h1 className='heading-style'>CLASS SCHEDULE</h1>
         <div className="button-group added-style">
-          <Button className="btn " color="info" onClick={onAddBatch}>
+          {/* <Button className="btn " color="info" onClick={onAddBatch}> TO BE ADDED WHEN ADD BATCH FUNCTIONALITY IS TO MAKE ACTIVE*/}
+          <Button className="btn " color="info">
             Add Batches
           </Button>
           {addBatch}
@@ -392,15 +328,12 @@ const TimeTable = () => {
             Save
           </Button>
           <Button className="btn" color="info" onClick={convertToImage}>
-            Convert to Image
-          </Button>
-          <Button className="btn" color="info" onClick={callWattsappApi}>
             Post
           </Button>
-
-
+          {/* <Button className="btn" color="info" onClick={callWattsappApi}>
+            Post
+          </Button> */}
         </div>
-
         <div>
           <div ref={divRef}>
             <table className='table-style'>
@@ -413,22 +346,16 @@ const TimeTable = () => {
                         <td className='F-style batch-style' key={batch.BatchID}>{each.Batch}</td>
                       )
                     })}
-
                   </tr>
-
                 </div>
                 <tr >
                   {time.map((t) => {
                     return (
-
                       <div >
                         <td className='F-style time-style'>{t.Time_From}-{t.Time_To}</td>
-
                         {batchList.map((b) => {
-
                           const key = t.LectureID + '_' + b.BatchID
                           return (
-
                             <td
                               draggable={true}
                               onDragOver={allowDrop}
@@ -440,10 +367,8 @@ const TimeTable = () => {
                               style={{ backgroundColor: teacherAssignment[key]?.color }}
                             // className={`each-block ${duplicateElements[key]}`}
                             >
-
                               {teacherAssignment[key] && (
                                 <div className={`teacname-cross-style ${teacherAssignment[key]?.className} `}>
-
                                   <div className="teacher-name" >
                                     {teacherAssignment[key]?.teacher}
                                   </div>
@@ -463,29 +388,21 @@ const TimeTable = () => {
                                 </div>
                               )}
                             </td>
-
                           )
                         })}
                       </div>
-
                     )
                   })}
-
-
-
                 </tr>
               </tbody>
             </table>
             {/* <button onClick={onAddBatch}>+</button>
-        {addBatch} */}
+            {addBatch} */}
           </div>
-          {/* <button onClick={convertToImage}>Convert to Image</button> */}
-          {image && <img src={image} alt="table" style={{ maxWidth: tableWidth }} />}
+
+          {/* {image && <img src={image} alt="table" style={{ maxWidth: tableWidth }} />} */}
           {/* <button onClick={saveTable}>Save</button> */}
-
         </div>
-
-
         <div className='teacher-container' style={{ maxWidth: tableWidth }}>
           {teachers_list.map((teacher, index) => {
             const { FacultyID, Faculty } = teacher;
@@ -507,10 +424,8 @@ const TimeTable = () => {
             );
           })}
         </div>
-
       </div>
     </>
   )
 }
-
 export default TimeTable;

@@ -49,6 +49,36 @@ export default class UploadApi {
             }
         }
 
+
+        getWattsappGroupApi = async (url,message,fileName) => {
+            try {
+                console.log("url",url);
+                console.log("mesage",message);
+                
+                console.log("file",fileName);
+                
+
+                //https://ziper.io/api/sendgroupmsg.php?group_id=84987694574-1618740914@g.us&type=media&message=test%20message&media_url=https://i.pravatar.cc&filename=file_test.jpg&instance_id=6453479F141A2&access_token=0a3e27126c2c239bdf7f9128943ef9c0
+                const res = await fetch("https://ziper.io/api/send.php" + '?' + new URLSearchParams({
+                    group_id:"",
+                    type:"media",
+                    message: message,
+                    media_url:"https://api.aayamcareerinstitute.co.in/"+url,
+                    filename: fileName,
+                    instance_id:"6453479F141A2",
+                    access_token:"0a3e27126c2c239bdf7f9128943ef9c0"
+
+                }), {
+                    method: 'GET',
+                });
+                const result = await res.json();
+                return result;
+            } catch (e) {
+                throw new Error(e.message, e.options);
+            }
+        }
+
+
     uplaodFile = async (file) => {
         try {
             const formData = new FormData();
