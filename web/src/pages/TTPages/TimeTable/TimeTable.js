@@ -1,24 +1,17 @@
 
 import React, { useEffect, useRef, useState } from 'react';
+import { RxCross2 } from "react-icons/rx";
 import { batch, teachers_list, time } from '../List/List';
 import "./TimeTable.scss";
-import { RxCross2 } from "react-icons/rx";
 // import { RiDeleteBin2Line } from "react-icons/ri";
 // import htmlToCanvas from 'html-to-canvas';
 import html2canvas from 'html2canvas';
-import AddBatch from '../AddBatch/AddBatch';
 import {
-  Button,
-  ButtonGroup,
-  Card,
-  CardBody,
-  CardTitle,
-  Row,
-  Col,
+  Button
 } from "reactstrap";
+import AddBatch from '../AddBatch/AddBatch';
 
 import UploadApi from '../../../api/upload.api';
-import {v4 as uuidv4} from "uuid"
 
 
 
@@ -40,6 +33,8 @@ const TimeTable = () => {
   const [teacherAssignment, setTeacherAssignment] = useState({});
   const [lectureList, setLectureList] = useState([]);
   const [addBatch, setAddBatch] = useState(null);
+  const [numberList, setNumberList] = useState([918989529107, 917898118503, 918871688429, 918349215747]);
+
 
   const [batchList, setBatchList] = useState(batch);
   const [image, setImage] = useState(null);   //  for div to image conversion
@@ -106,7 +101,7 @@ const TimeTable = () => {
   //   });
   // };// for div to image conversion
 
-  const generateUID=()=> {
+  const generateUID = () => {
     // I generate the UID from two parts here 
     // to ensure the random number provide enough bits.
     var firstPart = (Math.random() * 46656) | 0;
@@ -114,7 +109,7 @@ const TimeTable = () => {
     firstPart = ("000" + firstPart.toString(36)).slice(-3);
     secondPart = ("000" + secondPart.toString(36)).slice(-3);
     return firstPart + secondPart;
-}
+  }
   const convertToImage = async () => {
     const canvas = await html2canvas(divRef.current);
     const imgData = canvas.toDataURL();
@@ -129,42 +124,25 @@ const TimeTable = () => {
     }
 
     const blob = new Blob([ia], { type: mimeString });
-    const imageName= generateUID();
+    const imageName = generateUID();
     const file = new File([blob], imageName + ".jpg");
-    const fileName=imageName + ".jpg";
+    const fileName = imageName + ".jpg";
     const result = await new UploadApi().uplaodFile(file);
-    if(result=="Success"){
-    const data = await new UploadApi().getUploadedFile();
-    console.log("7777",data.Object);
-    if(data.Object?.length>0){
-      const fileDetail = data.Object.reverse().find(obj=>{return obj.Title?.indexOf(imageName)>=0});
-      console.log("gggg",fileDetail);
+    if (result === "Success") {
+      const data = await new UploadApi().getUploadedFile();
+      if (data.Object?.length > 0) {
+        const fileDetail = data.Object.reverse().find(obj => { return obj.Title?.indexOf(imageName) >= 0 });
+        for (let i = 0; i < numberList.length; i++) {
+          try {
+            const cell = numberList[i];
+            await new UploadApi().getWattsappApi(fileDetail.LongURL, "time table", cell, fileName);
+          } catch (e) {
+            continue;
+          }
+        }
+      }
 
-      const wattsapp = await new UploadApi().getWattsappApi(fileDetail.LongURL, "time table", 917898118503,fileName);
-      console.log("xxxx",wattsapp);
-      console.log("76666",imageName);
-// egl472231551896.jpg
     }
-
-    } 
-    // html2canvas(divRef.current).then(canvas => {
-    //   const imgData = canvas.toDataURL();
-    //   setImage(imgData);
-
-    //   const byteString = atob(imgData.split(',')[1]);
-    //   const mimeString = imgData.split(',')[0].split(':')[1].split(';')[0];
-
-    //   const ia = new Uint8Array(byteString.length);
-    //   for (let i = 0; i < byteString.length; i++) {
-    //     ia[i] = byteString.charCodeAt(i);
-    //   }
-
-    //   const blob = new Blob([ia], { type: mimeString });
-    //   const file = new File([blob], "image.jpg");
-
-
-
-
   }
 
 
