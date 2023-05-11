@@ -67,7 +67,7 @@ const TimeTableV2 = () => {
   };
 
   // Prepare lecture list
-  const updateLectureListOnDrop = (lecture, batch) => {
+  const updateLectureListOnDrop = (lecture, batch, teacher) => {
     const stateLectureList = lectureList;
     const lectureDto = {};
     lectureDto.ID = "0";
@@ -75,8 +75,8 @@ const TimeTableV2 = () => {
     lectureDto.LectureName = "";
     lectureDto.Batch = batch;
     lectureDto.Lecture = lecture;
-    lectureDto.Subject = draggedTeacher.subject;
-    lectureDto.FacultyID = draggedTeacher.FacultyID;
+    lectureDto.Subject = teacher.subject;
+    lectureDto.FacultyID = teacher.FacultyID;
     lectureDto.IsActive = true;
     lectureDto.CreatedByUserID = "1";
     lectureDto.CreatedOnDate = "02/05/2023";
@@ -84,12 +84,12 @@ const TimeTableV2 = () => {
     setLectureList([...stateLectureList]);
   };
 
-  const updateTeacherCounterOnDrop = () => {
+  const updateTeacherCounterOnDrop = (teacher) => {
     const stateTeacherCounter = teacherCounter;
-    if (!stateTeacherCounter[draggedTeacher.FacultyID]) {
-      teacherCounter[draggedTeacher.FacultyID] = 1;
+    if (!stateTeacherCounter[teacher.FacultyID]) {
+      teacherCounter[teacher.FacultyID] = 1;
     } else {
-      teacherCounter[draggedTeacher.FacultyID] += 1;
+      teacherCounter[teacher.FacultyID] += 1;
     }
   }
 
@@ -132,8 +132,8 @@ const TimeTableV2 = () => {
     const key = lecture.LectureID + '_' + batch.BatchID;
     teacherAssignment[key] = selectedTeacher;
     setTeacherAssignment({ ...stateTeacherAssignment });
-    updateLectureListOnDrop(lecture, batch);
-    updateTeacherCounterOnDrop();
+    updateLectureListOnDrop(lecture, batch, selectedTeacher);
+    updateTeacherCounterOnDrop(selectedTeacher);
     checkDuplicateTeacherInRowOnDrop(lecture.LectureID, selectedTeacher.FacultyID);
     setDraggedTeacher({});
     setDraggedCellKey(null);
