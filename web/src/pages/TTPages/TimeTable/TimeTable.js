@@ -10,7 +10,6 @@ import {
   Button
 } from "reactstrap";
 import AddBatch from '../AddBatch/AddBatch';
-
 import UploadApi from '../../../api/upload.api';
 
 
@@ -31,7 +30,6 @@ const TimeTable = () => {
   const [addBatch, setAddBatch] = useState(null);
   // const [numberList, setNumberList] = useState([918989529107, 917898118503, 918871688429, 918349215747,919826362001,918349215747,917314058393,917869597239,919977116612,918085390900,918302184021,918358810742,919893640561,919713519598,919713030834,919827274005,919691938832,917043127836,919977711607,917298519996,919713191848,918871841238,917007794323,919669889020,918770153381]);
   const [numberList, setNumberList] = useState([917898118503]);
-
   const [batchList, setBatchList] = useState(batch);
   const [image, setImage] = useState(null);   //  for div to image conversion
 
@@ -85,7 +83,7 @@ const TimeTable = () => {
     const canvas = await html2canvas(divRef.current);
     const imgData = canvas.toDataURL();
     setImage(imgData);
-
+/*converting page64 url got as imgData into file Object by using blob below*/
     const byteString = atob(imgData.split(',')[1]);
     const mimeString = imgData.split(',')[0].split(':')[1].split(';')[0];
 
@@ -106,6 +104,7 @@ const TimeTable = () => {
         for (let i = 0; i < numberList.length; i++) {
           try {
             const cell = numberList[i];
+            /*CHECK THE DETAILS OF THIS GETWATTSAPPAPI IN UPLOAD.API.JS FILE IN API FOLDER*/
             await new UploadApi().getWattsappApi(fileDetail.LongURL, "time table", cell, fileName);
             // await new UploadApi().getWattsappGroupApi(fileDetail.LongURL, "time table", fileName);
           } catch (e) {
@@ -226,6 +225,7 @@ const TimeTable = () => {
       const lecture_list = lectureList;
       lecture_list.push(lecture);
       setLectureList([...lecture_list])
+      /* THIS LECTURE LIST WILL BE USED BELOW IN THE CONST SAVETABLE() METHOD FROM WHERE WE SEND IT TO DATABASE THROUGH API WRITTEN IN SAVETABLE() METHOD*/
     }
   }
   const allowDrop = (ev) => {
@@ -269,8 +269,8 @@ const TimeTable = () => {
       "TimeTableID": 0,
       "Description": "time table save",
       "DateType": "single",
-      "FromDate": "10/05/2023",
-      "ToDate": "12/05/2023",
+      "FromDate": "12/05/2023",
+      "ToDate": "15/05/2023",
       "ShiftID": 1,
       "SessionID": 5,
       "Session": "string",

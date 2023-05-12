@@ -1,0 +1,44 @@
+.form-popup {
+    /* display: none; */
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px solid #888;
+    z-index: 1;
+    background-color: white;
+    width: 300px;
+    padding: 20px;
+  }
+  
+  .form-container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  form input, form textarea {
+    width: 100%;
+    padding: 5px;
+    margin: 5px 0 10px 0;
+    border: 1px solid #ccc;
+    background: #f1f1f1;
+  }
+  
+  .submit-btn, .cancel-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 10px;
+    opacity: 0.9;
+  }
+  
+  .cancel-btn {
+    background-color: #f44336;
+  }
+  
+  .submit-btn:hover, .cancel-btn:hover {
+    opacity: 1;
+  }

@@ -1,5 +1,6 @@
 import { lazy } from "react";
 import { Navigate } from "react-router-dom";
+// import Mobile from "../pages/TTPages/Mobile/Mobile.js";
 // import NewTT from "../pages/TTPages/NewTT/NewTT.js";
 
 // import AddBatch from "../views/ui/TTPages/AddBatch/AddBatch.js";
@@ -32,9 +33,10 @@ const Admin= lazy(()=> import("../pages/TTPages/Admin/Admin.js"));
 const PreviousTimeTable= lazy(()=> import("../pages/TTPages/PreviousTimeTable/PreviousTimeTable.js"));
 const AddBatch= lazy(()=> import("../pages/TTPages/AddBatch/AddBatch.js"));
 const NewTT=lazy(()=>import("../pages/TTPages/NewTT/NewTT.js"));
+const Mobile=lazy(()=>import("../pages/TTPages/Mobile/Mobile.js"));
 
 
-/*****Routes******/
+/*****Routes******/ 
 
 const ThemeRoutes = [
   {
@@ -62,7 +64,8 @@ const ThemeRoutes = [
       { path: "/admin", exact: true, element: <Admin />},
       { path: "/previoustimetable", exact: true, element: <PreviousTimeTable />},
       { path: "/addbatch", exact: true, element: <AddBatch />},
-      {path: "/newtt", exact: true, element: <NewTT/>}
+      {path: "/newtt", exact: true, element: <NewTT/>},
+      {path: "/mobile", exact: true, element: <Mobile/>}
 
     ],
   },

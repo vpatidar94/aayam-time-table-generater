@@ -293,9 +293,10 @@ import React, { useState } from 'react';
 import { batch } from '../List/List';
 
 
-const AddBatch = (props) => {
-  console.log(",,bb" ,props.batchList);
+const AddBatch = () => {
+  console.log(",,bb" ,batch);
   const [batches, setBatches] = useState(batch);
+  // const [batches, setBatches] = useState(JSON.parse(localStorage.getItem('batches')) || batch);
   const [apiData, setApiData] = useState({});
   const [checkedItems, setCheckedItems] = useState({});
 
@@ -323,18 +324,24 @@ const AddBatch = (props) => {
   const { Batch = [] } = responseObject;
 
   const addToBatch = () => {
-    const newBatches = [...props.batchList];
+    const newBatches = batch;
     for (const batchID in checkedItems) {
       if (checkedItems[batchID]) {
         const selectedItem = Batch.find((batch) => batch.BatchID === parseInt(batchID));
         if (selectedItem && !newBatches.find((batch) => batch.BatchID === selectedItem.BatchID)) {
-          newBatches.push(selectedItem);
+          newBatches.push({
+            BatchID: selectedItem.BatchID,
+            Batch: selectedItem.Batch,
+            CourseID: selectedItem.CourseID,
+          });
         }
       }
     }
-    console.log(batch)
+    console.log(newBatches)
     setBatches(newBatches);
-    batch.push(newBatches);
+//     setBatches(newBatches);
+// localStorage.setItem('batches', JSON.stringify(newBatches));
+    // batch.push(...newBatches);
   };
 
 
