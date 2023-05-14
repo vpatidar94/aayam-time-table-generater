@@ -1,0 +1,1 @@
+export const COLORS = ["#D4E6F1", "#E8DAEF", "#008080", "#808000", "#C39BD3", "#76D7C4", "#3498DB", "#358b79", "#847f86", "rgb(251, 235, 9)", "#CA6F1E", "#CCCCFF", "#F4D03F", "rgb(199, 185, 84)", "#979A9A", "#F0B27A", "rgb(117, 98, 179)", "#CD5C5C", "#40E0D0", "#DAF7A6", "#008080", "#808000", "#FADBD8", "green", "yellow", "white", "red", "pink"]

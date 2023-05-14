@@ -2,6 +2,7 @@ import html2canvas from 'html2canvas';
 import React, { useEffect, useRef, useState } from 'react';
 import { RxCross2 } from "react-icons/rx";
 import { Alert } from 'reactstrap';
+import { COLORS } from '../../../const/color.const';
 import AddBatch from '../AddBatch/AddBatch';
 import { batch, teachers_list, time } from '../List/List';
 import "./TimeTableV2.scss";
@@ -9,7 +10,6 @@ import "./TimeTableV2.scss";
 const TimeTableV2 = () => {
 
   /**************************************** const Section ************************************/
-  const color = ["blue", "green", "yellow", "white", "red", "pink"]
 
   /**************************************** Use Effect Section ************************************/
   useEffect(() => {
@@ -180,6 +180,18 @@ const TimeTableV2 = () => {
     });
   };
 
+  const onDragEnd = (e) => {
+    setDraggedTeacher({});
+  }
+
+  const onTouchMove = (e) => {
+    console.log(e);
+    const x = e.touches[0].clientX;
+    const y = e.touches[0].clientY;
+    var elem = document.elementFromPoint(x, y);
+    alert('xx xx elem ', elem.id);
+  }
+
   /**************************************** Template Section *****************************************/
   // These 4 methods need to be refactored & moved to Component Method Section @jitendra methods
   const convertToImage = () => {
@@ -281,6 +293,7 @@ const TimeTableV2 = () => {
                               key={key}
                               id={key}
                               className={`each-block ${isTeacherDuplicateInLecture(t.LectureID, teacherAssignment[key]?.FacultyID ?? null) ? "blink" : ""}`}
+                              style={{ backgroundColor: teacherAssignment[key]?.color }}
                             >
 
                               <div className={`teacname-cross-style ${teacherAssignment[key]?.className} `}>
@@ -313,12 +326,12 @@ const TimeTableV2 = () => {
                 </tr>
               </tbody>
             </table>
-            <button onClick={onAddBatch}>+</button>
-            {addBatch}
+            {/* <button onClick={onAddBatch}>+</button>
+            {addBatch} */}
           </div>
-          <button onClick={convertToImage}>Convert to Image</button>
+          {/* <button onClick={convertToImage}>Convert to Image</button>
           {image && <img src={image} alt="table" style={{ maxWidth: tableWidth }} />}
-          <button onClick={saveTable}>Save</button>
+          <button onClick={saveTable}>Save</button> */}
 
         </div>
 
@@ -326,13 +339,17 @@ const TimeTableV2 = () => {
         <div className='teacher-container' style={{ maxWidth: tableWidth }}>
           {teachers_list.map((teacher, index) => {
             const { FacultyID, Faculty } = teacher;
+            teacher.color = COLORS[index]
             return (
               <div
-                style={{ maxWidth: tableWidth, backgroundColor: color[FacultyID] }}
+                style={{ maxWidth: tableWidth, backgroundColor: teacher.color }}
                 key={FacultyID}
                 className="teacher-item"
                 draggable={true}
                 onDragStart={(e) => dragStart(e, teacher)}
+                onDragEnd={(e) => onDragEnd(e)}
+                onTouchStart={(e) => dragStart(e, teacher)}
+                onTouchMove={(e) => onTouchMove(e)}
               >
                 <h3>{Faculty}</h3>
                 {teacherCounter[FacultyID] > 0 && (
@@ -343,7 +360,7 @@ const TimeTableV2 = () => {
               </div>
             );
           })}
-          <button onClick={onAddTeacher}>+</button>
+          {/* <button onClick={onAddTeacher}>+</button> */}
 
         </div>
 

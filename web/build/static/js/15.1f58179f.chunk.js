@@ -1,0 +1,2 @@
+(this["webpackJsonpstarter-bt5"]=this["webpackJsonpstarter-bt5"]||[]).push([[15],{84:function(t,e,r){"use strict";r.r(e);r(1);var n=r(6);e.default=function(){return Object(n.jsx)(n.Fragment,{children:Object(n.jsx)("h1",{children:"Admin"})})}}}]);
+//# sourceMappingURL=15.1f58179f.chunk.js.map
