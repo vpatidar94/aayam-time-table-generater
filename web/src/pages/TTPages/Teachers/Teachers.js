@@ -77,7 +77,7 @@ const Teachers = () => {
           </Col>
         </Row>
         <header>
-          <TeacherForm />
+          {/* <TeacherForm /> */}
         </header>
       </div>
     </>

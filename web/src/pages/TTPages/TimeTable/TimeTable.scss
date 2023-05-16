@@ -296,7 +296,11 @@
   }
 
 
-  
+  .time-table-date-style{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
 
   /* ... Your existing CSS ... */
 

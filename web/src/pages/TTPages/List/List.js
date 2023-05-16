@@ -84,110 +84,110 @@ import {v4 as uuidv4} from "uuid"
 
 export const teachers_list = [
         {
-            "FacultyID": 1,
+            "FacultyID": 22,
             "Faculty": "MYK",
-            "subject": "Physics"
+            // "subject": "Physics"
         },
         
         {
-            "FacultyID": 2,
+            "FacultyID": 3038,
             "Faculty": "KPS",
-            "subject":"Chemistry"
+            // "subject":"Chemistry"
         },
 
         {
-            "FacultyID": 3,
+            "FacultyID": 2029,
             "Faculty": "MRS",
-            "subject":"Chemistry"
+            // "subject":"Chemistry"
         },
 
         {
-            "FacultyID": 4,
+            "FacultyID": 3051,
             "Faculty": "MAS",
-            "subject":"Physics"
+            // "subject":"Physics"
         },
 
         {
-            "FacultyID": 5,
+            "FacultyID": 3050,
             "Faculty": "RSS",
-            "subject":"Physics"
+            // "subject":"Physics"
         },
         {
-            "FacultyID": 6,
+            "FacultyID": 25,
             "Faculty": "NMS",
-            "subject":"Biology"
+            // "subject":"Biology"
         },
         {
-            "FacultyID": 7,
+            "FacultyID": 3037,
             "Faculty": "HDS",
-            "subject":"Chemistry"
+            // "subject":"Chemistry"
         },
         {
-            "FacultyID": 8,
+            "FacultyID": 3032,
             "Faculty": "MNM",
-            "subject": "Biology"
+            // "subject": "Biology"
         },
         
         {
-            "FacultyID": 9,
+            "FacultyID": 1023,
             "Faculty": "SJ",
-            "subject":"Biology"
+            // "subject":"Biology"
         },
 
         {
-            "FacultyID": 10,
+            "FacultyID": 1025,
             "Faculty": "AJ",
-            "subject":"Biology"
+            // "subject":"Biology"
         },
 
         {
-            "FacultyID": 11,
+            "FacultyID": 1026,
             "Faculty": "DMPS",
-            "subject":"Chemistry"
+            // "subject":"Chemistry"
         },
 
         
        
         
         {
-            "FacultyID": 12,
+            "FacultyID": 1027,
             "Faculty": "PSJ",
-            "subject":"Physics"
+            // "subject":"Physics"
         },
         {
-            "FacultyID": 13,
+            "FacultyID": 3033,
             "Faculty": "YBS",
-            "subject":"Biology"
+            // "subject":"Biology"
         },
         {
-            "FacultyID": 14,
+            "FacultyID": 3030,
             "Faculty": "AKS",
-            "subject":"Chemistry"
+            // "subject":"Chemistry"
         },
         {
-            "FacultyID": 15,
+            "FacultyID": 2028,
             "Faculty": "AMS",
-            "subject":"Maths"
+            // "subject":"Maths"
         },
         {
-            "FacultyID": 16,
+            "FacultyID": 3031,
             "Faculty": "NDS",
-            "subject":"Physics"
+            // "subject":"Physics"
         },
         {
-            "FacultyID": 17,
+            "FacultyID": 3052,
             "Faculty": "HWS",
-            "subject":"Physics"
+            // "subject":"Physics"
         },
         {
-            "FacultyID": 18,
+            "FacultyID": 1029,
             "Faculty": "JRS",
-            "subject":"Chemistry"
+            // "subject":"Chemistry"
         },
         {
-            "FacultyID": 19,
+            "FacultyID": 3053,
             "Faculty": "HTS",
-            "subject":"Chemistry"
+            // "subject":"Chemistry"
         },
     ]; 
     
@@ -219,57 +219,57 @@ export const batch= [
     {
         "BatchID": 1,
         "Batch": "A1",
-        "CourseID": 1
+        "CourseID": 3
     },
     {
-        "BatchID": 2,
+        "BatchID": 6,
         "Batch": "A2",
-        "CourseID": 2
+        "CourseID": 3
     },
     {
-        "BatchID": 3,
+        "BatchID": 10,
         "Batch": "A3",
         "CourseID": 3
     },
     {
-        "BatchID": 4,
-        "Batch": "A4",
-        "CourseID": 4
-    },
-    {
-        "BatchID": 5,
-        "Batch": "C1",
-        "CourseID": 5
-    },
-    {
-        "BatchID": 6,
-        "Batch": "C2",
-        "CourseID": 6
-    },
-    {
         "BatchID": 7,
-        "Batch": "B1",
-        "CourseID": 7
+        "Batch": "A4",
+        "CourseID": 3
     },
     {
-        "BatchID": 8,
+        "BatchID": 3,
+        "Batch": "C1",
+        "CourseID": 1
+    },
+    {
+        "BatchID": 15,
+        "Batch": "C2",
+        "CourseID": 1
+    },
+    {
+        "BatchID": 2,
+        "Batch": "B1",
+        "CourseID": 2
+    },
+    {
+        "BatchID": 3049,
         "Batch": "B2",
-        "CourseID": 8
+        "CourseID": 2
     },
     //MORE BATCHES ADDED WITH A FAKE BATCHID AND FAKE COURSEID NEED TO CHANGE LATER
 
     {
-        "BatchID": 9,
+        "BatchID": 20,
         "Batch": "JO1",
-        "CourseID": 9
+        "CourseID": 13
     },
     {
-        "BatchID": 10,
+        "BatchID": 3042,
         "Batch": "JXI-1",
-        "CourseID": 10
+        "CourseID": 11
     },
     {
-        "BatchID": 11,
+        "BatchID": 3061,
         "Batch": "JXI-2",
         "CourseID": 11
     },

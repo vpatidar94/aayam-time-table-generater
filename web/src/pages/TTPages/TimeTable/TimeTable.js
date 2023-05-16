@@ -2,15 +2,31 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { RxCross2 } from "react-icons/rx";
 import { batch, teachers_list, time } from '../List/List';
+// import { teachers_list } from '../../../const/teacherList';
+// import { batch } from '../../../const/batchList';
+// import { time } from '../../../const/time';
 import "./TimeTable.scss";
 // import { RiDeleteBin2Line } from "react-icons/ri";
 // import htmlToCanvas from 'html-to-canvas';
 import html2canvas from 'html2canvas';
 import {
-  Button
+  Card,
+  Row,
+  Col,
+  CardTitle,
+  CardBody,
+  Button,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  FormText,
 } from "reactstrap";
+
 import AddBatch from '../AddBatch/AddBatch';
 import UploadApi from '../../../api/upload.api';
+import AddTeacher from '../TeacherForm/TeacherForm';
+
 
 
 
@@ -32,6 +48,12 @@ const TimeTable = () => {
   const [numberList, setNumberList] = useState([917898118503]);
   const [batchList, setBatchList] = useState(batch);
   const [image, setImage] = useState(null);   //  for div to image conversion
+  const [showAddBatchModal, setShowAddBatchModal] = useState(false); //for add Batch popup
+  const [showAddTeacherModal, setShowAddTeacherModal] = useState(false);
+  const[fromDate,setFromDate]=useState("");
+  const[toDate,setToDate]=useState("");
+
+
 
 
   /**************************************** Use Effect Section ************************************/
@@ -83,7 +105,7 @@ const TimeTable = () => {
     const canvas = await html2canvas(divRef.current);
     const imgData = canvas.toDataURL();
     setImage(imgData);
-/*converting page64 url got as imgData into file Object by using blob below*/
+    /*converting page64 url got as imgData into file Object by using blob below*/
     const byteString = atob(imgData.split(',')[1]);
     const mimeString = imgData.split(',')[0].split(':')[1].split(';')[0];
 
@@ -221,6 +243,7 @@ const TimeTable = () => {
       lecture.CreatedByUserID = "1";
       lecture.CreatedOnDate = "02/05/2023";
       console.log("fff", lecture);
+      console.log("zzzz", teacher)
 
       const lecture_list = lectureList;
       lecture_list.push(lecture);
@@ -255,11 +278,20 @@ const TimeTable = () => {
     // setTeacherCounter({...teacherCounter});
     setTeacherCounter(teacherCount);
   }
+
+  const onChangeFromDate=(e)=>{
+    setFromDate(e.target.value);
+  }
+  const onChangeToDate=(e)=>{
+    setToDate(e.target.value);
+  }
+  
   const onAddBatch = () => {
-    setAddBatch(<AddBatch batchList={batchList} />)
+    // setAddBatch(<AddBatch batchList={batchList} />)
+    setShowAddBatchModal(true);
   }
   const onAddTeacher = () => {
-    alert("add")
+    setShowAddTeacherModal(true);
   }
   const saveTable = () => {
     // localStorage.setItem("teacherA", JSON.stringify(teacherAssignment));
@@ -269,8 +301,8 @@ const TimeTable = () => {
       "TimeTableID": 0,
       "Description": "time table save",
       "DateType": "single",
-      "FromDate": "12/05/2023",
-      "ToDate": "15/05/2023",
+      "FromDate": fromDate,
+      "ToDate": toDate,
       "ShiftID": 1,
       "SessionID": 5,
       "Session": "string",
@@ -282,7 +314,7 @@ const TimeTable = () => {
       ],
       "IsActive": true,
       "CreatedByUserID": 1,
-      "CreatedOnDate": "09/05/2023",
+      "CreatedOnDate": new Date().toLocaleString(),
       "LectureList": lectureList
     });
     var requestOptions = {
@@ -296,46 +328,56 @@ const TimeTable = () => {
       .then(response => response.text())
       .then(result => console.log(result))
       .catch(error => console.log('error', error));
+      alert("time table saved successfully");
   };
-  const callWattsappApi = (url) => {
-    var requestOptions = {
-      method: 'GET',
-      redirect: 'follow'
-    };
 
-    // fetch("https://ziper.io/api/send.php?number=917898118503&type=text&message=JITULOLO&instance_id=6453479F141A2&access_token=0a3e27126c2c239bdf7f9128943ef9c0", requestOptions)
-    fetch("https://ziper.io/api/send.php?number=917898118503&type=media&message=test%20message&media_url=https://api.aayamcareerinstitute.co.in//Uploads/Files/File_3431223213168.pdf&filename=file_test.jpg&instance_id=6453479F141A2&access_token=0a3e27126c2c239bdf7f9128943ef9c0", requestOptions)
-
-      .then(response => console.log(response))
-      .then(result => console.log(result))
-      .catch(error => console.log('error', error));
-  }
   /**************************************** Template Section *****************************************/
   return (
     <>
       <div className="bg-container">
         <h1 className='heading-style'>CLASS SCHEDULE</h1>
         <div className="button-group added-style">
-          {/* <Button className="btn " color="info" onClick={onAddBatch}> TO BE ADDED WHEN ADD BATCH FUNCTIONALITY IS TO MAKE ACTIVE*/}
-          <Button className="btn " color="info">
+          <Button className="btn " color="info" onClick={onAddBatch}>
             Add Batches
           </Button>
+          {showAddBatchModal && <AddBatch showModal={showAddBatchModal} setShowModal={setShowAddBatchModal} />}
           {addBatch}
-          <Button className="btn" color="info">
+          <Button className="btn" color="info" onClick={onAddTeacher}>
             Add Teachers
           </Button>
+          {showAddTeacherModal && <AddTeacher showModal={showAddTeacherModal} setShowModal={setShowAddTeacherModal} />}
           <Button className="btn" color="info" onClick={saveTable}>
             Save
           </Button>
           <Button className="btn" color="info" onClick={convertToImage}>
             Post
           </Button>
-          {/* <Button className="btn" color="info" onClick={callWattsappApi}>
-            Post
-          </Button> */}
         </div>
         <div>
           <div ref={divRef}>
+            <Form>
+              <div className='time-table-date-style'>
+                <FormGroup>
+                  <Label for="fromDate">From Date</Label>
+                  <Input
+                    id="fromDate"
+                    name="date"
+                    type="date"
+                    onChange={(e)=>{onChangeFromDate(e)}}
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Label for="toDate">To Date</Label>
+                  <Input
+                    id="toDate"
+                    name="date"
+                    type="date"
+                    onChange={(e)=>{onChangeToDate(e)}}
+
+                  />
+                </FormGroup>
+              </div>
+            </Form>
             <table className='table-style'>
               <tbody>
                 <div className="for-time">
@@ -409,10 +451,10 @@ const TimeTable = () => {
             return (
               <div
                 style={{ maxWidth: tableWidth, backgroundColor: color[index % color.length] }}
-                key={Faculty}
+                key={FacultyID}
                 className="teacher-item"
                 draggable={true}
-                onDragStart={(e) => dragStart(e, { teacher: Faculty, color: color[index % color.length] })}
+                onDragStart={(e) => dragStart(e, { teacher:Faculty, color: color[index % color.length] })}
               >
                 <h3>{Faculty}</h3>
                 {teacherCounter[Faculty] > 0 && (
