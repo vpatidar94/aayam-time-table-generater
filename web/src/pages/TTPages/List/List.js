@@ -86,64 +86,64 @@ export const teachers_list = [
         {
             "FacultyID": 22,
             "Faculty": "MYK",
-            // "subject": "Physics"
+            "subject": "Physics"
         },
         
         {
             "FacultyID": 3038,
             "Faculty": "KPS",
-            // "subject":"Chemistry"
+            "subject":"Chemistry"
         },
 
         {
             "FacultyID": 2029,
             "Faculty": "MRS",
-            // "subject":"Chemistry"
+            "subject":"Chemistry"
         },
 
         {
             "FacultyID": 3051,
             "Faculty": "MAS",
-            // "subject":"Physics"
+            "subject":"Physics"
         },
 
         {
             "FacultyID": 3050,
             "Faculty": "RSS",
-            // "subject":"Physics"
+            "subject":"Physics"
         },
         {
             "FacultyID": 25,
             "Faculty": "NMS",
-            // "subject":"Biology"
+            "subject":"Biology"
         },
         {
             "FacultyID": 3037,
             "Faculty": "HDS",
-            // "subject":"Chemistry"
+            "subject":"Chemistry"
         },
         {
             "FacultyID": 3032,
             "Faculty": "MNM",
-            // "subject": "Biology"
+            "subject": "Biology"
         },
         
         {
             "FacultyID": 1023,
             "Faculty": "SJ",
-            // "subject":"Biology"
+            "subject":"Biology"
         },
 
         {
             "FacultyID": 1025,
             "Faculty": "AJ",
-            // "subject":"Biology"
+            "subject":"Biology"
         },
 
         {
             "FacultyID": 1026,
             "Faculty": "DMPS",
-            // "subject":"Chemistry"
+            "subject":"Chemistry"
         },
 
         
@@ -152,42 +152,42 @@ export const teachers_list = [
         {
             "FacultyID": 1027,
             "Faculty": "PSJ",
-            // "subject":"Physics"
+            "subject":"Physics"
         },
         {
             "FacultyID": 3033,
             "Faculty": "YBS",
-            // "subject":"Biology"
+            "subject":"Biology"
         },
         {
             "FacultyID": 3030,
             "Faculty": "AKS",
-            // "subject":"Chemistry"
+            "subject":"Chemistry"
         },
         {
             "FacultyID": 2028,
             "Faculty": "AMS",
-            // "subject":"Maths"
+            "subject":"Maths"
         },
         {
             "FacultyID": 3031,
             "Faculty": "NDS",
-            // "subject":"Physics"
+            "subject":"Physics"
         },
         {
             "FacultyID": 3052,
             "Faculty": "HWS",
-            // "subject":"Physics"
+            "subject":"Physics"
         },
         {
             "FacultyID": 1029,
             "Faculty": "JRS",
-            // "subject":"Chemistry"
+            "subject":"Chemistry"
         },
         {
             "FacultyID": 3053,
             "Faculty": "HTS",
-            // "subject":"Chemistry"
+            "subject":"Chemistry"
         },
     ]; 
     

@@ -21,62 +21,84 @@ export default class UploadApi {
     // }
 
 
-    getWattsappApi = async (url,message,cell,fileName) => {
-            try {
-                console.log("url",url);
-                console.log("mesage",message);
-                console.log("cel",cell);
-                console.log("file",fileName);
-                
-
-                // https://ziper.io/api/send.php?number=917898118503&type=media&message=test%20message&media_url=https://api.aayamcareerinstitute.co.in//Uploads/Files/File_3431223213168.pdf&filename=file_test.jpg&instance_id=6453479F141A2&access_token=0a3e27126c2c239bdf7f9128943ef9c0
-                const res = await fetch("https://ziper.io/api/send.php" + '?' + new URLSearchParams({
-                    number: cell,
-                    type:"media",
-                    message: message,
-                    media_url:"https://api.aayamcareerinstitute.co.in/"+url,
-                    filename: fileName,
-                    instance_id:"6453479F141A2",
-                    access_token:"0a3e27126c2c239bdf7f9128943ef9c0"
-
-                }), {
-                    method: 'GET',
-                });
-                const result = await res.json();
-                return result;
-            } catch (e) {
-                throw new Error(e.message, e.options);
-            }
+    getWattsappApi = async (url, message, cell, fileName) => {
+        try {
+            console.log("url", url);
+            console.log("mesage", message);
+            console.log("cel", cell);
+            console.log("file", fileName);
+            // https://ziper.io/api/send.php?number=917898118503&type=media&message=test%20message&media_url=https://api.aayamcareerinstitute.co.in//Uploads/Files/File_3431223213168.pdf&filename=file_test.jpg&instance_id=6453479F141A2&access_token=0a3e27126c2c239bdf7f9128943ef9c0
+            const res = await fetch("https://ziper.io/api/send.php" + '?' + new URLSearchParams({
+                number: cell,
+                type: "media",
+                message: message,
+                media_url: "https://api.aayamcareerinstitute.co.in/" + url,
+                filename: fileName,
+                instance_id: "6453479F141A2",
+                access_token: "0a3e27126c2c239bdf7f9128943ef9c0"
+            }), {
+                method: 'GET',
+            });
+            const result = await res.json();
+            return result;
+        } catch (e) {
+            throw new Error(e.message, e.options);
         }
+    }
 
 
-        getWattsappGroupApi = async (url,message,fileName) => {
-            try {
-                console.log("url",url);
-                console.log("mesage",message);
-                
-                console.log("file",fileName);
-                
-
-                //https://ziper.io/api/sendgroupmsg.php?group_id=84987694574-1618740914@g.us&type=media&message=test%20message&media_url=https://i.pravatar.cc&filename=file_test.jpg&instance_id=6453479F141A2&access_token=0a3e27126c2c239bdf7f9128943ef9c0
-                const res = await fetch("https://ziper.io/api/sendgroupmsg.php" + '?' + new URLSearchParams({
-                    group_id:"919826362001-1628170376@g.us",
-                    type:"media",
-                    message: message,
-                    media_url:"https://api.aayamcareerinstitute.co.in/"+url,
-                    filename: fileName,
-                    instance_id:"6453479F141A2",
-                    access_token:"0a3e27126c2c239bdf7f9128943ef9c0"
-
-                }), {
-                    method: 'GET',
-                });
-                const result = await res.json();
-                return result;
-            } catch (e) {
-                throw new Error(e.message, e.options);
-            }
+    getWattsappGroupApiTeachers = async (url, message, fileName) => {
+        try {
+            console.log("url", url);
+            console.log("mesage", message);
+            console.log("file", fileName);
+            //https://ziper.io/api/sendgroupmsg.php?group_id=84987694574-1618740914@g.us&type=media&message=test%20message&media_url=https://i.pravatar.cc&filename=file_test.jpg&instance_id=6453479F141A2&access_token=0a3e27126c2c239bdf7f9128943ef9c0
+            const res = await fetch("https://ziper.io/api/sendgroupmsg.php" + '?' + new URLSearchParams({
+                group_id: "919977116612-1595572006@g.us",
+                type: "media",
+                message: message,
+                media_url: "https://api.aayamcareerinstitute.co.in/" + url,
+                filename: fileName,
+                instance_id: "6453479F141A2",
+                access_token: "0a3e27126c2c239bdf7f9128943ef9c0"
+            }), {
+                method: 'GET',
+            });
+            const result = await res.json();
+            return result;
+        } catch (e) {
+            throw new Error(e.message, e.options);
         }
+    }
+
+
+    getWattsappGroupApiOthers = async (url, message, fileName) => {
+        try {
+            console.log("url", url);
+            console.log("mesage", message);
+
+            console.log("file", fileName);
+
+
+            //https://ziper.io/api/sendgroupmsg.php?group_id=84987694574-1618740914@g.us&type=media&message=test%20message&media_url=https://i.pravatar.cc&filename=file_test.jpg&instance_id=6453479F141A2&access_token=0a3e27126c2c239bdf7f9128943ef9c0
+            const res = await fetch("https://ziper.io/api/sendgroupmsg.php" + '?' + new URLSearchParams({
+                group_id: "919826362001-1628170376@g.us",
+                type: "media",
+                message: message,
+                media_url: "https://api.aayamcareerinstitute.co.in/" + url,
+                filename: fileName,
+                instance_id: "6453479F141A2",
+                access_token: "0a3e27126c2c239bdf7f9128943ef9c0"
+
+            }), {
+                method: 'GET',
+            });
+            const result = await res.json();
+            return result;
+        } catch (e) {
+            throw new Error(e.message, e.options);
+        }
+    }
 
 
     uplaodFile = async (file) => {
@@ -102,7 +124,7 @@ export default class UploadApi {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({})
-                
+
             });
             const result = await res.json();
             return result;

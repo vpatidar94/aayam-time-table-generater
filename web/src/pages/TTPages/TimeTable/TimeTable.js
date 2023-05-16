@@ -50,8 +50,8 @@ const TimeTable = () => {
   const [image, setImage] = useState(null);   //  for div to image conversion
   const [showAddBatchModal, setShowAddBatchModal] = useState(false); //for add Batch popup
   const [showAddTeacherModal, setShowAddTeacherModal] = useState(false);
-  const[fromDate,setFromDate]=useState("");
-  const[toDate,setToDate]=useState("");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
 
 
 
@@ -82,13 +82,15 @@ const TimeTable = () => {
       setDuplicateDetected(false);
     }
   }, [duplicateDetected]);
-
-
-  /**************************************** Component Method Section *********************************/
-
+  /***************************************other const section*********************************** */
+  
   const divRef = useRef(null);
 
   const color = ["#D4E6F1", "#E8DAEF", "#008080", "#808000", "#C39BD3", "#76D7C4", "#3498DB", "#358b79", "#847f86", "rgb(251, 235, 9)", "#CA6F1E", "#CCCCFF", "#F4D03F", "rgb(199, 185, 84)", "#979A9A", "#F0B27A", "rgb(117, 98, 179)", "#CD5C5C", "#40E0D0", "#DAF7A6", "#008080", "#808000", "#FADBD8", "green", "yellow", "white", "red", "pink"]
+
+  /**************************************** Component Method Section *********************************/
+
+  
 
 
   const generateUID = () => {
@@ -123,24 +125,23 @@ const TimeTable = () => {
       const data = await new UploadApi().getUploadedFile();
       if (data.Object?.length > 0) {
         const fileDetail = data.Object.reverse().find(obj => { return obj.Title?.indexOf(imageName) >= 0 });
-        for (let i = 0; i < numberList.length; i++) {
-          try {
-            const cell = numberList[i];
-            /*CHECK THE DETAILS OF THIS GETWATTSAPPAPI IN UPLOAD.API.JS FILE IN API FOLDER*/
-            await new UploadApi().getWattsappApi(fileDetail.LongURL, "time table", cell, fileName);
-            // await new UploadApi().getWattsappGroupApi(fileDetail.LongURL, "time table", fileName);
-          } catch (e) {
-            continue;
-          }
+        // for (let i = 0; i < numberList.length; i++) {       THIS IS USED WHEN GETWATTSAPPAPI WILL USED SO DONT DELETE THIS LINES
+        try {
+          // const cell = numberList[i];
+          /*CHECK THE DETAILS OF THIS GETWATTSAPPAPI IN UPLOAD.API.JS FILE IN API FOLDER*/
+          // await new UploadApi().getWattsappApi(fileDetail.LongURL, "time table", cell, fileName);
+          await new UploadApi().getWattsappGroupApiOthers(fileDetail.LongURL, "time table", fileName);
+          await new UploadApi().getWattsappGroupApiTeachers(fileDetail.LongURL, "time table", fileName);
+        } catch (e) {
+          // continue;
+          console.log("error")
         }
       }
-
     }
     alert("Time table image sent successfully")
   }
 
   const dragItem = teacher;
-
   const dragStart = (e, teacherInfo) => {
     dragItem.current = teacherInfo;
     console.log(teacherInfo)
@@ -191,6 +192,7 @@ const TimeTable = () => {
 
   const handleDrop = (e, key) => {
     console.log(key)
+    console.log("jjjjj", teacherAssignment)
     console.log("drag cell key", draggedCellKey);
     if (draggedCellKey) {
       // Move table item
@@ -222,6 +224,9 @@ const TimeTable = () => {
       const teacher = teacherAssignment[key];
       const batchId = key.split("_")[1];
       const lectureId = key.split("_")[0];
+      const teacherName = teacher.teacher;
+
+
       const batchVo = batch.find(it => it.BatchID == batchId);
       console.log('xxxx xx xx teacher ', teacher);
       console.log('xxxx xx xx batchId ', batchId);
@@ -230,15 +235,17 @@ const TimeTable = () => {
 
       // making lectureVO 
       const lectureVo = time.find(it => it.LectureID == lectureId);
+      const teacherVo = teachers_list.find(it => it.Faculty == teacherName)
+      console.log("iiii", teacherVo)
 
       const lecture = {};
-      lecture.ID = "0";
+      lecture.ID = "0"
       lecture.TimeTableID = "0";
       lecture.LectureName = "";
       lecture.Batch = batchVo;
       lecture.Lecture = lectureVo;
-      lecture.Subject = teacher.subject;
-      lecture.FacultyID = teacher.FacultyID;
+      lecture.Subject = teacherVo.subject;
+      lecture.FacultyID = teacherVo.FacultyID;
       lecture.IsActive = true;
       lecture.CreatedByUserID = "1";
       lecture.CreatedOnDate = "02/05/2023";
@@ -279,13 +286,13 @@ const TimeTable = () => {
     setTeacherCounter(teacherCount);
   }
 
-  const onChangeFromDate=(e)=>{
+  const onChangeFromDate = (e) => {
     setFromDate(e.target.value);
   }
-  const onChangeToDate=(e)=>{
+  const onChangeToDate = (e) => {
     setToDate(e.target.value);
   }
-  
+
   const onAddBatch = () => {
     // setAddBatch(<AddBatch batchList={batchList} />)
     setShowAddBatchModal(true);
@@ -328,7 +335,7 @@ const TimeTable = () => {
       .then(response => response.text())
       .then(result => console.log(result))
       .catch(error => console.log('error', error));
-      alert("time table saved successfully");
+    alert("time table saved successfully");
   };
 
   /**************************************** Template Section *****************************************/
@@ -355,24 +362,27 @@ const TimeTable = () => {
         </div>
         <div>
           <div ref={divRef}>
-            <Form>
+          <br/>
+            <Form >
               <div className='time-table-date-style'>
-                <FormGroup>
-                  <Label for="fromDate">From Date</Label>
+                <FormGroup className="label-date-allignment">
+                  <p>From:</p>
                   <Input
                     id="fromDate"
                     name="date"
                     type="date"
-                    onChange={(e)=>{onChangeFromDate(e)}}
+                    onChange={(e) => { onChangeFromDate(e) }}
+                    className='input-size'
                   />
                 </FormGroup>
-                <FormGroup>
-                  <Label for="toDate">To Date</Label>
+                <FormGroup className="label-date-allignment">
+                  <p>To:</p>
                   <Input
                     id="toDate"
                     name="date"
                     type="date"
-                    onChange={(e)=>{onChangeToDate(e)}}
+                    onChange={(e) => { onChangeToDate(e) }}
+                    className='input-size'
 
                   />
                 </FormGroup>
@@ -438,6 +448,7 @@ const TimeTable = () => {
                 </tr>
               </tbody>
             </table>
+            <br/>
             {/* <button onClick={onAddBatch}>+</button>
             {addBatch} */}
           </div>
@@ -454,7 +465,7 @@ const TimeTable = () => {
                 key={FacultyID}
                 className="teacher-item"
                 draggable={true}
-                onDragStart={(e) => dragStart(e, { teacher:Faculty, color: color[index % color.length] })}
+                onDragStart={(e) => dragStart(e, { teacher: Faculty, color: color[index % color.length] })}
               >
                 <h3>{Faculty}</h3>
                 {teacherCounter[Faculty] > 0 && (
