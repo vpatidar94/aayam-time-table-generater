@@ -1,5 +1,6 @@
 import { lazy } from "react";
 import { Navigate } from "react-router-dom";
+// import EditTimeTable from "../pages/TTPages/EditTimeTable/EditTimeTable.js";
 // import Mobile from "../pages/TTPages/Mobile/Mobile.js";
 // import NewTT from "../pages/TTPages/NewTT/NewTT.js";
 
@@ -34,6 +35,9 @@ const PreviousTimeTable= lazy(()=> import("../pages/TTPages/PreviousTimeTable/Pr
 const AddBatch= lazy(()=> import("../pages/TTPages/AddBatch/AddBatch.js"));
 const NewTT=lazy(()=>import("../pages/TTPages/NewTT/NewTT.js"));
 const Mobile=lazy(()=>import("../pages/TTPages/Mobile/Mobile.js"));
+const EditTimeTable=lazy(()=>import("../pages/TTPages/EditTimeTable/EditTimeTable.js"));
+
+
 
 
 /*****Routes******/ 
@@ -65,7 +69,8 @@ const ThemeRoutes = [
       { path: "/previoustimetable", exact: true, element: <PreviousTimeTable />},
       { path: "/addbatch", exact: true, element: <AddBatch />},
       {path: "/newtt", exact: true, element: <NewTT/>},
-      {path: "/mobile", exact: true, element: <Mobile/>}
+      {path: "/mobile", exact: true, element: <Mobile/>},
+      {path: "/edit/:fromDateEdit", exact:true, element:<EditTimeTable/>}
 
     ],
   },

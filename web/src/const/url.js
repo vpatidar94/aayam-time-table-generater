@@ -10,4 +10,6 @@ export const URL = {
     
     GET_ALL_TT: BASE_URL + '/GetTimeTable', 
 
+    GET_EDIT_TT: BASE_URL + '/GetTimeTableByDate',
+
 };  

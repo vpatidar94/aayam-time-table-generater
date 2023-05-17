@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import TtApi from '../../../api/tt.api.js';
 import { Button, Card, CardBody, CardSubtitle, CardTitle, Table } from 'reactstrap';
+import { NavLink } from 'react-router-dom';
 
 const PreviousTimeTable = () => {
   /**************************************** const Section ************************************/
@@ -18,6 +19,7 @@ const PreviousTimeTable = () => {
     const result = await new TtApi().getTtList();
     if (result.IsSuccessful && result.Object?.length > 0) {
       setTimeTableList(result.Object);
+      console.log(result.Object)
     }
     // console.log(result);
   };
@@ -25,6 +27,8 @@ const PreviousTimeTable = () => {
   const editTt = (row) => {
     console.log('xxx xx xx row is ', row);
     
+    
+
     
   }
 
@@ -62,9 +66,9 @@ const PreviousTimeTable = () => {
                     </td>
                     <td>{tdata.ToDate}</td>
                     <td>
-                      <Button onClick={e => {editTt(tdata)}} className="btn" outline color="primary">
+                     <NavLink to={'/edit/'+ tdata.FromDate.replaceAll("/", '-')}><Button onClick={e => {editTt(tdata)}} className="btn" outline color="primary">
                         Edit
-                      </Button>
+                      </Button></NavLink>
                     </td>
                   </tr>
                 ))}
