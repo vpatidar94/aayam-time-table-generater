@@ -56,7 +56,7 @@ const ThemeRoutes = [
       { path: "/breadcrumbs", exact: true, element: <Breadcrumbs /> }, 
       
     
-      { path: "/tt", exact: true, element: <TimeTable /> },
+      // { path: "/tt", exact: true, element: <TimeTable /> },
       { path: "/tt-v2", exact: true, element: <TimeTableV2 /> },
 
       { path: "/students", exact: true, element: <Students />},

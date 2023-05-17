@@ -24,6 +24,8 @@ const PreviousTimeTable = () => {
 
   const editTt = (row) => {
     console.log('xxx xx xx row is ', row);
+    
+    
   }
 
   /**************************************** Template Section *****************************************/

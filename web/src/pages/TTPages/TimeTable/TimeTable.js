@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import { RxCross2 } from "react-icons/rx";
 import { batch, teachers_list, time } from '../List/List';
@@ -9,31 +8,13 @@ import "./TimeTable.scss";
 // import { RiDeleteBin2Line } from "react-icons/ri";
 // import htmlToCanvas from 'html-to-canvas';
 import html2canvas from 'html2canvas';
-import {
-  Card,
-  Row,
-  Col,
-  CardTitle,
-  CardBody,
-  Button,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  FormText,
-} from "reactstrap";
-
+import {Card,Row,Col,CardTitle,CardBody,Button,Form,FormGroup,Label,Input,FormText,} from "reactstrap";
 import AddBatch from '../AddBatch/AddBatch';
 import UploadApi from '../../../api/upload.api';
 import AddTeacher from '../TeacherForm/TeacherForm';
 
-
-
-
 const TimeTable = () => {
   /**************************************** Use Effect Section ************************************/
-
-
   /**************************************** State Section *****************************************/
   const [tableWidth, setTableWidth] = useState(0);
   const [draggedCellKey, setDraggedCellKey] = useState(null);
@@ -52,9 +33,6 @@ const TimeTable = () => {
   const [showAddTeacherModal, setShowAddTeacherModal] = useState(false);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
-
-
-
 
   /**************************************** Use Effect Section ************************************/
   useEffect(() => {
@@ -75,7 +53,6 @@ const TimeTable = () => {
     }
   }, [duplicateDetected]);
 
-
   useEffect(() => {
     if (duplicateDetected) {
       // alert('Two same teachers found in the same row');   
@@ -83,15 +60,9 @@ const TimeTable = () => {
     }
   }, [duplicateDetected]);
   /***************************************other const section*********************************** */
-  
   const divRef = useRef(null);
-
   const color = ["#D4E6F1", "#E8DAEF", "#008080", "#808000", "#C39BD3", "#76D7C4", "#3498DB", "#358b79", "#847f86", "rgb(251, 235, 9)", "#CA6F1E", "#CCCCFF", "#F4D03F", "rgb(199, 185, 84)", "#979A9A", "#F0B27A", "rgb(117, 98, 179)", "#CD5C5C", "#40E0D0", "#DAF7A6", "#008080", "#808000", "#FADBD8", "green", "yellow", "white", "red", "pink"]
-
   /**************************************** Component Method Section *********************************/
-
-  
-
 
   const generateUID = () => {
     // I generate the UID from two parts here 
@@ -110,12 +81,10 @@ const TimeTable = () => {
     /*converting page64 url got as imgData into file Object by using blob below*/
     const byteString = atob(imgData.split(',')[1]);
     const mimeString = imgData.split(',')[0].split(':')[1].split(';')[0];
-
     const ia = new Uint8Array(byteString.length);
     for (let i = 0; i < byteString.length; i++) {
       ia[i] = byteString.charCodeAt(i);
     }
-
     const blob = new Blob([ia], { type: mimeString });
     const imageName = generateUID();
     const file = new File([blob], imageName + ".jpg");
@@ -131,26 +100,28 @@ const TimeTable = () => {
           /*CHECK THE DETAILS OF THIS GETWATTSAPPAPI IN UPLOAD.API.JS FILE IN API FOLDER*/
           // await new UploadApi().getWattsappApi(fileDetail.LongURL, "time table", cell, fileName);
           await new UploadApi().getWattsappGroupApiOthers(fileDetail.LongURL, "time table", fileName);
-          await new UploadApi().getWattsappGroupApiTeachers(fileDetail.LongURL, "time table", fileName);
+          // await new UploadApi().getWattsappGroupApiTeachers(fileDetail.LongURL, "time table", fileName);
         } catch (e) {
           // continue;
+          console.log("error")
+        }
+        try {
+          await new UploadApi().getWattsappGroupApiTeachers(fileDetail.LongURL, "time table", fileName);
+        } catch (e){
           console.log("error")
         }
       }
     }
     alert("Time table image sent successfully")
   }
-
   const dragItem = teacher;
   const dragStart = (e, teacherInfo) => {
     dragItem.current = teacherInfo;
     console.log(teacherInfo)
   };
-
   const handleTableCellDragStart = (e, key) => {
     setDraggedCellKey(key);
   };
-
   const checkForDuplicateInRow = (key) => {
     const rowId = key.split('_')[0];
     const teacherInCurrentRow = [];
@@ -162,7 +133,6 @@ const TimeTable = () => {
         });
       }
     }
-
     const duplicates = teacherInCurrentRow.reduce((acc, item) => {
       if (acc[item.teacher]) {
         acc[item.teacher].push(item.key);
@@ -171,14 +141,11 @@ const TimeTable = () => {
       }
       return acc;
     }, {});
-
     const newDuplicateKeys = Object.values(duplicates)
       .filter((keys) => keys.length > 1)
       .flat();
-
     const oldDuplicateKeys = Object.keys(duplicateElements);
     const isNewDuplicate = !oldDuplicateKeys.includes(key) && newDuplicateKeys.includes(key);
-
     if (isNewDuplicate) {
       setDuplicateDetected(true);
       setDuplicateElements(
@@ -198,13 +165,11 @@ const TimeTable = () => {
       // Move table item
       const sourceAssignment = teacherAssignment[draggedCellKey];
       const targetAssignment = teacherAssignment[key];
-
       setTeacherAssignment({
         ...teacherAssignment,
         [draggedCellKey]: targetAssignment,
         [key]: sourceAssignment,
       });
-
       setDraggedCellKey(null);
     } else {
       // Assign teacher to the cell
@@ -226,13 +191,11 @@ const TimeTable = () => {
       const lectureId = key.split("_")[0];
       const teacherName = teacher.teacher;
 
-
       const batchVo = batch.find(it => it.BatchID == batchId);
       console.log('xxxx xx xx teacher ', teacher);
       console.log('xxxx xx xx batchId ', batchId);
       console.log('xxxx xx xx lectureId', lectureId);
       console.log('xxxx xx xx teacherAssignment', teacherAssignment);
-
       // making lectureVO 
       const lectureVo = time.find(it => it.LectureID == lectureId);
       const teacherVo = teachers_list.find(it => it.Faculty == teacherName)
@@ -279,20 +242,14 @@ const TimeTable = () => {
     }
     delete teacherAssignment[key].teacher;
     delete teacherAssignment[key].color;
-    // else {
-    //   teacherCounts[teacherAssignment[key]] += 1;
-    // }
-    // setTeacherCounter({...teacherCounter});
     setTeacherCounter(teacherCount);
   }
-
   const onChangeFromDate = (e) => {
     setFromDate(e.target.value);
   }
   const onChangeToDate = (e) => {
     setToDate(e.target.value);
   }
-
   const onAddBatch = () => {
     // setAddBatch(<AddBatch batchList={batchList} />)
     setShowAddBatchModal(true);
@@ -330,14 +287,12 @@ const TimeTable = () => {
       body: raw,
       redirect: 'follow'
     };
-
     fetch("https://api.aayamcareerinstitute.co.in/api/AddUpdateTimeTable", requestOptions)
       .then(response => response.text())
       .then(result => console.log(result))
       .catch(error => console.log('error', error));
     alert("time table saved successfully");
   };
-
   /**************************************** Template Section *****************************************/
   return (
     <>

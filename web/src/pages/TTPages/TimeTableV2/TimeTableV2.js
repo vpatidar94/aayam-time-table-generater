@@ -6,6 +6,9 @@ import { COLORS } from '../../../const/color.const';
 import AddBatch from '../AddBatch/AddBatch';
 import { batch, teachers_list, time } from '../List/List';
 import "./TimeTableV2.scss";
+import {Card,Row,Col,CardTitle,CardBody,Button,Form,FormGroup,Label,Input,FormText,} from "reactstrap";
+import UploadApi from '../../../api/upload.api';
+import AddTeacher from '../TeacherForm/TeacherForm';
 
 const TimeTableV2 = () => {
 
@@ -40,7 +43,11 @@ const TimeTableV2 = () => {
   // contains key of teacher asignment which is grag within the table
   const [addBatch, setAddBatch] = useState(null);
   const [image, setImage] = useState(null);   //  for div to image 
-
+  const [batchList, setBatchList] = useState(batch);
+  const [showAddBatchModal, setShowAddBatchModal] = useState(false); //for add Batch popup
+  const [showAddTeacherModal, setShowAddTeacherModal] = useState(false);
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
   const divRef = useRef(null);
 
   /**************************************** Component Method Section *********************************/
@@ -191,64 +198,109 @@ const TimeTableV2 = () => {
     var elem = document.elementFromPoint(x, y);
     alert('xx xx elem ', elem.id);
   }
-
-  /**************************************** Template Section *****************************************/
-  // These 4 methods need to be refactored & moved to Component Method Section @jitendra methods
-  const convertToImage = () => {
-    html2canvas(divRef.current).then(canvas => {
+/*********************************************This below methods are added by jitendra from TimeTable.js***********************************/
+  const generateUID = () => {
+    // I generate the UID from two parts here 
+    // to ensure the random number provide enough bits.
+    var firstPart = (Math.random() * 46656) | 0;
+    var secondPart = (Math.random() * 46656) | 0;
+    firstPart = ("000" + firstPart.toString(36)).slice(-3);
+    secondPart = ("000" + secondPart.toString(36)).slice(-3);
+    return firstPart + secondPart;
+  }
+    const convertToImage = async () => {
+      // alert("Time table image sent successfully")
+      const canvas = await html2canvas(divRef.current);
       const imgData = canvas.toDataURL();
       setImage(imgData);
-    }).catch(error => {
-      console.error(error);
-    });
-  };
-
-  const onAddBatch = () => {
-    setAddBatch(<AddBatch />)
-  }
-  const onAddTeacher = () => {
-    alert("add")
-  }
-
-  const saveTable = () => {
-    // localStorage.setItem("teacherA", JSON.stringify(teacherAssignment));
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-
-    var raw = JSON.stringify({
-      "TimeTableID": 0,
-      "Description": "time table save",
-      "DateType": "single",
-      "FromDate": "09/05/2023",
-      "ToDate": "12/05/2023",
-      "ShiftID": 1,
-      "SessionID": 5,
-      "Session": "string",
-      "BatchID": [
-        1, 6, 10, 7, 8, 9, 2, 3
-      ],
-      "LectureID": [
-        1, 2, 3, 4, 5, 6, 7, 8
-      ],
-      "IsActive": true,
-      "CreatedByUserID": 1,
-      "CreatedOnDate": "09/05/2023",
-      "LectureList": lectureList
-    });
-
-    var requestOptions = {
-      method: 'POST',
-      headers: myHeaders,
-      body: raw,
-      redirect: 'follow'
+      /*converting page64 url got as imgData into file Object by using blob below*/
+      const byteString = atob(imgData.split(',')[1]);
+      const mimeString = imgData.split(',')[0].split(':')[1].split(';')[0];
+      const ia = new Uint8Array(byteString.length);
+      for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+      }
+      const blob = new Blob([ia], { type: mimeString });
+      const imageName = generateUID();
+      const file = new File([blob], imageName + ".jpg");
+      const fileName = imageName + ".jpg";
+      const result = await new UploadApi().uplaodFile(file);
+      if (result === "Success") {
+        const data = await new UploadApi().getUploadedFile();
+        if (data.Object?.length > 0) {
+          const fileDetail = data.Object.reverse().find(obj => { return obj.Title?.indexOf(imageName) >= 0 });
+          // for (let i = 0; i < numberList.length; i++) {       THIS IS USED WHEN GETWATTSAPPAPI WILL USED SO DONT DELETE THIS LINES
+          try {
+            // const cell = numberList[i];
+            /*CHECK THE DETAILS OF THIS GETWATTSAPPAPI IN UPLOAD.API.JS FILE IN API FOLDER*/
+            // await new UploadApi().getWattsappApi(fileDetail.LongURL, "time table", cell, fileName);
+            await new UploadApi().getWattsappGroupApiOthers(fileDetail.LongURL, "time table", fileName);
+            // await new UploadApi().getWattsappGroupApiTeachers(fileDetail.LongURL, "time table", fileName);
+          } catch (e) {
+            // continue;
+            console.log("error")
+          }
+          try {
+            await new UploadApi().getWattsappGroupApiTeachers(fileDetail.LongURL, "time table", fileName);
+          } catch (e){
+            console.log("error")
+          }
+        }
+      }
+      alert("Time table image sent successfully")
+    }
+  
+    const onChangeFromDate = (e) => {
+      setFromDate(e.target.value);
+    }
+    const onChangeToDate = (e) => {
+      setToDate(e.target.value);
+    }
+    const onAddBatch = () => {
+      // setAddBatch(<AddBatch batchList={batchList} />)
+      setShowAddBatchModal(true);
+    }
+    const onAddTeacher = () => {
+      setShowAddTeacherModal(true);
+    }
+    const saveTable = () => {
+      // localStorage.setItem("teacherA", JSON.stringify(teacherAssignment));
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      var raw = JSON.stringify({
+        "TimeTableID": 0,
+        "Description": "time table save",
+        "DateType": "single",
+        "FromDate": fromDate,
+        "ToDate": toDate,
+        "ShiftID": 1,
+        "SessionID": 5,
+        "Session": "string",
+        "BatchID": [
+          1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
+        ],
+        "LectureID": [
+          1, 2, 3, 4, 5, 6, 7, 8
+        ],
+        "IsActive": true,
+        "CreatedByUserID": 1,
+        "CreatedOnDate": new Date().toLocaleString(),
+        "LectureList": lectureList
+      });
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+      };
+      fetch("https://api.aayamcareerinstitute.co.in/api/AddUpdateTimeTable", requestOptions)
+        .then(response => response.text())
+        .then(result => console.log(result))
+        .catch(error => console.log('error', error));
+      alert("time table saved successfully");
     };
 
-    fetch("https://api.aayamcareerinstitute.co.in/api/AddUpdateTimeTable", requestOptions)
-      .then(response => response.text())
-      .then(result => console.log(result))
-      .catch(error => console.log('error', error));
-  };
-
+  /**************************************** Template Section *****************************************/
   return (
     <>
       <div className="bg-container">
@@ -258,8 +310,50 @@ const TimeTableV2 = () => {
           </Alert> : <></>
         }
         <h1 className='heading-style'>CLASS SCHEDULE</h1>
+        <div className="button-group added-style">
+          <Button className="btn " color="info" onClick={onAddBatch}>
+            Add Batches
+          </Button>
+          {showAddBatchModal && <AddBatch showModal={showAddBatchModal} setShowModal={setShowAddBatchModal} />}
+          {addBatch}
+          <Button className="btn" color="info" onClick={onAddTeacher}>
+            Add Teachers
+          </Button>
+          {showAddTeacherModal && <AddTeacher showModal={showAddTeacherModal} setShowModal={setShowAddTeacherModal} />}
+          <Button className="btn" color="info" onClick={saveTable}>
+            Save
+          </Button>
+          <Button className="btn" color="info" onClick={convertToImage}>
+            Post
+          </Button>
+        </div>
         <div>
           <div ref={divRef}>
+          <br/>
+            <Form >
+              <div className='time-table-date-style'>
+                <FormGroup className="label-date-allignment">
+                  <p>From:</p>
+                  <Input
+                    id="fromDate"
+                    name="date"
+                    type="date"
+                    onChange={(e) => { onChangeFromDate(e) }}
+                    className='input-size'
+                  />
+                </FormGroup>
+                <FormGroup className="label-date-allignment">
+                  <p>To:</p>
+                  <Input
+                    id="toDate"
+                    name="date"
+                    type="date"
+                    onChange={(e) => { onChangeToDate(e) }}
+                    className='input-size'
+                  />
+                </FormGroup>
+              </div>
+            </Form>
             <table className='table-style'>
               <tbody>
                 <div className="for-time">
@@ -279,12 +373,9 @@ const TimeTableV2 = () => {
 
                       <div >
                         <td className='F-style time-style'>{t.Time_From}-{t.Time_To}</td>
-
                         {batch.map((b) => {
-
                           const key = t.LectureID + '_' + b.BatchID
                           return (
-
                             <td
                               draggable={true}
                               onDragOver={allowDrop}
@@ -295,9 +386,7 @@ const TimeTableV2 = () => {
                               className={`each-block ${isTeacherDuplicateInLecture(t.LectureID, teacherAssignment[key]?.FacultyID ?? null) ? "blink" : ""}`}
                               style={{ backgroundColor: teacherAssignment[key]?.color }}
                             >
-
                               <div className={`teacname-cross-style ${teacherAssignment[key]?.className} `}>
-
                                 <div className="teacher-name" >
                                   {teacherAssignment[key]?.Faculty}
                                 </div>
@@ -313,16 +402,11 @@ const TimeTableV2 = () => {
                                 </div>
                               </div>
                             </td>
-
                           )
                         })}
                       </div>
-
                     )
                   })}
-
-
-
                 </tr>
               </tbody>
             </table>
@@ -332,10 +416,7 @@ const TimeTableV2 = () => {
           {/* <button onClick={convertToImage}>Convert to Image</button>
           {image && <img src={image} alt="table" style={{ maxWidth: tableWidth }} />}
           <button onClick={saveTable}>Save</button> */}
-
         </div>
-
-
         <div className='teacher-container' style={{ maxWidth: tableWidth }}>
           {teachers_list.map((teacher, index) => {
             const { FacultyID, Faculty } = teacher;
@@ -361,12 +442,9 @@ const TimeTableV2 = () => {
             );
           })}
           {/* <button onClick={onAddTeacher}>+</button> */}
-
         </div>
-
       </div>
     </>
   )
 }
-
 export default TimeTableV2;

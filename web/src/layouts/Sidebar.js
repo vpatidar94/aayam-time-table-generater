@@ -13,9 +13,14 @@ const navigation = [
   //   icon: "bi bi-bell",
   // },
 
+  // {
+  //   title: "Time Table",
+  //   href: "/tt",
+  //   icon: "bi bi-bell",
+  // },
   {
     title: "Time Table",
-    href: "/tt",
+    href: "/tt-v2",
     icon: "bi bi-bell",
   },
   
