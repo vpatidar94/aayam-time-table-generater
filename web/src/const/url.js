@@ -8,5 +8,6 @@ export const URL = {
     UPLOAD_FILE: BASE_URL + '/UploadFilesAttachment',
     GET_UPLOAD_FILE_URL: BASE_URL + '/GetFiles', 
     
+    GET_ALL_TT: BASE_URL + '/GetTimeTable', 
 
 };  
