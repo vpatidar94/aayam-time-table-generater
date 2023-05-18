@@ -27,7 +27,7 @@ export default class TtApi {
 //     }
 // }
 
-getEditTt = async () => {
+getEditTt = async (fromDateEdit) => {
     try {
         // const formData = new FormData();
         // formData.append('file', file, file.name);
@@ -37,7 +37,7 @@ getEditTt = async () => {
             method: 'POST',
             headers: myHeaders,
             body: JSON.stringify({
-            FromDate: "18/05/23",
+            FromDate: fromDateEdit.replaceAll("-", "/"),
         })});
         const result = await res.json();
         return result;

@@ -274,7 +274,7 @@ export const batch= [
         "CourseID": 11
     },
     {
-        "BatchID": 12,
+        "BatchID": 22,
         "Batch": "JXII-1",
         "CourseID": 12
     },

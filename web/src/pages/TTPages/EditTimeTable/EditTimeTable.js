@@ -1,7 +1,8 @@
 import { useParams } from 'react-router-dom'
 import TtApi from '../../../api/tt.api.js';
+import "./EditTimeTable.scss";
 
-
+/*TAKING THE BELOW IMPORT FROM TIMETABLEV2* */
 import html2canvas from 'html2canvas';
 import React, { useEffect, useRef, useState } from 'react';
 import { RxCross2 } from "react-icons/rx";
@@ -10,15 +11,12 @@ import { COLORS } from '../../../const/color.const';
 import AddBatch from '../AddBatch/AddBatch';
 import { batch, teachers_list, time } from '../List/List';
 // import "./TimeTableV2.scss";
-import "./EditTimeTable.scss"
 import { Card, Row, Col, CardTitle, CardBody, Button, Form, FormGroup, Label, Input, FormText, } from "reactstrap";
 import UploadApi from '../../../api/upload.api';
 import AddTeacher from '../TeacherForm/TeacherForm';
 
 const EditTimeTable = () => {
     const { fromDateEdit } = useParams();
-
-
 
     /**************************************** const Section ************************************/
     /**************************************** Use Effect Section ************************************/
@@ -44,6 +42,7 @@ const EditTimeTable = () => {
     }, []);
     /**************************************** State Section *****************************************/
     const [editTimeTable, setEditTimeTable] = useState(null);
+    const [editBatch, setEditBatch] = useState([]); //this is for filter batch from Batch of saved data
 
     /* taking the below useStates from timetable.v2*/
     const [tableWidth, setTableWidth] = useState(0); // set table width
@@ -65,50 +64,42 @@ const EditTimeTable = () => {
     const [toDate, setToDate] = useState("");
     const divRef = useRef(null);
     /**************************************** Component Method Section *********************************/
-    // const getEditTimeTable = async () => {
-    //     // TODO: Call api
-    //     const result = await new TtApi().getEditTt();
-    //     if (result.IsSuccessful && result.Object?.length > 0) {
-    //       setEditTimeTable(result.Object);
-    //       console.log(result.Object)
-    //     }
-    //     // console.log(result);
-    //   };
-
-    /***API TO Get TIME Table by Date
-     * THE API JUST ABOVE IT IS ALSO THE SAME API GETTTING IT FROM THE TT.API.JS.JS
-     * COMMENT THIS API AHEAD AND USE THE ABOVE API ..DONT FORGET TO CONVERT FORMDATE TO FORMDATEDIT.REPLACEALL("-","/")IN TT.API.JS.JS**/
     const getEditTimeTable = async () => {
-        try {
-            const myHeaders = new Headers();
-            myHeaders.append("Content-Type", "application/json");
+        // TODO: Call api /***API TO Get TIME Table by from Date***/
+        const result = await new TtApi().getEditTt(fromDateEdit);
+        // if (result.IsSuccessful && result.Object?.length > 0) {
+          setEditTimeTable(result.Object);
+            console.log("xxxx", result.Object);
+            console.log("xxxx edittimetable", editTimeTable);
+            const uniqueTimeFromLectureList = [];
 
-            const raw = JSON.stringify({
-                "FromDate": fromDateEdit.replaceAll("-", "/")
+            // Create a Set to keep track of unique TimeFrom values
+            const TimeFromSet = new Set();
+
+            // Iterate over the lectureList array
+            result.Object.LectureList.forEach(lecture => {
+                const timeFrom = lecture.Lecture.Time_From;
+
+                // Check if the TimeFrom value is coming for the first time
+                if (!TimeFromSet.has(timeFrom)) {
+                    TimeFromSet.add(timeFrom);
+                    uniqueTimeFromLectureList.push(timeFrom);
+                }
             });
 
-            const requestOptions = {
-                method: 'POST',
-                headers: myHeaders,
-                body: raw,
-                redirect: 'follow'
-            };
+            console.log("xxxxuniquetime", uniqueTimeFromLectureList);
 
-            const response = await fetch("https://api.aayamcareerinstitute.co.in/api/GetTimeTableByDate", requestOptions);
-            const result = await response.json();
-            console.log(",,,,", result.Object); // Log the Object property
-            setEditTimeTable(result.Object);
-            console.log("llll", { editTimeTable })
-        } catch (error) {
-            console.log('error', error);
-        }
+            const filteredBatchFromSavedData = result.Object.Batch.filter(item => result.Object.BatchID.includes(item.BatchID)).map(item => item.Batch);
+            setEditBatch(filteredBatchFromSavedData)
+            console.log("xxxfilterbatch", filteredBatchFromSavedData);
+            console.log("xx xxx editbatch", editBatch);
+
     }
 
     /* Taking the below code from timetable.v2*/
     const dragStart = (e, teacherDragged) => {
         setDraggedTeacher(teacherDragged);
     };
-
     const allowDrop = (ev) => {
         let t = ev.target;
         while (t && (!t.classList || !t.classList.contains("each-block"))) {
@@ -297,7 +288,6 @@ const EditTimeTable = () => {
         }
         alert("Time table image sent successfully")
     }
-
     const onChangeFromDate = (e) => {
         setFromDate(e.target.value);
     }
@@ -325,7 +315,7 @@ const EditTimeTable = () => {
             "SessionID": 5,
             "Session": "string",
             "BatchID": [
-                1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
+                1, 6, 10, 7, 3, 15, 2, 3049, 20, 3042, 3061, 22, 13, 14
             ],
             "LectureID": [
                 1, 2, 3, 4, 5, 6, 7, 8
@@ -347,6 +337,7 @@ const EditTimeTable = () => {
             .catch(error => console.log('error', error));
         alert("time table saved successfully");
     };
+
     /**************************************** Template Section *****************************************/
     return (
         <>
@@ -409,20 +400,22 @@ const EditTimeTable = () => {
                                 <div className="for-time">
                                     <tr>
                                         <td className='F-style time-style'>Time</td>
-                                        {batch.map((each) => {
+                                        {/* {batch.map((each) => { */}
+                                        {editBatch.map((each) => {
                                             return (
-                                                <td className='F-style batch-style' key={batch.BatchID}>{each.Batch}</td>
+                                                <td className='F-style batch-style' key={batch.BatchID}>{each}</td>
                                             )
                                         })}
 
                                     </tr>
                                 </div>
                                 <tr >
-                                    {/* {time.map((t) => { */}
-                                    {editTimeTable?.LectureList.map((t) => {
+                                    {time.map((t) => {
+                                        {/* {editTimeTable?.LectureList.map((t) => { */ }
                                         return (
                                             <div >
-                                                <td className='F-style time-style'>{t.Lecture.Time_From}-{t.Lecture.Time_To}</td>
+                                                <td className='F-style time-style'>{t.Time_From}-{t.Time_To}</td>
+                                                {/* <td className='F-style time-style'>{t.Lecture.Time_From}-{t.Lecture.Time_To}</td> */}
                                                 {batch.map((b) => {
                                                     const key = t.LectureID + '_' + b.BatchID
                                                     return (
@@ -491,12 +484,9 @@ const EditTimeTable = () => {
                             </div>
                         );
                     })}
-                    {/* <button onClick={onAddTeacher}>+</button> */}
                 </div>
             </div>
         </>
     )
 }
-
-
 export default EditTimeTable

@@ -6,7 +6,7 @@ import { COLORS } from '../../../const/color.const';
 import AddBatch from '../AddBatch/AddBatch';
 import { batch, teachers_list, time } from '../List/List';
 import "./TimeTableV2.scss";
-import {Card,Row,Col,CardTitle,CardBody,Button,Form,FormGroup,Label,Input,FormText,} from "reactstrap";
+import { Card, Row, Col, CardTitle, CardBody, Button, Form, FormGroup, Label, Input, FormText, } from "reactstrap";
 import UploadApi from '../../../api/upload.api';
 import AddTeacher from '../TeacherForm/TeacherForm';
 
@@ -198,7 +198,7 @@ const TimeTableV2 = () => {
     var elem = document.elementFromPoint(x, y);
     alert('xx xx elem ', elem.id);
   }
-/*********************************************This below methods are added by jitendra from TimeTable.js***********************************/
+  /*********************************************This below methods are added by jitendra from TimeTable.js***********************************/
   const generateUID = () => {
     // I generate the UID from two parts here 
     // to ensure the random number provide enough bits.
@@ -208,97 +208,97 @@ const TimeTableV2 = () => {
     secondPart = ("000" + secondPart.toString(36)).slice(-3);
     return firstPart + secondPart;
   }
-    const convertToImage = async () => {
-      // alert("Time table image sent successfully")
-      const canvas = await html2canvas(divRef.current);
-      const imgData = canvas.toDataURL();
-      setImage(imgData);
-      /*converting page64 url got as imgData into file Object by using blob below*/
-      const byteString = atob(imgData.split(',')[1]);
-      const mimeString = imgData.split(',')[0].split(':')[1].split(';')[0];
-      const ia = new Uint8Array(byteString.length);
-      for (let i = 0; i < byteString.length; i++) {
-        ia[i] = byteString.charCodeAt(i);
-      }
-      const blob = new Blob([ia], { type: mimeString });
-      const imageName = generateUID();
-      const file = new File([blob], imageName + ".jpg");
-      const fileName = imageName + ".jpg";
-      const result = await new UploadApi().uplaodFile(file);
-      if (result === "Success") {
-        const data = await new UploadApi().getUploadedFile();
-        if (data.Object?.length > 0) {
-          const fileDetail = data.Object.reverse().find(obj => { return obj.Title?.indexOf(imageName) >= 0 });
-          // for (let i = 0; i < numberList.length; i++) {       THIS IS USED WHEN GETWATTSAPPAPI WILL USED SO DONT DELETE THIS LINES
-          try {
-            // const cell = numberList[i];
-            /*CHECK THE DETAILS OF THIS GETWATTSAPPAPI IN UPLOAD.API.JS FILE IN API FOLDER*/
-            // await new UploadApi().getWattsappApi(fileDetail.LongURL, "time table", cell, fileName);
-            await new UploadApi().getWattsappGroupApiOthers(fileDetail.LongURL, "time table", fileName);
-            // await new UploadApi().getWattsappGroupApiTeachers(fileDetail.LongURL, "time table", fileName);
-          } catch (e) {
-            // continue;
-            console.log("error")
-          }
-          try {
-            await new UploadApi().getWattsappGroupApiTeachers(fileDetail.LongURL, "time table", fileName);
-          } catch (e){
-            console.log("error")
-          }
+  const convertToImage = async () => {
+    // alert("Time table image sent successfully")
+    const canvas = await html2canvas(divRef.current);
+    const imgData = canvas.toDataURL();
+    setImage(imgData);
+    /*converting page64 url got as imgData into file Object by using blob below*/
+    const byteString = atob(imgData.split(',')[1]);
+    const mimeString = imgData.split(',')[0].split(':')[1].split(';')[0];
+    const ia = new Uint8Array(byteString.length);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    const blob = new Blob([ia], { type: mimeString });
+    const imageName = generateUID();
+    const file = new File([blob], imageName + ".jpg");
+    const fileName = imageName + ".jpg";
+    const result = await new UploadApi().uplaodFile(file);
+    if (result === "Success") {
+      const data = await new UploadApi().getUploadedFile();
+      if (data.Object?.length > 0) {
+        const fileDetail = data.Object.reverse().find(obj => { return obj.Title?.indexOf(imageName) >= 0 });
+        // for (let i = 0; i < numberList.length; i++) {       THIS IS USED WHEN GETWATTSAPPAPI WILL USED SO DONT DELETE THIS LINES
+        try {
+          // const cell = numberList[i];
+          /*CHECK THE DETAILS OF THIS GETWATTSAPPAPI IN UPLOAD.API.JS FILE IN API FOLDER*/
+          // await new UploadApi().getWattsappApi(fileDetail.LongURL, "time table", cell, fileName);
+          await new UploadApi().getWattsappGroupApiOthers(fileDetail.LongURL, "time table", fileName);
+          // await new UploadApi().getWattsappGroupApiTeachers(fileDetail.LongURL, "time table", fileName);
+        } catch (e) {
+          // continue;
+          console.log("error")
+        }
+        try {
+          await new UploadApi().getWattsappGroupApiTeachers(fileDetail.LongURL, "time table", fileName);
+        } catch (e) {
+          console.log("error")
         }
       }
-      alert("Time table image sent successfully")
     }
-  
-    const onChangeFromDate = (e) => {
-      setFromDate(e.target.value);
-    }
-    const onChangeToDate = (e) => {
-      setToDate(e.target.value);
-    }
-    const onAddBatch = () => {
-      // setAddBatch(<AddBatch batchList={batchList} />)
-      setShowAddBatchModal(true);
-    }
-    const onAddTeacher = () => {
-      setShowAddTeacherModal(true);
-    }
-    const saveTable = () => {
-      // localStorage.setItem("teacherA", JSON.stringify(teacherAssignment));
-      var myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/json");
-      var raw = JSON.stringify({
-        "TimeTableID": 0,
-        "Description": "time table save",
-        "DateType": "single",
-        "FromDate": fromDate,
-        "ToDate": toDate,
-        "ShiftID": 1,
-        "SessionID": 5,
-        "Session": "string",
-        "BatchID": [
-          1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
-        ],
-        "LectureID": [
-          1, 2, 3, 4, 5, 6, 7, 8
-        ],
-        "IsActive": true,
-        "CreatedByUserID": 1,
-        "CreatedOnDate": new Date().toLocaleString(),
-        "LectureList": lectureList
-      });
-      var requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
-        body: raw,
-        redirect: 'follow'
-      };
-      fetch("https://api.aayamcareerinstitute.co.in/api/AddUpdateTimeTable", requestOptions)
-        .then(response => response.text())
-        .then(result => console.log(result))
-        .catch(error => console.log('error', error));
-      alert("time table saved successfully");
+    alert("Time table image sent successfully")
+  }
+
+  const onChangeFromDate = (e) => {
+    setFromDate(e.target.value);
+  }
+  const onChangeToDate = (e) => {
+    setToDate(e.target.value);
+  }
+  const onAddBatch = () => {
+    // setAddBatch(<AddBatch batchList={batchList} />)
+    setShowAddBatchModal(true);
+  }
+  const onAddTeacher = () => {
+    setShowAddTeacherModal(true);
+  }
+  const saveTable = () => {
+    // localStorage.setItem("teacherA", JSON.stringify(teacherAssignment));
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var raw = JSON.stringify({
+      "TimeTableID": 0,
+      "Description": "time table save",
+      "DateType": "single",
+      "FromDate": fromDate,
+      "ToDate": toDate,
+      "ShiftID": 1,
+      "SessionID": 5,
+      "Session": "string",
+      "BatchID": [
+        1, 6, 10, 7, 3, 15, 2, 3049, 20, 3042,3061, 22, 13, 14
+      ],
+      "LectureID": [
+        1, 2, 3, 4, 5, 6, 7, 8
+      ],
+      "IsActive": true,
+      "CreatedByUserID": 1,
+      "CreatedOnDate": new Date().toLocaleString(),
+      "LectureList": lectureList
+    });
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow'
     };
+    fetch("https://api.aayamcareerinstitute.co.in/api/AddUpdateTimeTable", requestOptions)
+      .then(response => response.text())
+      .then(result => console.log(result))
+      .catch(error => console.log('error', error));
+    alert("time table saved successfully");
+  };
 
   /**************************************** Template Section *****************************************/
   return (
@@ -329,7 +329,7 @@ const TimeTableV2 = () => {
         </div>
         <div>
           <div ref={divRef}>
-          <br/>
+            <br />
             <Form >
               <div className='time-table-date-style'>
                 <FormGroup className="label-date-allignment">
