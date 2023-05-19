@@ -488,6 +488,7 @@
     
     .teacher-container {
         display: flex;
+        flex-direction: row;
         flex-wrap: wrap;
         justify-content: flex-start;
         align-items: flex-start;
@@ -496,7 +497,7 @@
       }
     
     .counter-style{
-        display: flex;
+        display: flex; 
         flex-direction: row;
         
     }
