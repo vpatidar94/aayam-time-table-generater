@@ -52,11 +52,11 @@ const navigation = [
     icon: "bi bi-bell",
   },
 
-  {
-    title: "Mobile",
-    href: "/mobile",
-    icon: "bi bi-bell",
-  },
+  // {
+  //   title: "Mobile",
+  //   href: "/mobile",
+  //   icon: "bi bi-bell",
+  // },
 
 
   // {

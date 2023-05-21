@@ -8,10 +8,11 @@ import "./TimeTable.scss";
 // import { RiDeleteBin2Line } from "react-icons/ri";
 // import htmlToCanvas from 'html-to-canvas';
 import html2canvas from 'html2canvas';
-import {Card,Row,Col,CardTitle,CardBody,Button,Form,FormGroup,Label,Input,FormText,} from "reactstrap";
+import { Card, Row, Col, CardTitle, CardBody, Button, Form, FormGroup, Label, Input, FormText, } from "reactstrap";
 import AddBatch from '../AddBatch/AddBatch';
 import UploadApi from '../../../api/upload.api';
 import AddTeacher from '../TeacherForm/TeacherForm';
+import TtApi from '../../../api/tt.api.js';
 
 const TimeTable = () => {
   /**************************************** Use Effect Section ************************************/
@@ -107,7 +108,7 @@ const TimeTable = () => {
         }
         try {
           await new UploadApi().getWattsappGroupApiTeachers(fileDetail.LongURL, "time table", fileName);
-        } catch (e){
+        } catch (e) {
           console.log("error")
         }
       }
@@ -254,43 +255,13 @@ const TimeTable = () => {
     // setAddBatch(<AddBatch batchList={batchList} />)
     setShowAddBatchModal(true);
   }
+  
   const onAddTeacher = () => {
     setShowAddTeacherModal(true);
   }
-  const saveTable = () => {
-    // localStorage.setItem("teacherA", JSON.stringify(teacherAssignment));
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    var raw = JSON.stringify({
-      "TimeTableID": 0,
-      "Description": "time table save",
-      "DateType": "single",
-      "FromDate": fromDate,
-      "ToDate": toDate,
-      "ShiftID": 1,
-      "SessionID": 5,
-      "Session": "string",
-      "BatchID": [
-        1, 6, 10, 7, 3, 15, 2, 3049, 20, 3042,3061, 22, 13, 14
-      ],
-      "LectureID": [
-        1, 2, 3, 4, 5, 6, 7, 8
-      ],
-      "IsActive": true,
-      "CreatedByUserID": 1,
-      "CreatedOnDate": new Date().toLocaleString(),
-      "LectureList": lectureList
-    });
-    var requestOptions = {
-      method: 'POST',
-      headers: myHeaders,
-      body: raw,
-      redirect: 'follow'
-    };
-    fetch("https://api.aayamcareerinstitute.co.in/api/AddUpdateTimeTable", requestOptions)
-      .then(response => response.text())
-      .then(result => console.log(result))
-      .catch(error => console.log('error', error));
+  const saveTable = async() => {
+    const result = await new TtApi().saveTt(fromDate,toDate,lectureList);
+    console.log("mmmm",result);
     alert("time table saved successfully");
   };
   /**************************************** Template Section *****************************************/
@@ -317,7 +288,7 @@ const TimeTable = () => {
         </div>
         <div>
           <div ref={divRef}>
-          <br/>
+            <br />
             <Form >
               <div className='time-table-date-style'>
                 <FormGroup className="label-date-allignment">
@@ -403,7 +374,7 @@ const TimeTable = () => {
                 </tr>
               </tbody>
             </table>
-            <br/>
+            <br />
             {/* <button onClick={onAddBatch}>+</button>
             {addBatch} */}
           </div>

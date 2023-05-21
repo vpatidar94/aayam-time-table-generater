@@ -1,0 +1,9 @@
+.add-batch-style{
+    text-decoration: underline;
+    background-color:#D4E6F1;
+    border: solid 1px rgb(188, 139, 139);
+}
+.addbatch-checkbox-style{
+    margin-right:20px;
+    margin-left:10px;
+}

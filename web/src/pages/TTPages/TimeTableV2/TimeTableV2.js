@@ -9,6 +9,7 @@ import "./TimeTableV2.scss";
 import { Card, Row, Col, CardTitle, CardBody, Button, Form, FormGroup, Label, Input, FormText, } from "reactstrap";
 import UploadApi from '../../../api/upload.api';
 import AddTeacher from '../TeacherForm/TeacherForm';
+import TtApi from '../../../api/tt.api.js';
 
 const TimeTableV2 = () => {
 
@@ -29,7 +30,6 @@ const TimeTableV2 = () => {
     // }
   }, []);
 
-
   /**************************************** State Section *****************************************/
   const [tableWidth, setTableWidth] = useState(0); // set table width
   const [draggedTeacher, setDraggedTeacher] = useState({}); // Contains dragged teacher
@@ -44,6 +44,7 @@ const TimeTableV2 = () => {
   const [addBatch, setAddBatch] = useState(null);
   const [image, setImage] = useState(null);   //  for div to image 
   const [batchList, setBatchList] = useState(batch);
+  const [teacherList, setTeacherList] = useState(teachers_list);
   const [showAddBatchModal, setShowAddBatchModal] = useState(false); //for add Batch popup
   const [showAddTeacherModal, setShowAddTeacherModal] = useState(false);
   const [fromDate, setFromDate] = useState("");
@@ -160,7 +161,6 @@ const TimeTableV2 = () => {
       stateLectureList.splice(index, 1);
       setLectureList([...stateLectureList]);
     }
-
     // Decrease one from teacher counter
     const stateTeacherCounter = teacherCounter;
     stateTeacherCounter[teacherId] -= 1;
@@ -169,7 +169,6 @@ const TimeTableV2 = () => {
     }
     setTeacherCounter(stateTeacherCounter);
   }
-
   // Called to provide class name if true set classname blink else empty
   // return true if same teacher counter greater than one with respect to lectureId
   const isTeacherDuplicateInLecture = (lectureId, teacherId) => {
@@ -260,46 +259,30 @@ const TimeTableV2 = () => {
     // setAddBatch(<AddBatch batchList={batchList} />)
     setShowAddBatchModal(true);
   }
+  const onDeleteBatch = (batchID) => {
+    const confirmDelete = window.confirm('Are you sure you want to delete this batch?');
+    if (confirmDelete) {
+      const updatedBatches = batchList.filter((each) => each.BatchID !== batchID);
+      setBatchList(updatedBatches);
+    }
+  };
   const onAddTeacher = () => {
     setShowAddTeacherModal(true);
   }
-  const saveTable = () => {
-    // localStorage.setItem("teacherA", JSON.stringify(teacherAssignment));
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    var raw = JSON.stringify({
-      "TimeTableID": 0,
-      "Description": "time table save",
-      "DateType": "single",
-      "FromDate": fromDate,
-      "ToDate": toDate,
-      "ShiftID": 1,
-      "SessionID": 5,
-      "Session": "string",
-      "BatchID": [
-        1, 6, 10, 7, 3, 15, 2, 3049, 20, 3042,3061, 22, 13, 14
-      ],
-      "LectureID": [
-        1, 2, 3, 4, 5, 6, 7, 8
-      ],
-      "IsActive": true,
-      "CreatedByUserID": 1,
-      "CreatedOnDate": new Date().toLocaleString(),
-      "LectureList": lectureList
-    });
-    var requestOptions = {
-      method: 'POST',
-      headers: myHeaders,
-      body: raw,
-      redirect: 'follow'
+  const onDeleteTeacher = (facultyID) => {
+    const confirmDelete = window.confirm('Are you sure you want to delete this Faculty?');
+    if (confirmDelete) {
+      const updatedTeachers = teacherList.filter((each) => each.FacultyID !== facultyID);
+      setTeacherList(updatedTeachers);
     };
-    fetch("https://api.aayamcareerinstitute.co.in/api/AddUpdateTimeTable", requestOptions)
-      .then(response => response.text())
-      .then(result => console.log(result))
-      .catch(error => console.log('error', error));
+  }
+  const saveTable = async () => {
+    const sentBatchID = batchList.map(item => item.BatchID)
+    console.log("xxsent", sentBatchID,)
+    const result = await new TtApi().saveTt(fromDate, toDate, lectureList, sentBatchID);
+    console.log("mmmm", result);
     alert("time table saved successfully");
   };
-
   /**************************************** Template Section *****************************************/
   return (
     <>
@@ -314,7 +297,7 @@ const TimeTableV2 = () => {
           <Button className="btn " color="info" onClick={onAddBatch}>
             Add Batches
           </Button>
-          {showAddBatchModal && <AddBatch showModal={showAddBatchModal} setShowModal={setShowAddBatchModal} />}
+          {showAddBatchModal && <AddBatch showModal={showAddBatchModal} setShowModal={setShowAddBatchModal} batchList={batchList} />}
           {addBatch}
           <Button className="btn" color="info" onClick={onAddTeacher}>
             Add Teachers
@@ -338,6 +321,7 @@ const TimeTableV2 = () => {
                     id="fromDate"
                     name="date"
                     type="date"
+                    value={fromDate}
                     onChange={(e) => { onChangeFromDate(e) }}
                     className='input-size'
                   />
@@ -348,6 +332,7 @@ const TimeTableV2 = () => {
                     id="toDate"
                     name="date"
                     type="date"
+                    value={toDate}
                     onChange={(e) => { onChangeToDate(e) }}
                     className='input-size'
                   />
@@ -359,9 +344,11 @@ const TimeTableV2 = () => {
                 <div className="for-time">
                   <tr>
                     <td className='F-style time-style'>Time</td>
-                    {batch.map((each) => {
+                    {batchList.map((each) => {
                       return (
-                        <td className='F-style batch-style' key={batch.BatchID}>{each.Batch}</td>
+                        <td className='F-style batch-style' key={each.BatchID}>{each.Batch}
+                          <button className="delete-style" onClick={() => onDeleteBatch(each.BatchID)}><RxCross2 /></button>
+                        </td>
                       )
                     })}
 
@@ -373,7 +360,7 @@ const TimeTableV2 = () => {
 
                       <div >
                         <td className='F-style time-style'>{t.Time_From}-{t.Time_To}</td>
-                        {batch.map((b) => {
+                        {batchList.map((b) => {
                           const key = t.LectureID + '_' + b.BatchID
                           return (
                             <td
@@ -410,20 +397,15 @@ const TimeTableV2 = () => {
                 </tr>
               </tbody>
             </table>
-            {/* <button onClick={onAddBatch}>+</button>
-            {addBatch} */}
           </div>
-          {/* <button onClick={convertToImage}>Convert to Image</button>
-          {image && <img src={image} alt="table" style={{ maxWidth: tableWidth }} />}
-          <button onClick={saveTable}>Save</button> */}
         </div>
-        <div className='teacher-container' style={{ maxWidth: tableWidth }}>
-          {teachers_list.map((teacher, index) => {
+        <div className='teacher-container'>
+          {teacherList.map((teacher, index) => {
             const { FacultyID, Faculty } = teacher;
             teacher.color = COLORS[index]
             return (
               <div
-                style={{ maxWidth: tableWidth, backgroundColor: teacher.color }}
+                style={{ backgroundColor: teacher.color }}
                 key={FacultyID}
                 className="teacher-item"
                 draggable={true}
@@ -438,10 +420,10 @@ const TimeTableV2 = () => {
                     {teacherCounter[FacultyID]}
                   </span>
                 )}
+                <button className="delete-style" onClick={() => onDeleteTeacher(teacher.FacultyID)}><RxCross2 /></button>
               </div>
             );
           })}
-          {/* <button onClick={onAddTeacher}>+</button> */}
         </div>
       </div>
     </>

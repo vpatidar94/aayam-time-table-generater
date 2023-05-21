@@ -26,10 +26,6 @@ const PreviousTimeTable = () => {
 
   const editTt = (row) => {
     console.log('xxx xx xx row is ', row);
-    
-    
-
-    
   }
 
   /**************************************** Template Section *****************************************/
@@ -55,7 +51,7 @@ const PreviousTimeTable = () => {
                 </tr>
               </thead>
               <tbody>
-                {timeTableList.map((tdata, index) => (
+                {timeTableList.reverse().map((tdata, index) => (
                   <tr key={index} className="border-top">
                     <td>
                       {tdata.TimeTableID}

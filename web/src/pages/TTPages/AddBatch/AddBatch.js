@@ -3,8 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { batch } from '../List/List';
 // import { batch } from '../../../const/batchList';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import "./AddBatch.css"
 
-const AddBatch = ({ showModal, setShowModal }) => {
+const AddBatch = ({ showModal, setShowModal, batchList }) => {
   console.log(",,bb", batch);
   /******************************************Use Effect********************************************** */
   useEffect(() => {
@@ -24,8 +25,7 @@ const AddBatch = ({ showModal, setShowModal }) => {
     }
   }, [showModal]);
   /********************************************Use State****************************************** */
-  const [batches, setBatches] = useState(batch);
-  // const [batches, setBatches] = useState(JSON.parse(localStorage.getItem('batches')) || batch);
+  const [batches, setBatches] = useState(batchList);
   const [apiData, setApiData] = useState({});
   const [checkedItems, setCheckedItems] = useState({});
 
@@ -43,7 +43,7 @@ const AddBatch = ({ showModal, setShowModal }) => {
   };
 
   const addToBatch = () => {
-    const newBatches = batch;
+    const newBatches = batchList;
     for (const batchID in checkedItems) {
       if (checkedItems[batchID]) {
         const selectedItem = Batch.find((batch) => batch.BatchID === parseInt(batchID));
@@ -68,42 +68,33 @@ const AddBatch = ({ showModal, setShowModal }) => {
   /***************************Template to return******************************************************* */
   return (
     <div>
-      <h1>Add New Batch</h1>
-      <Modal isOpen={showModal} toggle={closeModal}>
-        <ModalHeader toggle={closeModal}>Batch List with Checkboxes</ModalHeader>
+      <Modal isOpen={showModal} toggle={closeModal} style={{ maxWidth: '320px' }}>
+        <ModalHeader toggle={closeModal}>Select Batches from the list</ModalHeader>
         <ModalBody>
-          <div className="batch-list-container" style={{ maxHeight: '300px', overflowY: 'scroll' }}>
+          <div className="batch-list-container" style={{ maxHeight: '300px', overflowY: 'scroll', maxWidth: '300px' }}>
             <ul className="batch-list" style={{ listStyle: 'none' }}>
               {Batch.map((batch) => (
                 <li key={batch.BatchID}>
-                  <label>
+                  <div className="add-batch-style">
                     <input
                       type="checkbox"
                       name={batch.BatchID}
                       checked={checkedItems[batch.BatchID] || false}
                       onChange={handleCheckboxChange}
+                      className="addbatch-checkbox-style"
                     />
                     {batch.Batch}
-                  </label>
+                  </div>
                 </li>
               ))}
             </ul>
           </div>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={addToBatch}>Add selected items to batch</Button>{' '}
+          <Button color="primary" onClick={addToBatch}>Add</Button>{' '}
           <Button color="secondary" onClick={closeModal}>Close</Button>
         </ModalFooter>
       </Modal>
-      {/* <button onClick={addToBatch}>Add selected items to batch</button> */}
-      {/* <h2>Updated Batch List</h2>
-      <ul>
-        {batches.map((batch) => (
-          <li key={batch.BatchID}>
-            {batch.BatchID} - {batch.Batch} - {batch.CourseID}
-          </li>
-        ))}
-      </ul> */}
     </div>
   );
 };

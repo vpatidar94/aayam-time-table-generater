@@ -4,6 +4,7 @@ import { teachers_list } from '../List/List';
 // import { teachers_list } from '../../../const/teacherList';
 // import { batch } from '../../../const/batchList';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import "./TeacherForm.css";
 
 const AddTeacher = ({ showModal, setShowModal }) => {
   console.log(",,tt", teachers_list);
@@ -26,7 +27,7 @@ const AddTeacher = ({ showModal, setShowModal }) => {
   }, [showModal]);
 
   /***********************Use State***************************************************** */
-  const [faculties, setFaculties] = useState(batch);
+  const [faculties, setFaculties] = useState(teachers_list);
   // const [batches, setBatches] = useState(JSON.parse(localStorage.getItem('batches')) || batch);
   const [apiData, setApiData] = useState({});
   const [checkedItems, setCheckedItems] = useState({});
@@ -96,10 +97,10 @@ const AddTeacher = ({ showModal, setShowModal }) => {
   return (
     <div>
       <h1>Add New Teacher</h1>
-      <Modal isOpen={showModal} toggle={closeModal}>
-        <ModalHeader toggle={closeModal}>Teacher List with Checkboxes</ModalHeader>
+      <Modal isOpen={showModal} toggle={closeModal} style={{maxWidth:'320px'}}>
+        <ModalHeader toggle={closeModal}>Select Teachers from the list</ModalHeader>
         <ModalBody>
-          <div className="batch-list-container" style={{ maxHeight: '300px', overflowY: 'scroll' }}>
+          <div className="batch-list-container" style={{ maxHeight: '300px', overflowY: 'scroll',maxWidth:'300px'}}>
             <ul className="batch-list" style={{ listStyle: 'none' }}>
               {updatedFacultyList.map((faculty) => {
                 const { FacultyID, bgColor, className } = faculty;
@@ -107,15 +108,16 @@ const AddTeacher = ({ showModal, setShowModal }) => {
                 const facultyName = facultyUser ? facultyUser.UserName : faculty.Faculty;
                 return (
                   <li key={faculty.FacultyID}>
-                    <label>
+                  <div className="add-faculty-style">
                       <input
                         type="checkbox"
                         name={faculty.FacultyID}
                         checked={checkedItems[faculty.FacultyID] || false}
                         onChange={handleCheckboxChange}
+                        className="addfaculty-checkbox-style"
                       />
                       {facultyName}
-                    </label>
+                    </div>
                   </li>
                 )
               })}
@@ -123,19 +125,10 @@ const AddTeacher = ({ showModal, setShowModal }) => {
           </div>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={addToFaculty}>Add selected items to teacher List</Button>{' '}
+          <Button color="primary" onClick={addToFaculty}>Add</Button>{' '}
           <Button color="secondary" onClick={closeModal}>Close</Button>
         </ModalFooter>
       </Modal>
-      {/* <button onClick={addToBatch}>Add selected items to batch</button> */}
-      {/* <h2>Updated Batch List</h2>
-      <ul>
-        {batches.map((batch) => (
-          <li key={batch.BatchID}>
-            {batch.BatchID} - {batch.Batch} - {batch.CourseID}
-          </li>
-        ))}
-      </ul> */}
     </div>
   );
 };

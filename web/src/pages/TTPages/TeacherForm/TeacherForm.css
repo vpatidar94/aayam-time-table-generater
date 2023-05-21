@@ -1,5 +1,15 @@
+.add-faculty-style{
+  text-decoration: underline;
+  background-color:#D4E6F1;
+  border: solid 1px rgb(188, 139, 139);
+}
+.addfaculty-checkbox-style{
+  margin-right:20px;
+  margin-left:10px;
+}
+
+
 .form-popup {
-    /* display: none; */
     position: fixed;
     left: 50%;
     top: 50%;
@@ -42,3 +52,5 @@
   .submit-btn:hover, .cancel-btn:hover {
     opacity: 1;
   }
+
+  

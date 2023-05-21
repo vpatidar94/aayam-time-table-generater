@@ -71,15 +71,11 @@ export default class UploadApi {
         }
     }
 
-
     getWattsappGroupApiOthers = async (url, message, fileName) => {
         try {
             console.log("url", url);
             console.log("mesage", message);
-
             console.log("file", fileName);
-
-
             //https://ziper.io/api/sendgroupmsg.php?group_id=84987694574-1618740914@g.us&type=media&message=test%20message&media_url=https://i.pravatar.cc&filename=file_test.jpg&instance_id=6453479F141A2&access_token=0a3e27126c2c239bdf7f9128943ef9c0
             const res = await fetch("https://ziper.io/api/sendgroupmsg.php" + '?' + new URLSearchParams({
                 group_id: "919826362001-1628170376@g.us",
@@ -100,7 +96,6 @@ export default class UploadApi {
         }
     }
 
-
     uplaodFile = async (file) => {
         try {
             const formData = new FormData();
@@ -115,8 +110,6 @@ export default class UploadApi {
             throw new Error(e.message, e.options);
         }
     }
-
-
 
     getUploadedFile = async () => {
         try {

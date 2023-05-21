@@ -48,7 +48,7 @@ const EditTimeTable = () => {
     const [image, setImage] = useState(null);   //  for div to image 
     const [showAddBatchModal, setShowAddBatchModal] = useState(false); //for add Batch popup
     const [showAddTeacherModal, setShowAddTeacherModal] = useState(false);
-    const [fromDate, setFromDate] = useState("");
+    const [fromDate, setFromDate] = useState();
     const [toDate, setToDate] = useState("");
     const divRef = useRef(null);
 
@@ -69,6 +69,9 @@ const EditTimeTable = () => {
     const getEditTimeTable = async () => {
         const result = await new TtApi().getEditTt(fromDateEdit);
         setTt(result.Object);
+        setFromDate(result.Object.FromDate)
+        console.log(result.Object.FromDate);
+        console.log(fromDate);
         setBatchAndTimeList(result.Object);
         const stateTeacherAssignment = teacherAssignment;
         if (result.Object.LectureList?.length > 0) {
@@ -88,7 +91,9 @@ const EditTimeTable = () => {
                 }
             });
         }
+        console.log("xxx tt", tt);
         setLoaded(true);
+
     }
 
     const setBatchAndTimeList = (tt) => {
@@ -96,13 +101,13 @@ const EditTimeTable = () => {
             const stateBatchList = tt?.Batch?.filter(it => tt.BatchID?.indexOf(it.BatchID) >= 0);
             setBatchList([...stateBatchList]);
         }
+
     };
 
     /* Taking the below code from timetable.v2*/
     const dragStart = (e, teacherDragged) => {
         setDraggedTeacher(teacherDragged);
     };
-
     const allowDrop = (ev) => {
         let t = ev.target;
         while (t && (!t.classList || !t.classList.contains("each-block"))) {
@@ -132,7 +137,6 @@ const EditTimeTable = () => {
         stateLectureList.push(lectureDto);
         setLectureList([...stateLectureList]);
     };
-
     const updateTeacherCounterOnDrop = (teacher) => {
         const stateTeacherCounter = teacherCounter;
         if (!stateTeacherCounter[teacher.FacultyID]) {
@@ -299,33 +303,43 @@ const EditTimeTable = () => {
         setToDate(e.target.value);
     }
     const onAddBatch = () => {
-        // setAddBatch(<AddBatch batchList={batchList} />)
         setShowAddBatchModal(true);
     }
+    const onDeleteBatch = (batchID) => {
+        const confirmDelete = window.confirm('Are you sure you want to delete this batch?');
+        if (confirmDelete) {
+            const updatedBatches = batchList.filter((each) => each.BatchID !== batchID);
+            setBatchList(updatedBatches);
+        }
+    };
     const onAddTeacher = () => {
         setShowAddTeacherModal(true);
     }
+    const onDeleteTeacher = (facultyID) => {
+        const confirmDelete = window.confirm('Are you sure you want to delete this Faculty?');
+        if (confirmDelete) {
+            const updatedTeachers = teacherList.filter((each) => each.FacultyID !== facultyID);
+            setTeacherList(updatedTeachers);
+        };
+    }
     const saveTable = () => {
-        // localStorage.setItem("teacherA", JSON.stringify(teacherAssignment));
+        const sentBatchID = batchList.map(item => item.BatchID)
+        console.log("xxsent", sentBatchID,)
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         var raw = JSON.stringify({
-            "TimeTableID": 0,
+            "TimeTableID": tt.TimeTableID,
             "Description": "time table save",
-            "DateType": "single",
+            "DateType": tt.DateType,
             "FromDate": fromDate,
             "ToDate": toDate,
-            "ShiftID": 1,
-            "SessionID": 5,
-            "Session": "string",
-            "BatchID": [
-                1, 6, 10, 7, 3, 15, 2, 3049, 20, 3042, 3061, 22, 13, 14
-            ],
-            "LectureID": [
-                1, 2, 3, 4, 5, 6, 7, 8
-            ],
+            "ShiftID": tt.ShiftID,
+            "SessionID": tt.SessionID,
+            "Session": tt.Session,
+            "BatchID": sentBatchID,
+            "LectureID": tt.LectureID,
             "IsActive": true,
-            "CreatedByUserID": 1,
+            "CreatedByUserID": tt.CreatedByUserID,
             "CreatedOnDate": new Date().toLocaleString(),
             "LectureList": lectureList
         });
@@ -347,7 +361,6 @@ const EditTimeTable = () => {
         <>
             {
                 loaded ? <div>
-                    {/* <h1>Edit it{fromDateEdit}</h1> */}
                     <div className="bg-container">
                         {
                             duplicateTeacherDetectedInRow ? <Alert color="warning">
@@ -359,7 +372,7 @@ const EditTimeTable = () => {
                             <Button className="btn " color="info" onClick={onAddBatch}>
                                 Add Batches
                             </Button>
-                            {showAddBatchModal && <AddBatch showModal={showAddBatchModal} setShowModal={setShowAddBatchModal} />}
+                            {showAddBatchModal && <AddBatch showModal={showAddBatchModal} setShowModal={setShowAddBatchModal} batchList={batchList} />}
                             {addBatch}
                             <Button className="btn" color="info" onClick={onAddTeacher}>
                                 Add Teachers
@@ -405,10 +418,11 @@ const EditTimeTable = () => {
                                         <div className="for-time">
                                             <tr>
                                                 <td className='F-style time-style'>Time</td>
-                                                {/* {batch.map((each) => { */}
                                                 {batchList && batchList.map((batch) => {
                                                     return (
-                                                        <td className='F-style batch-style' key={batch.BatchID}>{batch.Batch}</td>
+                                                        <td className='F-style batch-style' key={batch.BatchID}>{batch.Batch}
+                                                            <button className="delete-style" onClick={() => onDeleteBatch(batch.BatchID)}><RxCross2 /></button>
+                                                        </td>
                                                     )
                                                 })}
 
@@ -416,11 +430,9 @@ const EditTimeTable = () => {
                                         </div>
                                         <tr >
                                             {time.map((t) => {
-                                                {/* {editTimeTable?.LectureList.map((t) => { */ }
                                                 return (
                                                     <div >
                                                         <td className='F-style time-style'>{t.Time_From}-{t.Time_To}</td>
-                                                        {/* <td className='F-style time-style'>{t.Lecture.Time_From}-{t.Lecture.Time_To}</td> */}
                                                         {batchList && batchList.map((b) => {
                                                             const key = t.LectureID + '_' + b.BatchID
                                                             return (
@@ -458,12 +470,7 @@ const EditTimeTable = () => {
                                         </tr>
                                     </tbody>
                                 </table>
-                                {/* <button onClick={onAddBatch}>+</button>
-                            {addBatch} */}
                             </div>
-                            {/* <button onClick={convertToImage}>Convert to Image</button>
-                        {image && <img src={image} alt="table" style={{ maxWidth: tableWidth }} />}
-                        <button onClick={saveTable}>Save</button> */}
                         </div>
                         <div className='teacher-container'>
                             {teacherList.map((teacher, index) => {
@@ -485,6 +492,8 @@ const EditTimeTable = () => {
                                                 {teacherCounter[FacultyID]}
                                             </span>
                                         )}
+                                        <button className="delete-style" onClick={() => onDeleteTeacher(teacher.FacultyID)}><RxCross2 /></button>
+
                                     </div>
                                 );
                             })}
