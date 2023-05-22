@@ -42,7 +42,7 @@ saveTt = async (fromDate,toDate,lectureList,sentBatchID) => {
             body: JSON.stringify({
                 TimeTableID: 0,
                 Description: "time table save",
-                DateType: "single",
+                DateType: "multiple",
                 FromDate: fromDate,
                 ToDate: toDate,
                 ShiftID: 1,
@@ -67,6 +67,34 @@ saveTt = async (fromDate,toDate,lectureList,sentBatchID) => {
     }
 }
 
-
+saveEditedTt = async (TimeTableID,DateType,fromDate,toDate,ShiftID,SessionID,Session,sentBatchID,LectureID,CreatedByUserID,lectureList) => {
+    try {
+        const myHeaders = new Headers();
+          myHeaders.append("Content-Type", "application/json");
+        const res = await fetch(URL.GET_SAVE_TIMETABLE_URL, {
+            method: 'POST',
+            headers: myHeaders,
+            body: JSON.stringify({
+            TimeTableID: 0,
+            Description: "time table save",
+            DateType: "multiple",
+            FromDate: fromDate,
+            ToDate: toDate,
+            ShiftID: ShiftID,
+            SessionID: SessionID,
+            Session: Session,
+            BatchID: sentBatchID,
+            LectureID: LectureID,
+            IsActive: true,
+            CreatedByUserID: CreatedByUserID,
+            CreatedOnDate: new Date().toLocaleString(),
+            LectureList: lectureList
+        })});
+        const result = await res.json();
+        return result;
+    } catch (e) {
+        throw new Error(e.message, e.options);
+    }
+}
 
 }

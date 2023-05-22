@@ -223,8 +223,10 @@
   .added-style{
     padding:5px 2px;
     margin-bottom:-70px;
-    margin-left:700px;
+    // margin-left:700px;
+    margin-left: auto;
     z-index: 999;
+
   }
 
   .time-table-date-style{

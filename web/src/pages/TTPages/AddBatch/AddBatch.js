@@ -6,7 +6,6 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import "./AddBatch.css"
 
 const AddBatch = ({ showModal, setShowModal, batchList }) => {
-  console.log(",,bb", batch);
   /******************************************Use Effect********************************************** */
   useEffect(() => {
     if (showModal) {
@@ -16,7 +15,6 @@ const AddBatch = ({ showModal, setShowModal, batchList }) => {
           const result = await response.json();
           setApiData(result);
         } catch (error) {
-          console.log('Error fetching API data:', error);
         }
       };
 
@@ -56,7 +54,6 @@ const AddBatch = ({ showModal, setShowModal, batchList }) => {
         }
       }
     }
-    console.log(newBatches)
     setBatches(newBatches);
     alert("batches added successfully");
   };

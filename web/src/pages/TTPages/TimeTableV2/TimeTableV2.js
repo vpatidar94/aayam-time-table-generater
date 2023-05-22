@@ -22,6 +22,7 @@ const TimeTableV2 = () => {
       const tableWidth = tableElement.offsetWidth;
       setTableWidth(tableWidth);
     }
+    
     // if (duplicateDetected) {
     //   setDuplicateDetected(false);
     //   setTimeout(() => {
@@ -283,6 +284,13 @@ const TimeTableV2 = () => {
     console.log("mmmm", result);
     alert("time table saved successfully");
   };
+
+  const clearAll=(key)=>{
+    // const key = lectureId + '_' + batchId
+    const stateTeacherAssignment = teacherAssignment;
+    delete stateTeacherAssignment[key];
+    setTeacherAssignment({ stateTeacherAssignment });
+  }
   /**************************************** Template Section *****************************************/
   return (
     <>
@@ -308,6 +316,9 @@ const TimeTableV2 = () => {
           </Button>
           <Button className="btn" color="info" onClick={convertToImage}>
             Post
+          </Button>
+          <Button className="btn" color="info" onClick={clearAll}>
+            Clear ALL
           </Button>
         </div>
         <div>

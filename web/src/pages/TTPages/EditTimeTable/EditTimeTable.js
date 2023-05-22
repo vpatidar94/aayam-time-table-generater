@@ -71,8 +71,13 @@ const EditTimeTable = () => {
         setTt(result.Object);
         setFromDate(result.Object.FromDate)
         console.log(result.Object.FromDate);
+        setToDate(result.Object.ToDate);
+        console.log(result.Object.FromDate);
+        console.log(fromDate);
         console.log(fromDate);
         setBatchAndTimeList(result.Object);
+        setLectureList([...result.Object.LectureList])
+        console.log("xxxlecture",lectureList);
         const stateTeacherAssignment = teacherAssignment;
         if (result.Object.LectureList?.length > 0) {
             result.Object.LectureList?.forEach(lec => {
@@ -202,11 +207,22 @@ const EditTimeTable = () => {
 
         // Remove from lecture list
         const stateLectureList = lectureList;
-        const index = stateLectureList?.find(row => row.batch?.BatchID === batchId && row.lecture?.LectureID === lectureId);
+        const index = stateLectureList?.findIndex(row => row.Batch?.BatchID === batchId && row.Lecture?.LectureID === lectureId);
+        console.log("gggindex",index);
+        console.log("xxlectureid",lectureId);
+        console.log("xxbatchid",batchId);
+        console.log("xxlecturliststate",stateLectureList);
+
+
+
+
         if (index >= 0) {
             stateLectureList.splice(index, 1);
             setLectureList([...stateLectureList]);
+
+
         }
+        // stateLectureList.pop(teacherAssignment)
 
         // Decrease one from teacher counter
         const stateTeacherCounter = teacherCounter;
@@ -215,6 +231,7 @@ const EditTimeTable = () => {
             delete stateTeacherCounter[teacherId];
         }
         setTeacherCounter(stateTeacherCounter);
+        console.log("xxxmy lre",lectureList)
     }
 
     // Called to provide class name if true set classname blink else empty
@@ -244,6 +261,19 @@ const EditTimeTable = () => {
         const y = e.touches[0].clientY;
         var elem = document.elementFromPoint(x, y);
         alert('xx xx elem ', elem.id);
+    }
+
+    const formatDate=(date)=>{
+        if (!date){
+            return "";
+        }
+        console.log("xxxdaete",date);
+        const dateParts = date.split("/");
+
+// month is 0-based, that's why we need dataParts[1] - 1
+const dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
+        return dateObject.toISOString().substring(0,10);
+
     }
     /*********************************************This below methods are added by jitendra from TimeTable.js***********************************/
     const generateUID = () => {
@@ -322,39 +352,22 @@ const EditTimeTable = () => {
             setTeacherList(updatedTeachers);
         };
     }
-    const saveTable = () => {
+
+    const saveTable = async () => {
         const sentBatchID = batchList.map(item => item.BatchID)
         console.log("xxsent", sentBatchID,)
-        var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-        var raw = JSON.stringify({
-            "TimeTableID": tt.TimeTableID,
-            "Description": "time table save",
-            "DateType": tt.DateType,
-            "FromDate": fromDate,
-            "ToDate": toDate,
-            "ShiftID": tt.ShiftID,
-            "SessionID": tt.SessionID,
-            "Session": tt.Session,
-            "BatchID": sentBatchID,
-            "LectureID": tt.LectureID,
-            "IsActive": true,
-            "CreatedByUserID": tt.CreatedByUserID,
-            "CreatedOnDate": new Date().toLocaleString(),
-            "LectureList": lectureList
-        });
-        var requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow'
-        };
-        fetch("https://api.aayamcareerinstitute.co.in/api/AddUpdateTimeTable", requestOptions)
-            .then(response => response.text())
-            .then(result => console.log(result))
-            .catch(error => console.log('error', error));
+        const result = await new TtApi().saveEditedTt(tt.TimeTableID, tt.DateType, fromDate, toDate, tt.ShiftID, tt.SessionID, tt.Session, sentBatchID, tt.LectureID, tt.CreatedByUserID, lectureList);
+        console.log("mmmm", result);
+        console.log("lllmmmnn",lectureList);
         alert("time table saved successfully");
     };
+
+    const clearAll=(key)=>{
+        // const key = lectureId + '_' + batchId
+        const stateTeacherAssignment = teacherAssignment;
+        delete stateTeacherAssignment[key];
+        setTeacherAssignment({ stateTeacherAssignment });
+      }
 
     /**************************************** Template Section *****************************************/
     return (
@@ -384,6 +397,9 @@ const EditTimeTable = () => {
                             <Button className="btn" color="info" onClick={convertToImage}>
                                 Post
                             </Button>
+                            <Button className="btn" color="info" onClick={clearAll}>
+                                Clear ALL
+                            </Button>
                         </div>
                         <div>
                             <div ref={divRef}>
@@ -394,8 +410,10 @@ const EditTimeTable = () => {
                                             <p>From:</p>
                                             <Input
                                                 id="fromDate"
-                                                name="date"
+                                                name="fromDate"
                                                 type="date"
+                                                
+                                                defaultValue={formatDate(fromDate)}
                                                 onChange={(e) => { onChangeFromDate(e) }}
                                                 className='input-size'
                                             />
@@ -404,8 +422,10 @@ const EditTimeTable = () => {
                                             <p>To:</p>
                                             <Input
                                                 id="toDate"
-                                                name="date"
+                                                name="toDate"
                                                 type="date"
+                                                defaultValue={formatDate(toDate)}
+
                                                 onChange={(e) => { onChangeToDate(e) }}
                                                 className='input-size'
                                             />

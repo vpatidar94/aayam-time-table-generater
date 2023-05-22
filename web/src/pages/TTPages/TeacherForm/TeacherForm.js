@@ -7,7 +7,6 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import "./TeacherForm.css";
 
 const AddTeacher = ({ showModal, setShowModal }) => {
-  console.log(",,tt", teachers_list);
 
   /************************************Use Effect****************************************** */
   useEffect(() => {
@@ -18,7 +17,6 @@ const AddTeacher = ({ showModal, setShowModal }) => {
           const result = await response.json();
           setApiData(result);
         } catch (error) {
-          console.log('Error fetching API data:', error);
         }
       };
 
@@ -83,7 +81,6 @@ const AddTeacher = ({ showModal, setShowModal }) => {
       }
     }
 
-    console.log(newTeachersList);
     setFaculties(newTeachersList);
     alert("faculty added successfully");
 
@@ -96,11 +93,10 @@ const AddTeacher = ({ showModal, setShowModal }) => {
   /**********************************************Template to return******************************** */
   return (
     <div>
-      <h1>Add New Teacher</h1>
-      <Modal isOpen={showModal} toggle={closeModal} style={{maxWidth:'320px'}}>
+      <Modal isOpen={showModal} toggle={closeModal} style={{ maxWidth: '320px' }}>
         <ModalHeader toggle={closeModal}>Select Teachers from the list</ModalHeader>
         <ModalBody>
-          <div className="batch-list-container" style={{ maxHeight: '300px', overflowY: 'scroll',maxWidth:'300px'}}>
+          <div className="batch-list-container" style={{ maxHeight: '300px', overflowY: 'scroll', maxWidth: '300px' }}>
             <ul className="batch-list" style={{ listStyle: 'none' }}>
               {updatedFacultyList.map((faculty) => {
                 const { FacultyID, bgColor, className } = faculty;
@@ -108,7 +104,7 @@ const AddTeacher = ({ showModal, setShowModal }) => {
                 const facultyName = facultyUser ? facultyUser.UserName : faculty.Faculty;
                 return (
                   <li key={faculty.FacultyID}>
-                  <div className="add-faculty-style">
+                    <div className="add-faculty-style">
                       <input
                         type="checkbox"
                         name={faculty.FacultyID}
