@@ -1,7 +1,6 @@
 import { useParams } from 'react-router-dom';
 import TtApi from '../../../api/tt.api.js';
 import "./EditTimeTable.scss";
-
 /*TAKING THE BELOW IMPORT FROM TIMETABLEV2* */
 import html2canvas from 'html2canvas';
 import React, { useEffect, useRef, useState } from 'react';
@@ -42,7 +41,6 @@ const EditTimeTable = () => {
     const [lectureTeacherCounter, setLectureTeacherCounter] = useState({}); // key: lectureId_teacherId, value: counter to check duplicate rows
     const [duplicateTeacherDetectedInRow, setDuplicateTeacherDetectedInRow] = useState(false);
     const [draggedCellKey, setDraggedCellKey] = useState(null);
-
     // contains key of teacher asignment which is grag within the table
     const [addBatch, setAddBatch] = useState(null);
     const [image, setImage] = useState(null);   //  for div to image 
@@ -51,7 +49,6 @@ const EditTimeTable = () => {
     const [fromDate, setFromDate] = useState();
     const [toDate, setToDate] = useState("");
     const divRef = useRef(null);
-
     const [batchList, setBatchList] = useState([]);
     const [teacherList, setTeacherList] = useState([]);
     const [loaded, setLoaded] = useState(false);
@@ -70,14 +67,9 @@ const EditTimeTable = () => {
         const result = await new TtApi().getEditTt(fromDateEdit);
         setTt(result.Object);
         setFromDate(result.Object.FromDate)
-        console.log(result.Object.FromDate);
         setToDate(result.Object.ToDate);
-        console.log(result.Object.FromDate);
-        console.log(fromDate);
-        console.log(fromDate);
         setBatchAndTimeList(result.Object);
         setLectureList([...result.Object.LectureList])
-        console.log("xxxlecture",lectureList);
         const stateTeacherAssignment = teacherAssignment;
         if (result.Object.LectureList?.length > 0) {
             result.Object.LectureList?.forEach(lec => {
@@ -96,7 +88,6 @@ const EditTimeTable = () => {
                 }
             });
         }
-        console.log("xxx tt", tt);
         setLoaded(true);
 
     }
@@ -208,18 +199,10 @@ const EditTimeTable = () => {
         // Remove from lecture list
         const stateLectureList = lectureList;
         const index = stateLectureList?.findIndex(row => row.Batch?.BatchID === batchId && row.Lecture?.LectureID === lectureId);
-        console.log("gggindex",index);
-        console.log("xxlectureid",lectureId);
-        console.log("xxbatchid",batchId);
-        console.log("xxlecturliststate",stateLectureList);
-
-
-
 
         if (index >= 0) {
             stateLectureList.splice(index, 1);
             setLectureList([...stateLectureList]);
-
 
         }
         // stateLectureList.pop(teacherAssignment)
@@ -231,7 +214,6 @@ const EditTimeTable = () => {
             delete stateTeacherCounter[teacherId];
         }
         setTeacherCounter(stateTeacherCounter);
-        console.log("xxxmy lre",lectureList)
     }
 
     // Called to provide class name if true set classname blink else empty
@@ -241,7 +223,6 @@ const EditTimeTable = () => {
             return false;
         }
         const key = lectureId + '_' + teacherId;
-        console.log(key);
         return lectureTeacherCounter[key] > 1;
     };
 
@@ -256,23 +237,26 @@ const EditTimeTable = () => {
     }
 
     const onTouchMove = (e) => {
-        console.log(e);
         const x = e.touches[0].clientX;
         const y = e.touches[0].clientY;
         var elem = document.elementFromPoint(x, y);
         alert('xx xx elem ', elem.id);
     }
 
-    const formatDate=(date)=>{
-        if (!date){
+    const formatDate = (date) => {
+        if (!date) {
             return "";
         }
-        console.log("xxxdaete",date);
         const dateParts = date.split("/");
 
-// month is 0-based, that's why we need dataParts[1] - 1
-const dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
-        return dateObject.toISOString().substring(0,10);
+        // month is 0-based, that's why we need dataParts[1] - 1
+        const dateObject = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
+        console.log("sss",dateObject.toISOString().substring(0, 10));
+        // return dateObject.toISOString().substring(0, 10);
+        const formatedDate= `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+        console.log("xxdateo",formatedDate);
+
+        return formatedDate;
 
     }
     /*********************************************This below methods are added by jitendra from TimeTable.js***********************************/
@@ -315,22 +299,28 @@ const dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
                     // await new UploadApi().getWattsappGroupApiTeachers(fileDetail.LongURL, "time table", fileName);
                 } catch (e) {
                     // continue;
-                    console.log("error")
                 }
                 try {
                     await new UploadApi().getWattsappGroupApiTeachers(fileDetail.LongURL, "time table", fileName);
                 } catch (e) {
-                    console.log("error")
                 }
             }
         }
         alert("Time table image sent successfully")
     }
+    const formateDateWithslash = (date) => {
+        const parts = date.split("-");
+        const formatedDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
+        return formatedDate;
+    }
+
     const onChangeFromDate = (e) => {
-        setFromDate(e.target.value);
+        const date=e.target.value;
+        setFromDate(formateDateWithslash(date));
     }
     const onChangeToDate = (e) => {
-        setToDate(e.target.value);
+        const date=e.target.value;
+        setToDate(formateDateWithslash(date));
     }
     const onAddBatch = () => {
         setShowAddBatchModal(true);
@@ -355,19 +345,16 @@ const dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
 
     const saveTable = async () => {
         const sentBatchID = batchList.map(item => item.BatchID)
-        console.log("xxsent", sentBatchID,)
         const result = await new TtApi().saveEditedTt(tt.TimeTableID, tt.DateType, fromDate, toDate, tt.ShiftID, tt.SessionID, tt.Session, sentBatchID, tt.LectureID, tt.CreatedByUserID, lectureList);
-        console.log("mmmm", result);
-        console.log("lllmmmnn",lectureList);
         alert("time table saved successfully");
     };
 
-    const clearAll=(key)=>{
+    const clearAll = (key) => {
         // const key = lectureId + '_' + batchId
         const stateTeacherAssignment = teacherAssignment;
         delete stateTeacherAssignment[key];
         setTeacherAssignment({ stateTeacherAssignment });
-      }
+    }
 
     /**************************************** Template Section *****************************************/
     return (
@@ -412,7 +399,7 @@ const dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
                                                 id="fromDate"
                                                 name="fromDate"
                                                 type="date"
-                                                
+
                                                 defaultValue={formatDate(fromDate)}
                                                 onChange={(e) => { onChangeFromDate(e) }}
                                                 className='input-size'
