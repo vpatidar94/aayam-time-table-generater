@@ -1,15 +1,14 @@
 import html2canvas from 'html2canvas';
 import React, { useEffect, useRef, useState } from 'react';
 import { RxCross2 } from "react-icons/rx";
-import { Alert } from 'reactstrap';
+import { Alert, Button, Form, FormGroup, Input } from 'reactstrap';
+import TtApi from '../../../api/tt.api.js';
+import UploadApi from '../../../api/upload.api';
 import { COLORS } from '../../../const/color.const';
 import AddBatch from '../AddBatch/AddBatch';
 import { batch, teachers_list, time } from '../List/List';
-import "./TimeTableV2.scss";
-import { Card, Row, Col, CardTitle, CardBody, Button, Form, FormGroup, Label, Input, FormText, } from "reactstrap";
-import UploadApi from '../../../api/upload.api';
 import AddTeacher from '../TeacherForm/TeacherForm';
-import TtApi from '../../../api/tt.api.js';
+import "./TimeTableV2.scss";
 
 const TimeTableV2 = () => {
 
@@ -17,22 +16,9 @@ const TimeTableV2 = () => {
 
   /**************************************** Use Effect Section ************************************/
   useEffect(() => {
-    const tableElement = document.querySelector('.table-style');
-    if (tableElement) {
-      const tableWidth = tableElement.offsetWidth;
-      setTableWidth(tableWidth);
-    }
-    
-    // if (duplicateDetected) {
-    //   setDuplicateDetected(false);
-    //   setTimeout(() => {
-    //     setDuplicateElements({});
-    //   }, 3000); // Blink duration
-    // }
   }, []);
 
   /**************************************** State Section *****************************************/
-  const [tableWidth, setTableWidth] = useState(0); // set table width
   const [draggedTeacher, setDraggedTeacher] = useState({}); // Contains dragged teacher
   const [lectureList, setLectureList] = useState([]);
   const [teacherAssignment, setTeacherAssignment] = useState({});
@@ -42,8 +28,6 @@ const TimeTableV2 = () => {
   const [draggedCellKey, setDraggedCellKey] = useState(null);
 
   // contains key of teacher asignment which is grag within the table
-  const [addBatch, setAddBatch] = useState(null);
-  const [image, setImage] = useState(null);   //  for div to image 
   const [batchList, setBatchList] = useState(batch);
   const [teacherList, setTeacherList] = useState(teachers_list);
   const [showAddBatchModal, setShowAddBatchModal] = useState(false); //for add Batch popup
@@ -170,6 +154,7 @@ const TimeTableV2 = () => {
     }
     setTeacherCounter(stateTeacherCounter);
   }
+
   // Called to provide class name if true set classname blink else empty
   // return true if same teacher counter greater than one with respect to lectureId
   const isTeacherDuplicateInLecture = (lectureId, teacherId) => {
@@ -208,11 +193,11 @@ const TimeTableV2 = () => {
     secondPart = ("000" + secondPart.toString(36)).slice(-3);
     return firstPart + secondPart;
   }
+
   const convertToImage = async () => {
     // alert("Time table image sent successfully")
     const canvas = await html2canvas(divRef.current);
     const imgData = canvas.toDataURL();
-    setImage(imgData);
     /*converting page64 url got as imgData into file Object by using blob below*/
     const byteString = atob(imgData.split(',')[1]);
     const mimeString = imgData.split(',')[0].split(':')[1].split(';')[0];
@@ -253,13 +238,16 @@ const TimeTableV2 = () => {
   const onChangeFromDate = (e) => {
     setFromDate(e.target.value);
   }
+
   const onChangeToDate = (e) => {
     setToDate(e.target.value);
   }
+
   const onAddBatch = () => {
     // setAddBatch(<AddBatch batchList={batchList} />)
     setShowAddBatchModal(true);
   }
+
   const onDeleteBatch = (batchID) => {
     const confirmDelete = window.confirm('Are you sure you want to delete this batch?');
     if (confirmDelete) {
@@ -267,9 +255,11 @@ const TimeTableV2 = () => {
       setBatchList(updatedBatches);
     }
   };
+
   const onAddTeacher = () => {
     setShowAddTeacherModal(true);
   }
+
   const onDeleteTeacher = (facultyID) => {
     const confirmDelete = window.confirm('Are you sure you want to delete this Faculty?');
     if (confirmDelete) {
@@ -277,20 +267,42 @@ const TimeTableV2 = () => {
       setTeacherList(updatedTeachers);
     };
   }
+
   const saveTable = async () => {
     const sentBatchID = batchList.map(item => item.BatchID)
-    console.log("xxsent", sentBatchID,)
-    const result = await new TtApi().saveTt(fromDate, toDate, lectureList, sentBatchID);
-    console.log("mmmm", result);
-    alert("time table saved successfully");
+    const body = {
+      TimeTableID: 0,
+      Description: "time table save",
+      DateType: !!toDate ? "multiple" : "single",
+      FromDate: fromDate,
+      ToDate: toDate,
+      ShiftID: 1,
+      SessionID: 6,
+      Session: "",
+      BatchID: sentBatchID,
+      LectureID: [
+        1, 2, 3, 4, 5, 6, 7, 8
+      ],
+      IsActive: true,
+      CreatedByUserID: 1,
+      CreatedOnDate: new Date(),
+      LectureList: lectureList
+    };
+    const result = await new TtApi().addUpdateTt(body);
+    if (result === 'Success') {
+      alert("time table saved successfully");
+    } else {
+      alert(result?.ExceptionMessage ?? 'An error has occurred.');
+    }
   };
 
-  const clearAll=(key)=>{
+  const clearAll = (key) => {
     // const key = lectureId + '_' + batchId
     const stateTeacherAssignment = teacherAssignment;
     delete stateTeacherAssignment[key];
     setTeacherAssignment({ stateTeacherAssignment });
   }
+
   /**************************************** Template Section *****************************************/
   return (
     <>
@@ -306,7 +318,6 @@ const TimeTableV2 = () => {
             Add Batches
           </Button>
           {showAddBatchModal && <AddBatch showModal={showAddBatchModal} setShowModal={setShowAddBatchModal} batchList={batchList} />}
-          {addBatch}
           <Button className="btn" color="info" onClick={onAddTeacher}>
             Add Teachers
           </Button>

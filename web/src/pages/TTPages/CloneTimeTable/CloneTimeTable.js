@@ -1,20 +1,17 @@
-import { useParams } from 'react-router-dom';
-import TtApi from '../../../api/tt.api.js';
-import "./EditTimeTable.scss";
-/*TAKING THE BELOW IMPORT FROM TIMETABLEV2* */
 import html2canvas from 'html2canvas';
 import React, { useEffect, useRef, useState } from 'react';
 import { RxCross2 } from "react-icons/rx";
-import { Alert } from 'reactstrap';
-import { COLORS } from '../../../const/color.const';
-import AddBatch from '../AddBatch/AddBatch';
-import { teachers_list, time } from '../List/List';
-// import "./TimeTableV2.scss";
-import { Button, Form, FormGroup, Input } from "reactstrap";
-import UploadApi from '../../../api/upload.api';
-import AddTeacher from '../TeacherForm/TeacherForm';
+import { useParams } from 'react-router-dom';
+import { Alert, Button, Form, FormGroup, Input } from 'reactstrap';
+import TtApi from '../../../api/tt.api.js';
+import UploadApi from '../../../api/upload.api.js';
+import { COLORS } from '../../../const/color.const.js';
+import AddBatch from '../AddBatch/AddBatch.js';
+import { teachers_list, time } from '../List/List.js';
+import AddTeacher from '../TeacherForm/TeacherForm.js';
+import "./CloneTimeTable.scss";
 
-const EditTimeTable = () => {
+const CloneTimeTable = () => {
     const { fromDateEdit } = useParams();
 
     /**************************************** const Section ************************************/
@@ -65,11 +62,19 @@ const EditTimeTable = () => {
 
     const getEditTimeTable = async () => {
         const result = await new TtApi().getEditTt(fromDateEdit);
-        setTt(result.Object);
+        if (!result.IsSuccessful) {
+            return;
+        }
+        setTt({...result.Object});
         setFromDate(result.Object.FromDate)
         setToDate(result.Object.ToDate);
         setBatchAndTimeList(result.Object);
         setLectureList([...result.Object.LectureList])
+        initTimeTable(result);
+        setLoaded(true);
+    }
+
+    const initTimeTable = (result) => {
         const stateTeacherAssignment = teacherAssignment;
         if (result.Object.LectureList?.length > 0) {
             result.Object.LectureList?.forEach(lec => {
@@ -88,8 +93,6 @@ const EditTimeTable = () => {
                 }
             });
         }
-        setLoaded(true);
-
     }
 
     const setBatchAndTimeList = (tt) => {
@@ -97,13 +100,13 @@ const EditTimeTable = () => {
             const stateBatchList = tt?.Batch?.filter(it => tt.BatchID?.indexOf(it.BatchID) >= 0);
             setBatchList([...stateBatchList]);
         }
-
     };
 
     /* Taking the below code from timetable.v2*/
     const dragStart = (e, teacherDragged) => {
         setDraggedTeacher(teacherDragged);
     };
+
     const allowDrop = (ev) => {
         let t = ev.target;
         while (t && (!t.classList || !t.classList.contains("each-block"))) {
@@ -133,6 +136,7 @@ const EditTimeTable = () => {
         stateLectureList.push(lectureDto);
         setLectureList([...stateLectureList]);
     };
+
     const updateTeacherCounterOnDrop = (teacher) => {
         const stateTeacherCounter = teacherCounter;
         if (!stateTeacherCounter[teacher.FacultyID]) {
@@ -248,17 +252,12 @@ const EditTimeTable = () => {
             return "";
         }
         const dateParts = date.split("/");
-
         // month is 0-based, that's why we need dataParts[1] - 1
-        const dateObject = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
-        console.log("sss",dateObject.toISOString().substring(0, 10));
-        // return dateObject.toISOString().substring(0, 10);
-        const formatedDate= `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
-        console.log("xxdateo",formatedDate);
-
+        const formatedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
         return formatedDate;
 
     }
+
     /*********************************************This below methods are added by jitendra from TimeTable.js***********************************/
     const generateUID = () => {
         // I generate the UID from two parts here 
@@ -269,6 +268,7 @@ const EditTimeTable = () => {
         secondPart = ("000" + secondPart.toString(36)).slice(-3);
         return firstPart + secondPart;
     }
+
     const convertToImage = async () => {
         // alert("Time table image sent successfully")
         const canvas = await html2canvas(divRef.current);
@@ -308,6 +308,7 @@ const EditTimeTable = () => {
         }
         alert("Time table image sent successfully")
     }
+
     const formateDateWithslash = (date) => {
         const parts = date.split("-");
         const formatedDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
@@ -315,16 +316,19 @@ const EditTimeTable = () => {
     }
 
     const onChangeFromDate = (e) => {
-        const date=e.target.value;
+        const date = e.target.value;
         setFromDate(formateDateWithslash(date));
     }
+
     const onChangeToDate = (e) => {
-        const date=e.target.value;
+        const date = e.target.value;
         setToDate(formateDateWithslash(date));
     }
+
     const onAddBatch = () => {
         setShowAddBatchModal(true);
     }
+
     const onDeleteBatch = (batchID) => {
         const confirmDelete = window.confirm('Are you sure you want to delete this batch?');
         if (confirmDelete) {
@@ -332,9 +336,11 @@ const EditTimeTable = () => {
             setBatchList(updatedBatches);
         }
     };
+
     const onAddTeacher = () => {
         setShowAddTeacherModal(true);
     }
+
     const onDeleteTeacher = (facultyID) => {
         const confirmDelete = window.confirm('Are you sure you want to delete this Faculty?');
         if (confirmDelete) {
@@ -344,13 +350,34 @@ const EditTimeTable = () => {
     }
 
     const saveTable = async () => {
-        const sentBatchID = batchList.map(item => item.BatchID)
-        const result = await new TtApi().saveEditedTt(tt.TimeTableID, tt.DateType, fromDate, toDate, tt.ShiftID, tt.SessionID, tt.Session, sentBatchID, tt.LectureID, tt.CreatedByUserID, lectureList);
-        alert("time table saved successfully");
+        const sentBatchID = batchList.map(item => item.BatchID);
+
+        const body = {
+            TimeTableID: 0,
+            Description: "time table save",
+            DateType: !!toDate ? "multiple" : "single",
+            FromDate: fromDate,
+            ToDate: toDate,
+            ShiftID: tt.ShiftID,
+            SessionID: tt.SessionID,
+            Session: tt.Session,
+            BatchID: sentBatchID,
+            LectureID: tt.LectureID,
+            IsActive: true,
+            CreatedByUserID: tt.CreatedByUserID,
+            CreatedOnDate: new Date(),
+            LectureList: lectureList
+        };
+
+        const result = await new TtApi().addUpdateTt(body);
+        if (result === 'Success') {
+            alert("time table saved successfully");
+        } else {
+            alert(result?.ExceptionMessage ?? 'An error has occurred.');
+        }
     };
 
     const clearAll = (key) => {
-        // const key = lectureId + '_' + batchId
         const stateTeacherAssignment = teacherAssignment;
         delete stateTeacherAssignment[key];
         setTeacherAssignment({ stateTeacherAssignment });
@@ -512,4 +539,4 @@ const EditTimeTable = () => {
         </>
     )
 }
-export default EditTimeTable
+export default CloneTimeTable
