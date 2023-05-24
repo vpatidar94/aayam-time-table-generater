@@ -116,19 +116,9 @@ export const batch= [
         CourseID: 3
     },
     {
-        BatchID: 6,
-        Batch: "A2",
-        CourseID: 3
-    },
-    {
-        BatchID: 10,
-        Batch: "A3",
-        CourseID: 3
-    },
-    {
-        BatchID: 7,
-        Batch: "A4",
-        CourseID: 3
+        BatchID: 2,
+        Batch: "B1",
+        CourseID: 2
     },
     {
         BatchID: 3,
@@ -136,20 +126,29 @@ export const batch= [
         CourseID: 1
     },
     {
+        BatchID: 6,
+        Batch: "A2",
+        CourseID: 3
+    },
+    
+    {
+        BatchID: 7,
+        Batch: "A4",
+        CourseID: 3
+    },
+    {
+        BatchID: 10,
+        Batch: "A3",
+        CourseID: 3
+    },
+    
+    {
         BatchID: 15,
         Batch: "C2",
         CourseID: 1
     },
-    {
-        BatchID: 2,
-        Batch: "B1",
-        CourseID: 2
-    },
-    {
-        BatchID: 3049,
-        Batch: "B2",
-        CourseID: 2
-    },
+    
+    
     //MORE BATCHES ADDED WITH A FAKE BATCHID AND FAKE COURSEID NEED TO CHANGE LATER
 
     {
@@ -158,9 +157,19 @@ export const batch= [
         CourseID: 13
     },
     {
+        BatchID: 22,
+        Batch: "JXII-1",
+        CourseID: 12
+    },
+    {
         BatchID: 3042,
         Batch: "JXI-1",
         CourseID: 11
+    },
+    {
+        BatchID: 3049,
+        Batch: "B2",
+        CourseID: 2
     },
     {
         BatchID: 3061,
@@ -168,20 +177,17 @@ export const batch= [
         CourseID: 11
     },
     {
-        BatchID: 22,
-        Batch: "JXII-1",
-        CourseID: 12
+        BatchID: 3078,
+        Batch: "JEE adv",
+        CourseID: 13
     },
+    
     {
         BatchID: 3079,
         Batch: "JEE XL",
         CourseID: 1025
-    },
-    {
-        BatchID: 3078,
-        Batch: "JEE adv",
-        CourseID: 13
     }
+    
 ]
 
 

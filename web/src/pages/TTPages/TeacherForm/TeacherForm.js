@@ -3,10 +3,10 @@ import { batch } from '../List/List';
 import { teachers_list } from '../List/List';
 // import { teachers_list } from '../../../const/teacherList';
 // import { batch } from '../../../const/batchList';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter,UncontrolledAlert } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, UncontrolledAlert } from 'reactstrap';
 import "./TeacherForm.css";
 
-const AddTeacher = ({ showModal, setShowModal,teacherList }) => {
+const AddTeacher = ({ showModal, setShowModal, teacherList }) => {
 
   /************************************Use Effect****************************************** */
   useEffect(() => {
@@ -30,6 +30,7 @@ const AddTeacher = ({ showModal, setShowModal,teacherList }) => {
   const [apiData, setApiData] = useState({});
   const [checkedItems, setCheckedItems] = useState({});
   const [showAlert, setShowAlert] = useState("");
+  const [timeOfAlert, setTimeOfAlert] = useState(false);
 
   /*************************other consts*************************************************** */
   const { Object: responseObject = {} } = apiData;
@@ -81,12 +82,16 @@ const AddTeacher = ({ showModal, setShowModal,teacherList }) => {
         }
       }
     }
-
     setFaculties(newTeachersList);
-    setShowAlert(<UncontrolledAlert color="success" fade={false}>
-        Teachers added successfully 
-    </UncontrolledAlert>);
-
+    if (!timeOfAlert) {
+      setShowAlert(<UncontrolledAlert color="success" fade={false}>
+        Batches added successfully
+      </UncontrolledAlert>);
+      setTimeout(() => {
+        setTimeOfAlert(false);
+        setShowAlert("");
+      }, 3000);
+    };
   };
 
   const closeModal = () => {
@@ -99,7 +104,7 @@ const AddTeacher = ({ showModal, setShowModal,teacherList }) => {
       <Modal isOpen={showModal} toggle={closeModal} style={{ maxWidth: '320px' }}>
         <ModalHeader toggle={closeModal}>Select Teachers from the list</ModalHeader>
         <ModalBody>
-        {showAlert}
+          {showAlert}
           <div className="batch-list-container" style={{ maxHeight: '300px', overflowY: 'scroll', maxWidth: '300px' }}>
             <ul className="batch-list" style={{ listStyle: 'none' }}>
               {updatedFacultyList.map((faculty) => {

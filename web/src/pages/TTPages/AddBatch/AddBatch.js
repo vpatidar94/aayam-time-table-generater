@@ -25,6 +25,8 @@ const AddBatch = ({ showModal, setShowModal, batchList }) => {
   const [apiData, setApiData] = useState({});
   const [checkedItems, setCheckedItems] = useState({});
   const [showAlert, setShowAlert] = useState("");
+  const [timeOfAlert, setTimeOfAlert] = useState(false);
+
 
   /*****************************Other consts******************************************************** */
   const { Object: responseObject = {} } = apiData;
@@ -54,10 +56,18 @@ const AddBatch = ({ showModal, setShowModal, batchList }) => {
       }
     }
     setBatches(newBatches);
-    setShowAlert(<UncontrolledAlert color="success" fade={false}>
-      Batches added successfully
-    </UncontrolledAlert>);
-  };
+    if (!timeOfAlert) {
+      setShowAlert(<UncontrolledAlert color="success" fade={false}>
+        Batches added successfully
+      </UncontrolledAlert>);
+
+      setTimeout(() => {
+        setTimeOfAlert(false);
+        setShowAlert("");
+      }, 3000);
+
+    };
+  }
 
   const closeModal = () => {
     setShowModal(false);

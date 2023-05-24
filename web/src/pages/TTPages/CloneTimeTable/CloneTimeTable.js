@@ -38,6 +38,7 @@ const CloneTimeTable = () => {
     const [fromDate, setFromDate] = useState("");
     const [toDate, setToDate] = useState("");
     const [showAlert, setShowAlert] = useState(""); // to show alert
+    const [timeOfAlert, setTimeOfAlert] = useState(false);
     const [batchList, setBatchList] = useState([]);
     const [teacherList, setTeacherList] = useState([]);
     const [loaded, setLoaded] = useState(false);
@@ -305,9 +306,15 @@ const CloneTimeTable = () => {
                 }
             }
         }
-        setShowAlert(<UncontrolledAlert color="warning" fade={false}>
-            Time table image sent successfully
-        </UncontrolledAlert>);
+        if (!timeOfAlert) {
+            setShowAlert(<UncontrolledAlert color="success" fade={false}>
+                Time table image sent successfully
+            </UncontrolledAlert>);
+            setTimeout(() => {
+                setTimeOfAlert(false);
+                setShowAlert("");
+            }, 3000);
+        };
     }
 
     // method to convert date with "-" into date with "/" and correcting the format also....this method is created sothat single method could be used in both fromdate and todate..i.e no need to write again and again
@@ -376,13 +383,27 @@ const CloneTimeTable = () => {
 
         const result = await new TtApi().addUpdateTt(body);
         if (result === 'Success') {
-            setShowAlert(<UncontrolledAlert color="success" fade={false}>
-                time table saved successfully
-            </UncontrolledAlert>);
+            if (!timeOfAlert) {
+                setShowAlert(<UncontrolledAlert color="success" fade={false}>
+                    time table saved successfully
+                </UncontrolledAlert>);
+                setTimeout(() => {
+                    setTimeOfAlert(false);
+                    setShowAlert("");
+                }, 3000);
+            };
+
         } else {
-            setShowAlert(<UncontrolledAlert color="danger" fade={false}>
-                {result?.ExceptionMessage ?? 'An error has occurred.'}
-            </UncontrolledAlert>);
+            if (!timeOfAlert) {
+                setShowAlert(<UncontrolledAlert color="danger" fade={false}>
+                    {result?.ExceptionMessage ?? 'An error has occurred.'}
+                </UncontrolledAlert>);
+                setTimeout(() => {
+                    setTimeOfAlert(false);
+                    setShowAlert("");
+                }, 3000);
+            };
+
 
         }
     };

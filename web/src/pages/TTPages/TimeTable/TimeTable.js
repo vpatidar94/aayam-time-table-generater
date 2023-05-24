@@ -35,6 +35,7 @@ const TimeTable = () => {
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [showAlert, setShowAlert] = useState("");
+  const [timeOfAlert, setTimeOfAlert] = useState(false);
   const divRef = useRef(null);
 
   /**************************************** Component Method Section *********************************/
@@ -232,9 +233,16 @@ const TimeTable = () => {
         }
       }
     }
-    setShowAlert(<UncontrolledAlert color="success" fade={false}>
-      Time table image sent successfully
-    </UncontrolledAlert>);
+    if (!timeOfAlert) {
+      setShowAlert(<UncontrolledAlert color="success" fade={false}>
+        Time table image sent successfully
+      </UncontrolledAlert>);
+      setTimeout(() => {
+        setTimeOfAlert(false);
+        setShowAlert("");
+      }, 3000);
+    };
+
   }
 
   const onChangeFromDate = (e) => {
@@ -293,15 +301,26 @@ const TimeTable = () => {
 
     const result = await new TtApi().addUpdateTt(body);
     if (result === 'Success') {
-      setShowAlert(<UncontrolledAlert color="success" fade={false}>
-        time table saved successfully
-      </UncontrolledAlert>);
+      if (!timeOfAlert) {
+        setShowAlert(<UncontrolledAlert color="success" fade={false}>
+          time table saved successfully
+        </UncontrolledAlert>);
+        setTimeout(() => {
+          setTimeOfAlert(false);
+          setShowAlert("");
+        }, 3000);
+      };
 
     } else {
-      setShowAlert(<UncontrolledAlert color="danger" fade={false}>
-        {result?.ExceptionMessage ?? 'An error has occurred.'}
-      </UncontrolledAlert>);
-
+      if (!timeOfAlert) {
+        setShowAlert(<UncontrolledAlert color="danger" fade={false}>
+          {result?.ExceptionMessage ?? 'An error has occurred.'}
+        </UncontrolledAlert>);
+        setTimeout(() => {
+          setTimeOfAlert(false);
+          setShowAlert("");
+        }, 3000);
+      };
     }
   };
 
@@ -358,7 +377,6 @@ const TimeTable = () => {
                     onChange={(e) => { onChangeFromDate(e) }}
                     className='input-size'
                     min={new Date().toISOString().split('T')[0]}
-
                   />
                 </FormGroup>
                 <FormGroup className="label-date-allignment">

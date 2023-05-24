@@ -59,7 +59,7 @@ const PreviousTimeTable = () => {
                     </td>
                     <td>{tdata.ToDate}</td>
                     <td>
-                     <NavLink to={'/clone/' + tdata.TimeTableID + '/' + tdata.FromDate.replaceAll("/", '-')}><Button onClick={e => {editTt(tdata)}} className="btn" outline color="primary">
+                      <NavLink to={'/clone/' + tdata.TimeTableID + '/' + tdata.FromDate.replaceAll("/", '-')}><Button onClick={e => { editTt(tdata) }} className="btn" outline color="primary">
                         Clone
                       </Button></NavLink>
                     </td>
