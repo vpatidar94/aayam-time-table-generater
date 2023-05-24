@@ -2,7 +2,7 @@ import html2canvas from 'html2canvas';
 import React, { useEffect, useRef, useState } from 'react';
 import { RxCross2 } from "react-icons/rx";
 import { useParams } from 'react-router-dom';
-import { Alert, Button, Form, FormGroup, Input } from 'reactstrap';
+import { Alert, UncontrolledAlert, Button, Form, FormGroup, Input } from 'reactstrap';
 import TtApi from '../../../api/tt.api.js';
 import UploadApi from '../../../api/upload.api.js';
 import { COLORS } from '../../../const/color.const.js';
@@ -12,46 +12,40 @@ import AddTeacher from '../TeacherForm/TeacherForm.js';
 import "./CloneTimeTable.scss";
 
 const CloneTimeTable = () => {
-    const { fromDateEdit } = useParams();
+    /***************************************** Use Params Section******************************/
+    const { fromDateEdit, timeTableId } = useParams();
 
     /**************************************** const Section ************************************/
     /**************************************** Use Effect Section ************************************/
     useEffect(() => {
         appenColorTOTeacherList();
         getEditTimeTable();
-        const tableElement = document.querySelector('.table-style');
-        if (tableElement) {
-            const tableWidth = tableElement.offsetWidth;
-            setTableWidth(tableWidth);
-        }
     }, []);
 
     /**************************************** State Section *****************************************/
     const [tt, setTt] = useState(null);
-
-    /* taking the below useStates from timetable.v2*/
-    const [tableWidth, setTableWidth] = useState(0); // set table width
+    /* taking the below useStates from timetable.js*/
     const [draggedTeacher, setDraggedTeacher] = useState({}); // Contains dragged teacher
-    const [lectureList, setLectureList] = useState([]);
+    const [lectureList, setLectureList] = useState([]); //contains the lecture list
     const [teacherAssignment, setTeacherAssignment] = useState({});
     const [teacherCounter, setTeacherCounter] = useState({}); // key: teacherId, value: counter
     const [lectureTeacherCounter, setLectureTeacherCounter] = useState({}); // key: lectureId_teacherId, value: counter to check duplicate rows
     const [duplicateTeacherDetectedInRow, setDuplicateTeacherDetectedInRow] = useState(false);
     const [draggedCellKey, setDraggedCellKey] = useState(null);
     // contains key of teacher asignment which is grag within the table
-    const [addBatch, setAddBatch] = useState(null);
-    const [image, setImage] = useState(null);   //  for div to image 
     const [showAddBatchModal, setShowAddBatchModal] = useState(false); //for add Batch popup
-    const [showAddTeacherModal, setShowAddTeacherModal] = useState(false);
-    const [fromDate, setFromDate] = useState();
+    const [showAddTeacherModal, setShowAddTeacherModal] = useState(false); //for add teacher popup
+    const [fromDate, setFromDate] = useState("");
     const [toDate, setToDate] = useState("");
-    const divRef = useRef(null);
+    const [showAlert, setShowAlert] = useState(""); // to show alert
     const [batchList, setBatchList] = useState([]);
     const [teacherList, setTeacherList] = useState([]);
     const [loaded, setLoaded] = useState(false);
+    const divRef = useRef(null); // used to send image as the code under this will be sent as image see the return(render)
 
     /**************************************** Component Method Section *********************************/
     const appenColorTOTeacherList = () => {
+        //due to this method once the color assigng to the teacher will stick to that teacher only i.e on deleting the teacher from teacher list the color will aslo be deleted i.e will not assign to the next teacher.
         const stateTeacherList = [];
         teachers_list.forEach((teacher, i) => {
             teacher.color = COLORS[i];
@@ -63,15 +57,18 @@ const CloneTimeTable = () => {
     const getEditTimeTable = async () => {
         const result = await new TtApi().getEditTt(fromDateEdit);
         if (!result.IsSuccessful) {
+            setShowAlert(<UncontrolledAlert color="danger" fade={false}>
+                Something went wrong
+            </UncontrolledAlert>);
             return;
         }
-        setTt({...result.Object});
+        setTt({ ...result.Object });
         setFromDate(result.Object.FromDate)
         setToDate(result.Object.ToDate);
         setBatchAndTimeList(result.Object);
         setLectureList([...result.Object.LectureList])
         initTimeTable(result);
-        setLoaded(true);
+        setLoaded(true); //used so that it becomes true only when all things loaded completely
     }
 
     const initTimeTable = (result) => {
@@ -99,10 +96,11 @@ const CloneTimeTable = () => {
         if (tt) {
             const stateBatchList = tt?.Batch?.filter(it => tt.BatchID?.indexOf(it.BatchID) >= 0);
             setBatchList([...stateBatchList]);
+            //filtering only those Batches from Batch List whose Batch ID's are there with us as the Batch array in saved data has all the batches(i.e it also included those batches which are not being used or added in the time table so need to filter them)
         }
     };
 
-    /* Taking the below code from timetable.v2*/
+    /* Taking the below code from timetable.js*/
     const dragStart = (e, teacherDragged) => {
         setDraggedTeacher(teacherDragged);
     };
@@ -138,6 +136,7 @@ const CloneTimeTable = () => {
     };
 
     const updateTeacherCounterOnDrop = (teacher) => {
+        // to update the counter of teacher when new teacher is droped into the cell of table
         const stateTeacherCounter = teacherCounter;
         if (!stateTeacherCounter[teacher.FacultyID]) {
             stateTeacherCounter[teacher.FacultyID] = 1;
@@ -148,15 +147,19 @@ const CloneTimeTable = () => {
     }
 
     const checkDuplicateTeacherInRowOnDrop = (lectureId, teacherId) => {
+        //for checking duplicate teacher in a row
         const key = lectureId + '_' + teacherId;
+        // as each cell of teacher has id as the combination of lectureId i.e time and batchId i.e column and we want to check duplicate in row so we need only lectuereID and teacherID so if counter with this ID >1 it means in same row two same teachers are there.
         const stateLectureTeacherCounter = lectureTeacherCounter;
         if (!stateLectureTeacherCounter[key]) {
-            stateLectureTeacherCounter[key] = 1
+            stateLectureTeacherCounter[key] = 1;
+            // i.e if no counter is yet i.e counte is 0 then make it count 1 when teacher is dropped else if already teacher is there i.e counter >0 then add 1 to previous count value
         } else {
-            stateLectureTeacherCounter[key] += 1
+            stateLectureTeacherCounter[key] += 1;
         }
         setLectureTeacherCounter({ ...stateLectureTeacherCounter });
         if (stateLectureTeacherCounter[key] > 1) {
+            // i.e if counter>1 with same ID i.e key=lectureId + teacherID it means two same teacher in a row so setDuplicateTeacherDetectedInRow will be true and if this will true then we will use blink feature which used further in the code;
             setDuplicateTeacherDetectedInRow(true);
             setTimeout(() => {
                 setDuplicateTeacherDetectedInRow(false);
@@ -177,11 +180,13 @@ const CloneTimeTable = () => {
     const handleDrop = (e, lecture, batch) => {
         let selectedTeacher = draggedTeacher;
         if (draggedCellKey) {
+            // draggedCellKey is for handling drag and drop within table ..so if any already assigned teacher is dragged then it should be deleted with deleting whole its identity from the dragged cell so we will use remove method to remove it from the cell from where its being dragged and will further proceed for drop
             // if dragged within the table remove source & proceed for drop
-            const keyInside = draggedCellKey.lecture.LectureID + '_' + draggedCellKey.batch.BatchID;
-            selectedTeacher = teacherAssignment[keyInside];
+            const keyInside = draggedCellKey.lecture.LectureID + '_' + draggedCellKey.batch.BatchID;  // i.e providing key to the cell of table
+            selectedTeacher = teacherAssignment[keyInside]; // i.e teacher assigned to table cell which is detected by using keyInside
             removeTeacher(draggedCellKey.lecture.LectureID, draggedCellKey.batch.BatchID, teacherAssignment[keyInside].FacultyID);
         }
+        // i.e now proceed for drop (for both i.e for teacher dragged from teacher list or dragged from table cell ) i.e set or update teacherAssignment, lectureList, counter, checkforduplicate, then make dragged teacher again empty and also the empty the draggedcell key....see below
         const stateTeacherAssignment = teacherAssignment;
         const key = lecture.LectureID + '_' + batch.BatchID;
         teacherAssignment[key] = selectedTeacher;
@@ -194,23 +199,19 @@ const CloneTimeTable = () => {
     }
 
     const removeTeacher = (lectureId, batchId, teacherId) => {
-        // Remove from teacher assignment
+        // Remove from teacher assignment ...// Remove from teacher assignment i.e when clicked on cross of teacher assigned to the cell just remove it from that cell and again set new updated teacherAssignements to time table without removed teacher
         const key = lectureId + '_' + batchId
         const stateTeacherAssignment = teacherAssignment;
         delete stateTeacherAssignment[key];
         setTeacherAssignment({ ...stateTeacherAssignment });
 
-        // Remove from lecture list
+        // Remove from lecture list ....as those removed assigned teachers must also be removed from lecture list 
         const stateLectureList = lectureList;
         const index = stateLectureList?.findIndex(row => row.Batch?.BatchID === batchId && row.Lecture?.LectureID === lectureId);
-
         if (index >= 0) {
             stateLectureList.splice(index, 1);
             setLectureList([...stateLectureList]);
-
         }
-        // stateLectureList.pop(teacherAssignment)
-
         // Decrease one from teacher counter
         const stateTeacherCounter = teacherCounter;
         stateTeacherCounter[teacherId] -= 1;
@@ -249,15 +250,14 @@ const CloneTimeTable = () => {
 
     const formatDate = (date) => {
         if (!date) {
-            return "";
+            return ""; //if not date then return nothing
+
         }
-        const dateParts = date.split("/");
+        const dateParts = date.split("/"); // to split the date on behalf oh slash
         // month is 0-based, that's why we need dataParts[1] - 1
-        const formatedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+        const formatedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`; // converting dd/mm/yyyy to dd-mm-yyyy
         return formatedDate;
-
     }
-
     /*********************************************This below methods are added by jitendra from TimeTable.js***********************************/
     const generateUID = () => {
         // I generate the UID from two parts here 
@@ -271,9 +271,8 @@ const CloneTimeTable = () => {
 
     const convertToImage = async () => {
         // alert("Time table image sent successfully")
-        const canvas = await html2canvas(divRef.current);
+        const canvas = await html2canvas(divRef.current); //data converted to image through html2canvas
         const imgData = canvas.toDataURL();
-        setImage(imgData);
         /*converting page64 url got as imgData into file Object by using blob below*/
         const byteString = atob(imgData.split(',')[1]);
         const mimeString = imgData.split(',')[0].split(':')[1].split(';')[0];
@@ -306,18 +305,21 @@ const CloneTimeTable = () => {
                 }
             }
         }
-        alert("Time table image sent successfully")
+        setShowAlert(<UncontrolledAlert color="warning" fade={false}>
+            Time table image sent successfully
+        </UncontrolledAlert>);
     }
 
+    // method to convert date with "-" into date with "/" and correcting the format also....this method is created sothat single method could be used in both fromdate and todate..i.e no need to write again and again
     const formateDateWithslash = (date) => {
         const parts = date.split("-");
-        const formatedDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
+        const formatedDate = `${parts[2]}/${parts[1]}/${parts[0]}`; // converting yyyy-mm-dd to dd/mm/yyyy
         return formatedDate;
     }
 
     const onChangeFromDate = (e) => {
         const date = e.target.value;
-        setFromDate(formateDateWithslash(date));
+        setFromDate(formateDateWithslash(date)); // dont do directly setFromDate(e.target.value) as date with slash is required
     }
 
     const onChangeToDate = (e) => {
@@ -326,11 +328,12 @@ const CloneTimeTable = () => {
     }
 
     const onAddBatch = () => {
-        setShowAddBatchModal(true);
+        setShowAddBatchModal(true);  // method of opening pop up on clicking add batch
     }
 
     const onDeleteBatch = (batchID) => {
         const confirmDelete = window.confirm('Are you sure you want to delete this batch?');
+        // to open confirm pop up alert to ask do yow want to delete or cancel it ...and if select ok that is if confirmed then update batches as..
         if (confirmDelete) {
             const updatedBatches = batchList.filter((each) => each.BatchID !== batchID);
             setBatchList(updatedBatches);
@@ -339,6 +342,7 @@ const CloneTimeTable = () => {
 
     const onAddTeacher = () => {
         setShowAddTeacherModal(true);
+        // method of opening popup when clicked on add teacher button
     }
 
     const onDeleteTeacher = (facultyID) => {
@@ -349,9 +353,10 @@ const CloneTimeTable = () => {
         };
     }
 
+    //to save the time table on clicking the save button
     const saveTable = async () => {
         const sentBatchID = batchList.map(item => item.BatchID);
-
+        await new TtApi().removeTtById(tt.TimeTableID);
         const body = {
             TimeTableID: 0,
             Description: "time table save",
@@ -371,13 +376,20 @@ const CloneTimeTable = () => {
 
         const result = await new TtApi().addUpdateTt(body);
         if (result === 'Success') {
-            alert("time table saved successfully");
+            setShowAlert(<UncontrolledAlert color="success" fade={false}>
+                time table saved successfully
+            </UncontrolledAlert>);
         } else {
-            alert(result?.ExceptionMessage ?? 'An error has occurred.');
+            setShowAlert(<UncontrolledAlert color="danger" fade={false}>
+                {result?.ExceptionMessage ?? 'An error has occurred.'}
+            </UncontrolledAlert>);
+
         }
     };
 
+    // to clear all assigned teacher to table at once on clicking on clear button
     const clearAll = (key) => {
+        // const key = lectureId + '_' + batchId
         const stateTeacherAssignment = teacherAssignment;
         delete stateTeacherAssignment[key];
         setTeacherAssignment({ stateTeacherAssignment });
@@ -389,6 +401,7 @@ const CloneTimeTable = () => {
             {
                 loaded ? <div>
                     <div className="bg-container">
+                        {showAlert}
                         {
                             duplicateTeacherDetectedInRow ? <Alert color="warning">
                                 Two same teachers found in the same row
@@ -400,11 +413,10 @@ const CloneTimeTable = () => {
                                 Add Batches
                             </Button>
                             {showAddBatchModal && <AddBatch showModal={showAddBatchModal} setShowModal={setShowAddBatchModal} batchList={batchList} />}
-                            {addBatch}
                             <Button className="btn" color="info" onClick={onAddTeacher}>
                                 Add Teachers
                             </Button>
-                            {showAddTeacherModal && <AddTeacher showModal={showAddTeacherModal} setShowModal={setShowAddTeacherModal} />}
+                            {showAddTeacherModal && <AddTeacher showModal={showAddTeacherModal} setShowModal={setShowAddTeacherModal} teacherList={teacherList} />}
                             <Button className="btn" color="info" onClick={saveTable}>
                                 Save
                             </Button>
@@ -417,11 +429,12 @@ const CloneTimeTable = () => {
                         </div>
                         <div>
                             <div ref={divRef}>
+                                {/* the code below under divRef div will be converted to image as if you see convertImage method above divRef.current is taken */}
                                 <br />
                                 <Form >
                                     <div className='time-table-date-style'>
                                         <FormGroup className="label-date-allignment">
-                                            <p>From:</p>
+                                            <p className="date-label-style">From:</p>
                                             <Input
                                                 id="fromDate"
                                                 name="fromDate"
@@ -433,7 +446,7 @@ const CloneTimeTable = () => {
                                             />
                                         </FormGroup>
                                         <FormGroup className="label-date-allignment">
-                                            <p>To:</p>
+                                            <p className="date-label-style">To:</p>
                                             <Input
                                                 id="toDate"
                                                 name="toDate"
@@ -509,6 +522,7 @@ const CloneTimeTable = () => {
                         <div className='teacher-container'>
                             {teacherList.map((teacher, index) => {
                                 const { FacultyID, Faculty } = teacher;
+                                teacher.color = COLORS[index]
                                 return (
                                     <div
                                         style={{ backgroundColor: teacher.color }}
@@ -527,7 +541,6 @@ const CloneTimeTable = () => {
                                             </span>
                                         )}
                                         <button className="delete-style" onClick={() => onDeleteTeacher(teacher.FacultyID)}><RxCross2 /></button>
-
                                     </div>
                                 );
                             })}

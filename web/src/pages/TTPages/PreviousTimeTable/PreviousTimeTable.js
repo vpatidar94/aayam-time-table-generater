@@ -15,13 +15,11 @@ const PreviousTimeTable = () => {
 
   /**************************************** Component Method Section *********************************/
   const getTimeTableList = async () => {
-    // TODO: Call api
     const result = await new TtApi().getTtList();
     if (result.IsSuccessful && result.Object?.length > 0) {
       setTimeTableList(result.Object);
       console.log(result.Object)
     }
-    // console.log(result);
   };
 
   const editTt = (row) => {
@@ -38,7 +36,6 @@ const PreviousTimeTable = () => {
             <CardSubtitle className="mb-2 text-muted" tag="h6">
               Overview of the projects
             </CardSubtitle>
-
             <Table className="no-wrap mt-3 align-middle" responsive borderless>
               <thead>
                 <tr>
@@ -62,7 +59,7 @@ const PreviousTimeTable = () => {
                     </td>
                     <td>{tdata.ToDate}</td>
                     <td>
-                     <NavLink to={'/clone/'+ tdata.FromDate.replaceAll("/", '-')}><Button onClick={e => {editTt(tdata)}} className="btn" outline color="primary">
+                     <NavLink to={'/clone/' + tdata.TimeTableID + '/' + tdata.FromDate.replaceAll("/", '-')}><Button onClick={e => {editTt(tdata)}} className="btn" outline color="primary">
                         Clone
                       </Button></NavLink>
                     </td>

@@ -1,15 +1,5 @@
 import { lazy } from "react";
 import { Navigate } from "react-router-dom";
-// import EditTimeTable from "../pages/TTPages/EditTimeTable/EditTimeTable.js";
-// import Mobile from "../pages/TTPages/Mobile/Mobile.js";
-// import NewTT from "../pages/TTPages/NewTT/NewTT.js";
-
-// import AddBatch from "../views/ui/TTPages/AddBatch/AddBatch.js";
-// import PreviousTimeTable from "../views/ui/TTPages/PreviousTimeTable/PreviousTimeTable.js";
-// import Admin from "../views/ui/TTPages/Admin/Admin.js";
-// import Teachers from "../views/ui/TTPages/Teachers/Teachers.js";
-// import Students from "../views/ui/TTPages/Students/Students.js";
-// import DragnDrop from "../views/ui/DragnDrop/index.js";
 
 /****Layouts*****/
 const FullLayout = lazy(() => import("../layouts/FullLayout.js"));
@@ -26,14 +16,13 @@ const Grid = lazy(() => import("../views/ui/Grid"));
 const Tables = lazy(() => import("../views/ui/Tables"));
 const Forms = lazy(() => import("../views/ui/Forms"));
 const Breadcrumbs = lazy(() => import("../views/ui/Breadcrumbs"));
+const TimeTable2 = lazy(() => import("../pages/TTPages/TimeTable2/TimeTable2.js"));
 const TimeTable = lazy(() => import("../pages/TTPages/TimeTable/TimeTable.js"));
-const TimeTableV2 = lazy(() => import("../pages/TTPages/TimeTableV2/TimeTableV2.js"));
 const Students = lazy(() => import("../pages/TTPages/Students/Students.js"));
 const Teachers = lazy(() => import("../pages/TTPages/Teachers/Teachers.js"));
 const Admin = lazy(() => import("../pages/TTPages/Admin/Admin.js"));
 const PreviousTimeTable = lazy(() => import("../pages/TTPages/PreviousTimeTable/PreviousTimeTable.js"));
 const AddBatch = lazy(() => import("../pages/TTPages/AddBatch/AddBatch.js"));
-const NewTT = lazy(() => import("../pages/TTPages/NewTT/NewTT.js"));
 const Mobile = lazy(() => import("../pages/TTPages/Mobile/Mobile.js"));
 const CloneTimeTable = lazy(() => import("../pages/TTPages/CloneTimeTable/CloneTimeTable.js"));
 
@@ -60,17 +49,16 @@ const ThemeRoutes = [
       { path: "/breadcrumbs", exact: true, element: <Breadcrumbs /> },
 
 
-      // { path: "/tt", exact: true, element: <TimeTable /> },
-      { path: "/tt-v2", exact: true, element: <TimeTableV2 /> },
+      // { path: "/tt", exact: true, element: <TimeTable2 /> },
+      { path: "/tt", exact: true, element: <TimeTable/> },
 
       { path: "/students", exact: true, element: <Students /> },
       { path: "/teachers", exact: true, element: <Teachers /> },
       { path: "/admin", exact: true, element: <Admin /> },
       { path: "/previoustimetable", exact: true, element: <PreviousTimeTable /> },
       { path: "/addbatch", exact: true, element: <AddBatch /> },
-      { path: "/newtt", exact: true, element: <NewTT /> },
       { path: "/mobile", exact: true, element: <Mobile /> },
-      { path: "/clone/:fromDateEdit", exact: true, element: <CloneTimeTable /> }
+      { path: "/clone/:timeTableId/:fromDateEdit", exact: true, element: <CloneTimeTable /> }
 
     ],
   },

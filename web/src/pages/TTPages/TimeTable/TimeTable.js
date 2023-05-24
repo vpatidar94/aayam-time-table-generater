@@ -1,70 +1,190 @@
+import html2canvas from 'html2canvas';
 import React, { useEffect, useRef, useState } from 'react';
 import { RxCross2 } from "react-icons/rx";
-import { batch, teachers_list, time } from '../List/List';
-// import { teachers_list } from '../../../const/teacherList';
-// import { batch } from '../../../const/batchList';
-// import { time } from '../../../const/time';
-import "./TimeTable.scss";
-// import { RiDeleteBin2Line } from "react-icons/ri";
-// import htmlToCanvas from 'html-to-canvas';
-import html2canvas from 'html2canvas';
-import { Card, Row, Col, CardTitle, CardBody, Button, Form, FormGroup, Label, Input, FormText, } from "reactstrap";
-import AddBatch from '../AddBatch/AddBatch';
-import UploadApi from '../../../api/upload.api';
-import AddTeacher from '../TeacherForm/TeacherForm';
+import { Alert, Button, Form, FormGroup, Input, UncontrolledAlert } from 'reactstrap';
 import TtApi from '../../../api/tt.api.js';
+import UploadApi from '../../../api/upload.api.js';
+import { COLORS } from '../../../const/color.const.js';
+import AddBatch from '../AddBatch/AddBatch.js';
+import { batch, teachers_list, time } from '../List/List.js';
+import AddTeacher from '../TeacherForm/TeacherForm.js';
+import "./TimeTable.scss";
 
 const TimeTable = () => {
+  /***************************************** Use Params Section******************************/
+  /**************************************** const Section ************************************/
+
   /**************************************** Use Effect Section ************************************/
+  useEffect(() => {
+  }, []);
+
   /**************************************** State Section *****************************************/
-  const [tableWidth, setTableWidth] = useState(0);
-  const [draggedCellKey, setDraggedCellKey] = useState(null);
-  const [duplicateElements, setDuplicateElements] = useState({});
-  const [duplicateDetected, setDuplicateDetected] = useState(false);
-  const [teacher, setTeacher] = useState({});
-  const [teacherCounter, setTeacherCounter] = useState({}); // key: teacherId, value: counter
-  const [teacherAssignment, setTeacherAssignment] = useState({});
+  const [draggedTeacher, setDraggedTeacher] = useState({}); // Contains dragged teacher
   const [lectureList, setLectureList] = useState([]);
-  const [addBatch, setAddBatch] = useState(null);
-  // const [numberList, setNumberList] = useState([918989529107, 917898118503, 918871688429, 918349215747,919826362001,918349215747,917314058393,917869597239,919977116612,918085390900,918302184021,918358810742,919893640561,919713519598,919713030834,919827274005,919691938832,917043127836,919977711607,917298519996,919713191848,918871841238,917007794323,919669889020,918770153381]);
-  const [numberList, setNumberList] = useState([917898118503]);
+  const [teacherAssignment, setTeacherAssignment] = useState({});
+  const [teacherCounter, setTeacherCounter] = useState({}); // key: teacherId, value: counter
+  const [lectureTeacherCounter, setLectureTeacherCounter] = useState({}); // key: lectureId_teacherId, value: counter to check duplicate rows
+  const [duplicateTeacherDetectedInRow, setDuplicateTeacherDetectedInRow] = useState(false);
+  const [draggedCellKey, setDraggedCellKey] = useState(null);
+
+  // contains key of teacher asignment which is grag within the table
   const [batchList, setBatchList] = useState(batch);
-  const [image, setImage] = useState(null);   //  for div to image conversion
+  const [teacherList, setTeacherList] = useState(teachers_list);
   const [showAddBatchModal, setShowAddBatchModal] = useState(false); //for add Batch popup
   const [showAddTeacherModal, setShowAddTeacherModal] = useState(false);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
-
-  /**************************************** Use Effect Section ************************************/
-  useEffect(() => {
-    const tableElement = document.querySelector('.table-style');
-    if (tableElement) {
-      const tableWidth = tableElement.offsetWidth;
-      setTableWidth(tableWidth);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (duplicateDetected) {
-      alert('Two same teachers found in the same row');
-      setDuplicateDetected(false);
-      setTimeout(() => {
-        setDuplicateElements({});
-      }, 3000); // Blink duration
-    }
-  }, [duplicateDetected]);
-
-  useEffect(() => {
-    if (duplicateDetected) {
-      // alert('Two same teachers found in the same row');   
-      setDuplicateDetected(false);
-    }
-  }, [duplicateDetected]);
-  /***************************************other const section*********************************** */
+  const [showAlert, setShowAlert] = useState("");
   const divRef = useRef(null);
-  const color = ["#D4E6F1", "#E8DAEF", "#008080", "#808000", "#C39BD3", "#76D7C4", "#3498DB", "#358b79", "#847f86", "rgb(251, 235, 9)", "#CA6F1E", "#CCCCFF", "#F4D03F", "rgb(199, 185, 84)", "#979A9A", "#F0B27A", "rgb(117, 98, 179)", "#CD5C5C", "#40E0D0", "#DAF7A6", "#008080", "#808000", "#FADBD8", "green", "yellow", "white", "red", "pink"]
-  /**************************************** Component Method Section *********************************/
 
+  /**************************************** Component Method Section *********************************/
+  /**
+   * 
+   * @param {*} e drag event
+   * @param {*} teacherInfo teacherVo
+   * Calls when drag start & drag the reacher
+   */
+  const dragStart = (e, teacherDragged) => {
+    setDraggedTeacher(teacherDragged);
+  };
+
+  const allowDrop = (ev) => {
+    let t = ev.target;
+    while (t && (!t.classList || !t.classList.contains("each-block"))) {
+      t = t.parentNode;
+    }
+    if (t && t.innerText.trim() !== "") {
+      // Prevent drop event if cell is not empty
+      return false;
+    }
+    ev.preventDefault();
+  };
+
+  // Prepare lecture list
+  const updateLectureListOnDrop = (lecture, batch, teacher) => {
+    const stateLectureList = lectureList;
+    const lectureDto = {};
+    lectureDto.ID = "0";
+    lectureDto.TimeTableID = "0";
+    lectureDto.LectureName = "";
+    lectureDto.Batch = batch;
+    lectureDto.Lecture = lecture;
+    lectureDto.Subject = teacher.subject;
+    lectureDto.FacultyID = teacher.FacultyID;
+    lectureDto.IsActive = true;
+    lectureDto.CreatedByUserID = "1";
+    lectureDto.CreatedOnDate = "02/05/2023";
+    stateLectureList.push(lectureDto);
+    setLectureList([...stateLectureList]);
+  };
+
+  const updateTeacherCounterOnDrop = (teacher) => {
+    const stateTeacherCounter = teacherCounter;
+    if (!stateTeacherCounter[teacher.FacultyID]) {
+      teacherCounter[teacher.FacultyID] = 1;
+    } else {
+      teacherCounter[teacher.FacultyID] += 1;
+    }
+  }
+
+  const checkDuplicateTeacherInRowOnDrop = (lectureId, teacherId) => {
+    const key = lectureId + '_' + teacherId;
+    const stateLectureTeacherCounter = lectureTeacherCounter;
+    if (!stateLectureTeacherCounter[key]) {
+      stateLectureTeacherCounter[key] = 1
+    } else {
+      stateLectureTeacherCounter[key] += 1
+    }
+    setLectureTeacherCounter({ ...stateLectureTeacherCounter });
+    if (stateLectureTeacherCounter[key] > 1) {
+      setDuplicateTeacherDetectedInRow(true);
+      setTimeout(() => {
+        setDuplicateTeacherDetectedInRow(false);
+      }, 3000); // Alert duration 
+    }
+  }
+
+  /**
+   * On Drop
+   * Check if drops within the table if yes remove techer from current block by preserving the teacher and proceed for select teacher & if no proceed for select teacher
+   * set teacher assignment object
+   * set teature lecture list for api call (updateLectureListOnDrop)
+   * update teacher drop counter (updateTeacherCounterOnDrop)
+   * Check if teacher dropped in same row if yes show alert and set lecture vs teacher counter to use for blink (checkDuplicateTeacherInRowOnDrop)
+   * empty teacher state
+   * empty state used withing table drag
+   */
+  const handleDrop = (e, lecture, batch) => {
+    let selectedTeacher = draggedTeacher;
+    if (draggedCellKey) {
+      // if dragged within the table remove source & proceed for drop
+      const keyInside = draggedCellKey.lecture.LectureID + '_' + draggedCellKey.batch.BatchID;
+      selectedTeacher = teacherAssignment[keyInside];
+      removeTeacher(draggedCellKey.lecture.LectureID, draggedCellKey.batch.BatchID, teacherAssignment[keyInside].FacultyID);
+    }
+    const stateTeacherAssignment = teacherAssignment;
+    const key = lecture.LectureID + '_' + batch.BatchID;
+    teacherAssignment[key] = selectedTeacher;
+    setTeacherAssignment({ ...stateTeacherAssignment });
+    updateLectureListOnDrop(lecture, batch, selectedTeacher);
+    updateTeacherCounterOnDrop(selectedTeacher);
+    checkDuplicateTeacherInRowOnDrop(lecture.LectureID, selectedTeacher.FacultyID);
+    setDraggedTeacher({});
+    setDraggedCellKey(null);
+  }
+
+  const removeTeacher = (lectureId, batchId, teacherId) => {
+    // Remove from teacher assignment
+    const key = lectureId + '_' + batchId
+    const stateTeacherAssignment = teacherAssignment;
+    delete stateTeacherAssignment[key];
+    setTeacherAssignment({ ...stateTeacherAssignment });
+
+    // Remove from lecture list
+    const stateLectureList = lectureList;
+    const index = stateLectureList?.find(row => row.batch?.BatchID === batchId && row.lecture?.LectureID === lectureId);
+    if (index >= 0) {
+      stateLectureList.splice(index, 1);
+      setLectureList([...stateLectureList]);
+    }
+    // Decrease one from teacher counter
+    const stateTeacherCounter = teacherCounter;
+    stateTeacherCounter[teacherId] -= 1;
+    if (stateTeacherCounter[teacherId] <= 0) {
+      delete stateTeacherCounter[teacherId];
+    }
+    setTeacherCounter(stateTeacherCounter);
+  }
+
+  // Called to provide class name if true set classname blink else empty
+  // return true if same teacher counter greater than one with respect to lectureId
+  const isTeacherDuplicateInLecture = (lectureId, teacherId) => {
+    if (!lectureId || !teacherId) {
+      return false;
+    }
+    const key = lectureId + '_' + teacherId;
+    console.log(key);
+    return lectureTeacherCounter[key] > 1;
+  };
+
+  const handleTableCellDragStart = (e, lecture, batch) => {
+    setDraggedCellKey({
+      lecture, batch
+    });
+  };
+
+  const onDragEnd = (e) => {
+    setDraggedTeacher({});
+  }
+
+  const onTouchMove = (e) => {
+    console.log(e);
+    const x = e.touches[0].clientX;
+    const y = e.touches[0].clientY;
+    var elem = document.elementFromPoint(x, y);
+    alert('xx xx elem ', elem.id);
+  }
+  /*********************************************This below methods are added by jitendra from TimeTable.js***********************************/
   const generateUID = () => {
     // I generate the UID from two parts here 
     // to ensure the random number provide enough bits.
@@ -74,11 +194,10 @@ const TimeTable = () => {
     secondPart = ("000" + secondPart.toString(36)).slice(-3);
     return firstPart + secondPart;
   }
+
   const convertToImage = async () => {
-    // alert("Time table image sent successfully")
     const canvas = await html2canvas(divRef.current);
     const imgData = canvas.toDataURL();
-    setImage(imgData);
     /*converting page64 url got as imgData into file Object by using blob below*/
     const byteString = atob(imgData.split(',')[1]);
     const mimeString = imgData.split(',')[0].split(':')[1].split(';')[0];
@@ -113,177 +232,115 @@ const TimeTable = () => {
         }
       }
     }
-    alert("Time table image sent successfully")
+    setShowAlert(<UncontrolledAlert color="success" fade={false}>
+      Time table image sent successfully
+    </UncontrolledAlert>);
   }
-  const dragItem = teacher;
-  const dragStart = (e, teacherInfo) => {
-    dragItem.current = teacherInfo;
-    console.log(teacherInfo)
-  };
-  const handleTableCellDragStart = (e, key) => {
-    setDraggedCellKey(key);
-  };
-  const checkForDuplicateInRow = (key) => {
-    const rowId = key.split('_')[0];
-    const teacherInCurrentRow = [];
-    for (const cellKey in teacherAssignment) {
-      if (cellKey.startsWith(rowId)) {
-        teacherInCurrentRow.push({
-          key: cellKey,
-          teacher: teacherAssignment[cellKey].teacher,
-        });
-      }
-    }
-    const duplicates = teacherInCurrentRow.reduce((acc, item) => {
-      if (acc[item.teacher]) {
-        acc[item.teacher].push(item.key);
-      } else {
-        acc[item.teacher] = [item.key];
-      }
-      return acc;
-    }, {});
-    const newDuplicateKeys = Object.values(duplicates)
-      .filter((keys) => keys.length > 1)
-      .flat();
-    const oldDuplicateKeys = Object.keys(duplicateElements);
-    const isNewDuplicate = !oldDuplicateKeys.includes(key) && newDuplicateKeys.includes(key);
-    if (isNewDuplicate) {
-      setDuplicateDetected(true);
-      setDuplicateElements(
-        newDuplicateKeys.reduce((acc, key) => {
-          acc[key] = true;
-          return acc;
-        }, {})
-      );
-    }
-  };
 
-  const handleDrop = (e, key) => {
-    console.log(key)
-    console.log("jjjjj", teacherAssignment)
-    console.log("drag cell key", draggedCellKey);
-    if (draggedCellKey) {
-      // Move table item
-      const sourceAssignment = teacherAssignment[draggedCellKey];
-      const targetAssignment = teacherAssignment[key];
-      setTeacherAssignment({
-        ...teacherAssignment,
-        [draggedCellKey]: targetAssignment,
-        [key]: sourceAssignment,
-      });
-      setDraggedCellKey(null);
-    } else {
-      // Assign teacher to the cell
-      const teacher_assignment = teacherAssignment;
-      teacherAssignment[key] = dragItem.current;
-      setTeacherAssignment({ ...teacher_assignment });
-      setTeacher({});
-      const teacherCount = teacherCounter;
-      if (!teacherCount[dragItem.current.teacher]) {
-        teacherCount[dragItem.current.teacher] = 1;
-      } else {
-        teacherCount[dragItem.current.teacher] += 1;
-      }
-      setTeacherCounter({ ...teacherCount });
-      checkForDuplicateInRow(key);
-
-      const teacher = teacherAssignment[key];
-      const batchId = key.split("_")[1];
-      const lectureId = key.split("_")[0];
-      const teacherName = teacher.teacher;
-
-      const batchVo = batch.find(it => it.BatchID == batchId);
-      console.log('xxxx xx xx teacher ', teacher);
-      console.log('xxxx xx xx batchId ', batchId);
-      console.log('xxxx xx xx lectureId', lectureId);
-      console.log('xxxx xx xx teacherAssignment', teacherAssignment);
-      // making lectureVO 
-      const lectureVo = time.find(it => it.LectureID == lectureId);
-      const teacherVo = teachers_list.find(it => it.Faculty == teacherName)
-      console.log("iiii", teacherVo)
-
-      const lecture = {};
-      lecture.ID = "0"
-      lecture.TimeTableID = "0";
-      lecture.LectureName = "";
-      lecture.Batch = batchVo;
-      lecture.Lecture = lectureVo;
-      lecture.Subject = teacherVo.subject;
-      lecture.FacultyID = teacherVo.FacultyID;
-      lecture.IsActive = true;
-      lecture.CreatedByUserID = "1";
-      lecture.CreatedOnDate = "02/05/2023";
-      console.log("fff", lecture);
-      console.log("zzzz", teacher)
-
-      const lecture_list = lectureList;
-      lecture_list.push(lecture);
-      setLectureList([...lecture_list])
-      /* THIS LECTURE LIST WILL BE USED BELOW IN THE CONST SAVETABLE() METHOD FROM WHERE WE SEND IT TO DATABASE THROUGH API WRITTEN IN SAVETABLE() METHOD*/
-    }
-  }
-  const allowDrop = (ev) => {
-    let t = ev.target;
-    while (t && (!t.classList || !t.classList.contains("each-block"))) {
-      t = t.parentNode;
-    }
-    if (t && t.innerText.trim() !== "") {
-      // Prevent drop event if cell is not empty
-      return false;
-    }
-    ev.preventDefault();
-  };
-  const removeTeacher = (key) => {
-    const teacher_assignment = teacherAssignment;
-    setTeacherAssignment({ ...teacher_assignment });
-    setTeacher({});
-    const teacherCount = teacherCounter;
-    if ([teacherAssignment[key].teacher]) {
-      teacherCount[teacherAssignment[key].teacher] -= 1;
-    }
-    delete teacherAssignment[key].teacher;
-    delete teacherAssignment[key].color;
-    setTeacherCounter(teacherCount);
-  }
   const onChangeFromDate = (e) => {
     setFromDate(e.target.value);
   }
+
   const onChangeToDate = (e) => {
     setToDate(e.target.value);
   }
+
   const onAddBatch = () => {
     // setAddBatch(<AddBatch batchList={batchList} />)
     setShowAddBatchModal(true);
   }
-  
+
+  const onDeleteBatch = (batchID) => {
+    const confirmDelete = window.confirm('Are you sure you want to delete this batch?');
+    if (confirmDelete) {
+      const updatedBatches = batchList.filter((each) => each.BatchID !== batchID);
+      setBatchList(updatedBatches);
+    }
+  };
+
   const onAddTeacher = () => {
     setShowAddTeacherModal(true);
   }
-  const saveTable = async() => {
-    const result = await new TtApi().saveTt(fromDate,toDate,lectureList);
-    console.log("mmmm",result);
-    alert("time table saved successfully");
+
+  const onDeleteTeacher = (facultyID) => {
+    const confirmDelete = window.confirm('Are you sure you want to delete this Faculty?');
+    if (confirmDelete) {
+      const updatedTeachers = teacherList.filter((each) => each.FacultyID !== facultyID);
+      setTeacherList(updatedTeachers);
+    };
+  }
+
+  const saveTable = async () => {
+    const sentBatchID = batchList.map(item => item.BatchID)
+    const body = {
+      TimeTableID: 0,
+      Description: "time table save",
+      DateType: !!toDate ? "multiple" : "single",
+      FromDate: fromDate,
+      ToDate: toDate,
+      ShiftID: 1,
+      SessionID: 6,
+      Session: "",
+      BatchID: sentBatchID,
+      LectureID: [
+        1, 2, 3, 4, 5, 6, 7, 8
+      ],
+      IsActive: true,
+      CreatedByUserID: 1,
+      CreatedOnDate: new Date(),
+      LectureList: lectureList
+    };
+
+    const result = await new TtApi().addUpdateTt(body);
+    if (result === 'Success') {
+      setShowAlert(<UncontrolledAlert color="success" fade={false}>
+        time table saved successfully
+      </UncontrolledAlert>);
+
+    } else {
+      setShowAlert(<UncontrolledAlert color="danger" fade={false}>
+        {result?.ExceptionMessage ?? 'An error has occurred.'}
+      </UncontrolledAlert>);
+
+    }
   };
+
+  const clearAll = (key) => {
+    // const key = lectureId + '_' + batchId
+    const stateTeacherAssignment = teacherAssignment;
+    delete stateTeacherAssignment[key];
+    setTeacherAssignment({ stateTeacherAssignment });
+  }
+
   /**************************************** Template Section *****************************************/
   return (
     <>
       <div className="bg-container">
+        {showAlert}
+        {
+          duplicateTeacherDetectedInRow ? <Alert color="warning">
+            Two same teachers found in the same row
+          </Alert> : <></>
+        }
         <h1 className='heading-style'>CLASS SCHEDULE</h1>
         <div className="button-group added-style">
           <Button className="btn " color="info" onClick={onAddBatch}>
             Add Batches
           </Button>
-          {showAddBatchModal && <AddBatch showModal={showAddBatchModal} setShowModal={setShowAddBatchModal} />}
-          {addBatch}
+          {showAddBatchModal && <AddBatch showModal={showAddBatchModal} setShowModal={setShowAddBatchModal} batchList={batchList} />}
           <Button className="btn" color="info" onClick={onAddTeacher}>
             Add Teachers
           </Button>
-          {showAddTeacherModal && <AddTeacher showModal={showAddTeacherModal} setShowModal={setShowAddTeacherModal} />}
-          <Button className="btn" color="info" onClick={saveTable}>
+          {showAddTeacherModal && <AddTeacher showModal={showAddTeacherModal} setShowModal={setShowAddTeacherModal} teacherList={teacherList} />}
+          <Button className="btn" color="info" onClick={saveTable} disabled={fromDate === ''}>
             Save
           </Button>
+          {/* disabled={fromDate===""} means the save button will be enabled only when there is some entry in formDate input */}
           <Button className="btn" color="info" onClick={convertToImage}>
             Post
+          </Button>
+          <Button className="btn" color="info" onClick={clearAll}>
+            Clear ALL
           </Button>
         </div>
         <div>
@@ -292,24 +349,28 @@ const TimeTable = () => {
             <Form >
               <div className='time-table-date-style'>
                 <FormGroup className="label-date-allignment">
-                  <p>From:</p>
+                  <p className="date-label-style">From<span style={{ color: "red" }}>*</span>:</p>
                   <Input
                     id="fromDate"
                     name="date"
                     type="date"
+                    defaultValue={fromDate}
                     onChange={(e) => { onChangeFromDate(e) }}
                     className='input-size'
+                    min={new Date().toISOString().split('T')[0]}
+
                   />
                 </FormGroup>
                 <FormGroup className="label-date-allignment">
-                  <p>To:</p>
+                  <p className="date-label-style">To:</p>
                   <Input
                     id="toDate"
                     name="date"
                     type="date"
+                    defaultValue={toDate}
                     onChange={(e) => { onChangeToDate(e) }}
                     className='input-size'
-
+                    min={new Date().toISOString().split('T')[0]}
                   />
                 </FormGroup>
               </div>
@@ -319,9 +380,11 @@ const TimeTable = () => {
                 <div className="for-time">
                   <tr>
                     <td className='F-style time-style'>Time</td>
-                    {batch.map((each) => {
+                    {batchList.map((each) => {
                       return (
-                        <td className='F-style batch-style' key={batch.BatchID}>{each.Batch}</td>
+                        <td className='F-style batch-style' key={each.BatchID}>{each.Batch}
+                          <button className="delete-style" onClick={() => onDeleteBatch(each.BatchID)}><RxCross2 /></button>
+                        </td>
                       )
                     })}
                   </tr>
@@ -329,6 +392,7 @@ const TimeTable = () => {
                 <tr >
                   {time.map((t) => {
                     return (
+
                       <div >
                         <td className='F-style time-style'>{t.Time_From}-{t.Time_To}</td>
                         {batchList.map((b) => {
@@ -337,34 +401,28 @@ const TimeTable = () => {
                             <td
                               draggable={true}
                               onDragOver={allowDrop}
-                              onDrop={(e) => handleDrop(e, key)}
-                              onDragStart={(e) => teacherAssignment[key] && handleTableCellDragStart(e, key)}
+                              onDrop={(e) => handleDrop(e, t, b)}
+                              onDragStart={(e) => handleTableCellDragStart(e, t, b)}
                               key={key}
                               id={key}
-                              className={`each-block ${duplicateElements[key] ? "blink" : ""}`}
+                              className={`each-block ${isTeacherDuplicateInLecture(t.LectureID, teacherAssignment[key]?.FacultyID ?? null) ? "blink" : ""}`}
                               style={{ backgroundColor: teacherAssignment[key]?.color }}
-                            // className={`each-block ${duplicateElements[key]}`}
                             >
-                              {teacherAssignment[key] && (
-                                <div className={`teacname-cross-style ${teacherAssignment[key]?.className} `}>
-                                  <div className="teacher-name" >
-                                    {teacherAssignment[key]?.teacher}
-                                  </div>
-                                  <div className="cross-btn-container">
-                                    {teacherAssignment[key]?.teacher ? (
-                                      <button
-                                        className="cross-style"
-                                        onClick={() => removeTeacher(key)}
-                                      >
-                                        {/* <RiDeleteBin2Line /> */}
-                                        <RxCross2 />
-                                      </button>
-                                    ) : (
-                                      ''
-                                    )}
-                                  </div>
+                              <div className={`teacname-cross-style ${teacherAssignment[key]?.className} `}>
+                                <div className="teacher-name" >
+                                  {teacherAssignment[key]?.Faculty}
                                 </div>
-                              )}
+                                <div className="cross-btn-container">
+                                  {teacherAssignment[key]?.Faculty ? (
+                                    <button
+                                      className="cross-style"
+                                      onClick={() => removeTeacher(t.LectureID, b.BatchID, teacherAssignment[key].FacultyID)}
+                                    >
+                                      <RxCross2 />
+                                    </button>
+                                  ) : <></>}
+                                </div>
+                              </div>
                             </td>
                           )
                         })}
@@ -374,31 +432,30 @@ const TimeTable = () => {
                 </tr>
               </tbody>
             </table>
-            <br />
-            {/* <button onClick={onAddBatch}>+</button>
-            {addBatch} */}
           </div>
-
-          {/* {image && <img src={image} alt="table" style={{ maxWidth: tableWidth }} />} */}
-          {/* <button onClick={saveTable}>Save</button> */}
         </div>
-        <div className='teacher-container' style={{ maxWidth: tableWidth }}>
-          {teachers_list.map((teacher, index) => {
+        <div className='teacher-container'>
+          {teacherList.map((teacher, index) => {
             const { FacultyID, Faculty } = teacher;
+            teacher.color = COLORS[index]
             return (
               <div
-                style={{ maxWidth: tableWidth, backgroundColor: color[index % color.length] }}
+                style={{ backgroundColor: teacher.color }}
                 key={FacultyID}
                 className="teacher-item"
                 draggable={true}
-                onDragStart={(e) => dragStart(e, { teacher: Faculty, color: color[index % color.length] })}
+                onDragStart={(e) => dragStart(e, teacher)}
+                onDragEnd={(e) => onDragEnd(e)}
+                onTouchStart={(e) => dragStart(e, teacher)}
+                onTouchMove={(e) => onTouchMove(e)}
               >
                 <h3>{Faculty}</h3>
-                {teacherCounter[Faculty] > 0 && (
+                {teacherCounter[FacultyID] > 0 && (
                   <span className={`counter-item `} draggable={false}>
-                    {teacherCounter[Faculty]}
+                    {teacherCounter[FacultyID]}
                   </span>
                 )}
+                <button className="delete-style" onClick={() => onDeleteTeacher(teacher.FacultyID)}><RxCross2 /></button>
               </div>
             );
           })}

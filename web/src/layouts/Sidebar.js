@@ -20,7 +20,7 @@ const navigation = [
   // },
   {
     title: "Time Table",
-    href: "/tt-v2",
+    href: "/tt",
     icon: "bi bi-bell",
   },
   
@@ -58,22 +58,13 @@ const navigation = [
   //   icon: "bi bi-bell",
   // },
 
-
-  // {
-  //   title: "New TT",
-  //   href: "/newtt",
-  //   icon: "bi bi-bell",
-  // },
-
- 
-
   // {
   //   title: "Badges",
   //   href: "/badges",
   //   icon: "bi bi-patch-check",
   // },
   // {
-  //   title: "Buttons",
+  //   title: "Button
   //   href: "/buttons",
   //   icon: "bi bi-hdd-stack",
   // },

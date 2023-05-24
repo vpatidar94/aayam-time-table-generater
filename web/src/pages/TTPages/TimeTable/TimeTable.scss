@@ -1,31 +1,21 @@
 .bg-container{
-    // background-image: url("D:\aayam\web\aayam-time-table-generater\src\assets\images\bg\ttbgimage.jpg");
-    // background-image: url("D:\aayam\web\aayam-time-table-generater\src\assets\images\bg\ttbgimage.jpg");
-    background-image: url("../../../assets/images/bg/ttbgimage.jpg");
+    // background-image: url("../../../assets/images/bg/ttbgimage.jpg");
     background-repeat: no-repeat;
     background-size: cover;
-    // background-color:#cfd5d8;
     height:100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    overflow: auto;
-    // padding-right: 20px;
-    // padding-left: 20px;
-    
 }
 
 
 
 .heading-style{
-    // margin-top:0px;
-    // margin-bottom:5px;
-    // padding:10px 0;
+    padding:10px 0;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 30px;
 }
-
 
 .F-style{
     border:solid 2px black;
@@ -36,18 +26,13 @@
     max-height:30px;
     
     text-align: center;
-    
 }
-
-
 .batch-style{
     background-color: #c4cac9;
 
     padding-bottom:-12px;
     width:100px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    
-
 }
 
 .for-time{
@@ -60,21 +45,16 @@
     color:rgb(2, 2, 2);
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size:12px;
-
 }
 
 
 .table-style{
     border:solid 1px black;
-    margin-left:30px;
-    margin-right:30px;
-    
 }
 .each-block {
     border: solid 2px black;
     width: 80px;
     height: 30px;
-    
     text-align: center;
     justify-content: center;
     align-items: center;
@@ -117,7 +97,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    // margin: 1px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 .cross-btn-container{
@@ -148,8 +127,19 @@
     color:rgb(242, 9, 9);
     font-size: 16px;
     font-weight: 900;
-    
-    
+}
+.delete-style{
+  border:none;
+  background-color:transparent;
+  color:transparent;
+  // font-size:120px;
+  margin-left:-30%;
+  right:10px;
+}
+.delete-style:hover{
+  color:rgb(242, 9, 9);
+  font-size: 18px;
+  font-weight: 900;
 }
 .style-faculty{
     margin-right:10px;
@@ -160,70 +150,8 @@
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     cursor: move;
     height:20px;
-    position: fixed;
 }
 
-.bg-myk{
-    background-color: #D4E6F1;
-}
-.bg-kps{
-    background-color: #E8DAEF;
-}
-
-
-.bg-mrs{
-    background-color: #FADBD8;
-}
-
-.bg-mas{
-    background-color: #CA6F1E;
-}
-
-
-
-.bg-rss{
-    background-color: #C39BD3;
-}
-
-.bg-nms{
-    background-color: #76D7C4;
-}
-
-.bg-hds{
-    background-color: #3498DB;
-}
-
-.bg-mnm{
-    background-color: #358b79;
-}
-
-.bg-sj{
-    background-color: #847f86;
-}
-
-.bg-aj{
-    background-color: rgb(251, 235, 9);
-}
-
-.bg-dmps{
-    background-color: #F4D03F;
-}
-
-.bg-psj{
-    background-color: rgb(199, 185, 84);
-}
-
-.bg-ybs{
-    background-color: #979A9A;
-}
-
-.bg-aks{
-    background-color: #F0B27A;
-}
-
-.bg-ams{
-    background-color: rgb(117, 98, 179);
-}
 
 
 .teacher-container {
@@ -241,7 +169,7 @@
     
 }
 .blink {
-    animation: blinker 1s linear infinite;
+    animation: blinker 1s linear 5;
   }
   
   @keyframes blinker {
@@ -270,7 +198,7 @@
     width: 18px; 
     height: 15px; 
     border-radius: 50%; 
-    background-color:none; 
+    background-color: transparent; 
     display: flex;
     justify-content: center;
     align-items: center;
@@ -286,20 +214,20 @@
   padding: 0;
 }
 
-
-
-  
   .teacher-style,
   .counter-style {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
   }
-
   .added-style{
     padding:5px 2px;
-  }
+    margin-bottom:-70px;
+    // margin-left:700px;
+    margin-left: auto;
+    z-index: 999;
 
+  }
 
   .time-table-date-style{
     display: flex;
@@ -308,6 +236,7 @@
     margin-bottom: -25px;
     margin-left:30px;
   }
+  
   .form-style{
     margin-top:40px;
   }
@@ -320,6 +249,11 @@
     // margin-bottom:0px;
     font-size: 24px;
   }
+
+  .date-label-style{
+    margin-top:7px;
+  }
+
   .input-size{
     height:40px;
     font-weight: 800;
@@ -332,16 +266,13 @@
     // margin-bottom:px;
     // margin-left:5px;
   }
-
   /* ... Your existing CSS ... */
 
 /* Media Queries for mobile view */
 @media only screen and (max-width: 767px) {
     
     .bg-container{
-        // background-image: url("D:\aayam\web\aayam-time-table-generater\src\assets\images\bg\ttbgimage.jpg");
-        // background-image: url("D:\aayam\web\aayam-time-table-generater\src\assets\images\bg\ttbgimage.jpg");
-        background-image: url("../../../assets/images/bg/ttbgimage.jpg");
+        // background-image: url("../../../assets/images/bg/ttbgimage.jpg");
         background-repeat: no-repeat;
         background-size: cover;
         // background-color:#cfd5d8;
@@ -352,8 +283,6 @@
         align-items: center;
     }
     
-    
-    
     .heading-style{
         // margin-top:0px;
         // margin-bottom:5px;
@@ -361,8 +290,6 @@
         font-family: Verdana, Geneva, Tahoma, sans-serif;
         font-size: 24px;
     }
-    
-    
     .F-style{
         border:solid 2px black;
         min-width:30px;
@@ -375,7 +302,6 @@
         
     }
     
-    
     .batch-style{
         background-color: #c4cac9;
     
@@ -385,18 +311,13 @@
         font-size: 7px;
     
     }
-
-    
     .time-style{
         background-color: rgb(225, 210, 210);
         color:rgb(2, 2, 2);
         font-family: Verdana, Geneva, Tahoma, sans-serif;
         font-size:4px;
         font-weight: 900;
-    
     }
-    
-    
     .table-style{
         border:solid 1px black;
         
@@ -539,7 +460,7 @@
         width: 10px; 
         height: 8px; 
         border-radius: 50%; 
-        background-color: none; 
+        background-color: red; 
         display: flex;
         justify-content: center;
         align-items: center;

@@ -3,10 +3,10 @@ import { batch } from '../List/List';
 import { teachers_list } from '../List/List';
 // import { teachers_list } from '../../../const/teacherList';
 // import { batch } from '../../../const/batchList';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter,UncontrolledAlert } from 'reactstrap';
 import "./TeacherForm.css";
 
-const AddTeacher = ({ showModal, setShowModal }) => {
+const AddTeacher = ({ showModal, setShowModal,teacherList }) => {
 
   /************************************Use Effect****************************************** */
   useEffect(() => {
@@ -25,10 +25,11 @@ const AddTeacher = ({ showModal, setShowModal }) => {
   }, [showModal]);
 
   /***********************Use State***************************************************** */
-  const [faculties, setFaculties] = useState(teachers_list);
+  const [faculties, setFaculties] = useState(teacherList);
   // const [batches, setBatches] = useState(JSON.parse(localStorage.getItem('batches')) || batch);
   const [apiData, setApiData] = useState({});
   const [checkedItems, setCheckedItems] = useState({});
+  const [showAlert, setShowAlert] = useState("");
 
   /*************************other consts*************************************************** */
   const { Object: responseObject = {} } = apiData;
@@ -53,7 +54,7 @@ const AddTeacher = ({ showModal, setShowModal }) => {
   }));
 
   const addToFaculty = () => {
-    const newTeachersList = teachers_list;
+    const newTeachersList = teacherList;
 
     for (const facultyID in checkedItems) {
       if (checkedItems[facultyID]) {
@@ -82,7 +83,9 @@ const AddTeacher = ({ showModal, setShowModal }) => {
     }
 
     setFaculties(newTeachersList);
-    alert("faculty added successfully");
+    setShowAlert(<UncontrolledAlert color="success" fade={false}>
+        Teachers added successfully 
+    </UncontrolledAlert>);
 
   };
 
@@ -96,6 +99,7 @@ const AddTeacher = ({ showModal, setShowModal }) => {
       <Modal isOpen={showModal} toggle={closeModal} style={{ maxWidth: '320px' }}>
         <ModalHeader toggle={closeModal}>Select Teachers from the list</ModalHeader>
         <ModalBody>
+        {showAlert}
           <div className="batch-list-container" style={{ maxHeight: '300px', overflowY: 'scroll', maxWidth: '300px' }}>
             <ul className="batch-list" style={{ listStyle: 'none' }}>
               {updatedFacultyList.map((faculty) => {

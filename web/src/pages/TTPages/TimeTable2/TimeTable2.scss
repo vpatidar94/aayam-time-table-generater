@@ -1,23 +1,27 @@
 .bg-container{
-    /* background-image: url("D:\aayam\web\aayam-time-table-generater\src\assets\images\bg\ttbgimage.jpg"); */
-    /* background-image: url("D:\aayam\web\aayam-time-table-generater\src\assets\images\bg\ttbgimage.jpg"); */
+    // background-image: url("D:\aayam\web\aayam-time-table-generater\src\assets\images\bg\ttbgimage.jpg");
+    // background-image: url("D:\aayam\web\aayam-time-table-generater\src\assets\images\bg\ttbgimage.jpg");
     background-image: url("../../../assets/images/bg/ttbgimage.jpg");
     background-repeat: no-repeat;
     background-size: cover;
-    /* background-color:#cfd5d8; */
+    // background-color:#cfd5d8;
     height:100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    overflow: auto;
+    // padding-right: 20px;
+    // padding-left: 20px;
+    
 }
 
 
 
 .heading-style{
-    /* margin-top:0px; */
-    /* margin-bottom:5px; */
-    padding:10px 0;
+    // margin-top:0px;
+    // margin-bottom:5px;
+    // padding:10px 0;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 30px;
 }
@@ -42,6 +46,7 @@
     padding-bottom:-12px;
     width:100px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
+    
 
 }
 
@@ -61,6 +66,8 @@
 
 .table-style{
     border:solid 1px black;
+    margin-left:30px;
+    margin-right:30px;
     
 }
 .each-block {
@@ -110,7 +117,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /* margin: 1px; */
+    // margin: 1px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 .cross-btn-container{
@@ -119,13 +126,13 @@
     bottom:24px;
     width: 18px; 
     height: 15px; 
-    /* // border-radius: 50%;  */
+    // border-radius: 50%; 
     background-color:none; 
     display: flex;
     justify-content: center;
     align-items: center;
     color:black;
-    /* // border:solid 1px rgb(92, 87, 87); */
+    // border:solid 1px rgb(92, 87, 87);
 }
 
 .cross-style{
@@ -133,7 +140,7 @@
     background-color:transparent;
     color:transparent;
     font-size:120px;
-    /* // margin-left:-22px; */
+    // margin-left:-22px;
     right:10px;
     
 }
@@ -153,6 +160,7 @@
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     cursor: move;
     height:20px;
+    position: fixed;
 }
 
 .bg-myk{
@@ -262,12 +270,12 @@
     width: 18px; 
     height: 15px; 
     border-radius: 50%; 
-    background-color: red; 
+    background-color:none; 
     display: flex;
     justify-content: center;
     align-items: center;
     color:black;
-    border:solid 1px rgb(92, 87, 87);
+    border:solid 1px none;
    
   }
   
@@ -288,18 +296,55 @@
     gap: 10px;
   }
 
+  .added-style{
+    padding:5px 2px;
+  }
+
+
+  .time-table-date-style{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    margin-bottom: -25px;
+    margin-left:30px;
+  }
+  .form-style{
+    margin-top:40px;
+  }
+
+  .label-date-allignment{
+    display: flex;
+    flex-direction: row;
+    font-weight: 800;
+    // justify-content: space-between;
+    // margin-bottom:0px;
+    font-size: 24px;
+  }
+  .input-size{
+    height:40px;
+    font-weight: 800;
+    background-color: transparent;
+    border:none;
+    // padding-bottom:7px;
+    font-size: 24px;
+    margin-right:50px;
+    margin-left: 10px;
+    // margin-bottom:px;
+    // margin-left:5px;
+  }
+
   /* ... Your existing CSS ... */
 
 /* Media Queries for mobile view */
 @media only screen and (max-width: 767px) {
     
     .bg-container{
-        /* background-image: url("D:\aayam\web\aayam-time-table-generater\src\assets\images\bg\ttbgimage.jpg");
-        background-image: url("D:\aayam\web\aayam-time-table-generater\src\assets\images\bg\ttbgimage.jpg"); */
+        // background-image: url("D:\aayam\web\aayam-time-table-generater\src\assets\images\bg\ttbgimage.jpg");
+        // background-image: url("D:\aayam\web\aayam-time-table-generater\src\assets\images\bg\ttbgimage.jpg");
         background-image: url("../../../assets/images/bg/ttbgimage.jpg");
         background-repeat: no-repeat;
         background-size: cover;
-        /* background-color:#cfd5d8; */
+        // background-color:#cfd5d8;
         height:100vh;
         display: flex;
         flex-direction: column;
@@ -310,8 +355,8 @@
     
     
     .heading-style{
-        /* margin-top:0px; */
-        /* margin-bottom:5px; */
+        // margin-top:0px;
+        // margin-bottom:5px;
         padding:10px 0;
         font-family: Verdana, Geneva, Tahoma, sans-serif;
         font-size: 24px;
@@ -403,7 +448,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        /* margin: 1px; */
+        // margin: 1px;
         font-family: Verdana, Geneva, Tahoma, sans-serif;
     }
     .cross-btn-container{
@@ -412,13 +457,13 @@
         bottom:8px;
         width: 10px; 
         height: 5px; 
-        /* border-radius: 50%;  */
+        // border-radius: 50%; 
         background-color:none; 
         display: flex;
         justify-content: center;
         align-items: center;
         color:black;
-        /* border:solid 1px rgb(92, 87, 87); */
+        // border:solid 1px rgb(92, 87, 87);
     }
     
     .cross-style{
@@ -426,7 +471,7 @@
         background-color:transparent;
         color:transparent;
         font-size:40px;
-        /* margin-left:-22px; */
+        // margin-left:-22px;
         right:10px;
         
     }
@@ -494,7 +539,7 @@
         width: 10px; 
         height: 8px; 
         border-radius: 50%; 
-        background-color: red; 
+        background-color: none; 
         display: flex;
         justify-content: center;
         align-items: center;

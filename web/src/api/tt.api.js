@@ -48,11 +48,8 @@ export default class TtApi {
                     FromDate: fromDate,
                     ToDate: toDate,
                     ShiftID: 1,
-                    SessionID: 5,
+                    SessionID: 6,
                     Session: "string",
-                    // BatchID: [
-                    //   1, 6, 10, 7, 3, 15, 2, 3049, 20, 3042, 3061, 22, 13, 14
-                    // ],,
                     BatchID: sentBatchID,
                     LectureID: [
                         1, 2, 3, 4, 5, 6, 7, 8
@@ -70,38 +67,6 @@ export default class TtApi {
         }
     }
 
-    // TODO: @jitendrsa please check usage and remove this
-    // saveEditedTt = async (TimeTableID, DateType, fromDate, toDate, ShiftID, SessionID, Session, sentBatchID, LectureID, CreatedByUserID, lectureList) => {
-    //     try {
-    //         const myHeaders = new Headers();
-    //         myHeaders.append("Content-Type", "application/json");
-    //         const res = await fetch(URL.GET_SAVE_TIMETABLE_URL, {
-    //             method: 'POST',
-    //             headers: myHeaders,
-    //             body: JSON.stringify({
-    //                 TimeTableID: 0,
-    //                 Description: "time table save",
-    //                 DateType: "multiple",
-    //                 FromDate: fromDate,
-    //                 ToDate: toDate,
-    //                 ShiftID: ShiftID,
-    //                 SessionID: SessionID,
-    //                 Session: Session,
-    //                 BatchID: sentBatchID,
-    //                 LectureID: LectureID,
-    //                 IsActive: true,
-    //                 CreatedByUserID: CreatedByUserID,
-    //                 CreatedOnDate: new Date(),
-    //                 LectureList: lectureList
-    //             })
-    //         });
-    //         const result = await res.json();
-    //         return result;
-    //     } catch (e) {
-    //         throw new Error(e.message, e.options);
-    //     }
-    // }
-
     addUpdateTt = async (ttRequestBody) => {
         try {
             const myHeaders = new Headers();
@@ -110,6 +75,24 @@ export default class TtApi {
                 method: 'POST',
                 headers: myHeaders,
                 body: JSON.stringify(ttRequestBody)
+            });
+            const result = await res.json();
+            return result;
+        } catch (e) {
+            throw new Error(e.message, e.options);
+        }
+    }
+
+    removeTtById = async (timeTableID) => {
+        try {
+            // const formData = new FormData();
+            // formData.append('file', file, file.name);
+            const myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+            const res = await fetch(URL.REMOVE_TT, {
+                method: 'POST',
+                headers: myHeaders,
+                body: timeTableID
             });
             const result = await res.json();
             return result;

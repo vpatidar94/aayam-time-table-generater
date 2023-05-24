@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { batch } from '../List/List';
 // import { batch } from '../../../const/batchList';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, UncontrolledAlert } from 'reactstrap';
 import "./AddBatch.css"
 
 const AddBatch = ({ showModal, setShowModal, batchList }) => {
@@ -17,15 +17,14 @@ const AddBatch = ({ showModal, setShowModal, batchList }) => {
         } catch (error) {
         }
       };
-
       fetchApiData();
-
     }
   }, [showModal]);
   /********************************************Use State****************************************** */
   const [batches, setBatches] = useState(batchList);
   const [apiData, setApiData] = useState({});
   const [checkedItems, setCheckedItems] = useState({});
+  const [showAlert, setShowAlert] = useState("");
 
   /*****************************Other consts******************************************************** */
   const { Object: responseObject = {} } = apiData;
@@ -55,7 +54,9 @@ const AddBatch = ({ showModal, setShowModal, batchList }) => {
       }
     }
     setBatches(newBatches);
-    alert("batches added successfully");
+    setShowAlert(<UncontrolledAlert color="success" fade={false}>
+      Batches added successfully
+    </UncontrolledAlert>);
   };
 
   const closeModal = () => {
@@ -68,6 +69,7 @@ const AddBatch = ({ showModal, setShowModal, batchList }) => {
       <Modal isOpen={showModal} toggle={closeModal} style={{ maxWidth: '320px' }}>
         <ModalHeader toggle={closeModal}>Select Batches from the list</ModalHeader>
         <ModalBody>
+          {showAlert}
           <div className="batch-list-container" style={{ maxHeight: '300px', overflowY: 'scroll', maxWidth: '300px' }}>
             <ul className="batch-list" style={{ listStyle: 'none' }}>
               {Batch.map((batch) => (
