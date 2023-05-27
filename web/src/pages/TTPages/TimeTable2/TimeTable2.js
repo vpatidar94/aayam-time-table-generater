@@ -222,6 +222,7 @@ const TimeTable2 = () => {
       /* THIS LECTURE LIST WILL BE USED BELOW IN THE CONST SAVETABLE() METHOD FROM WHERE WE SEND IT TO DATABASE THROUGH API WRITTEN IN SAVETABLE() METHOD*/
     }
   }
+
   const allowDrop = (ev) => {
     let t = ev.target;
     while (t && (!t.classList || !t.classList.contains("each-block"))) {
@@ -233,6 +234,7 @@ const TimeTable2 = () => {
     }
     ev.preventDefault();
   };
+
   const removeTeacher = (key) => {
     const teacher_assignment = teacherAssignment;
     setTeacherAssignment({ ...teacher_assignment });
@@ -245,12 +247,15 @@ const TimeTable2 = () => {
     delete teacherAssignment[key].color;
     setTeacherCounter(teacherCount);
   }
+
   const onChangeFromDate = (e) => {
     setFromDate(e.target.value);
   }
+
   const onChangeToDate = (e) => {
     setToDate(e.target.value);
   }
+
   const onAddBatch = () => {
     // setAddBatch(<AddBatch batchList={batchList} />)
     setShowAddBatchModal(true);
@@ -259,11 +264,12 @@ const TimeTable2 = () => {
   const onAddTeacher = () => {
     setShowAddTeacherModal(true);
   }
+
   const saveTable = async() => {
     const result = await new TtApi().saveTt(fromDate,toDate,lectureList);
-    console.log("mmmm",result);
     alert("time table saved successfully");
   };
+  
   /**************************************** Template Section *****************************************/
   return (
     <>

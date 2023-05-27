@@ -102,7 +102,9 @@ const TimeTable = () => {
       setTimeout(() => {
         setDuplicateTeacherDetectedInRow(false);
       }, 3000); // Alert duration 
+      
     }
+    
   }
 
   /**
@@ -136,7 +138,7 @@ const TimeTable = () => {
 
   const removeTeacher = (lectureId, batchId, teacherId) => {
     // Remove from teacher assignment
-    const key = lectureId + '_' + batchId
+    const key = lectureId + '_' + batchId;
     const stateTeacherAssignment = teacherAssignment;
     delete stateTeacherAssignment[key];
     setTeacherAssignment({ ...stateTeacherAssignment });
@@ -155,6 +157,16 @@ const TimeTable = () => {
       delete stateTeacherCounter[teacherId];
     }
     setTeacherCounter(stateTeacherCounter);
+    
+    // To make not blink when teacher itself dragged from one place to other in same row
+    const stateLectureTeacherCounter = lectureTeacherCounter;
+    const lectureTeacherKey = lectureId + '_' + teacherId;
+    if (stateLectureTeacherCounter[lectureTeacherKey] > 1) {
+      stateLectureTeacherCounter[lectureTeacherKey] -= 1;
+    } else {
+      delete stateLectureTeacherCounter[lectureTeacherKey];
+    }
+    setLectureTeacherCounter(stateLectureTeacherCounter);
   }
 
   // Called to provide class name if true set classname blink else empty
@@ -288,7 +300,7 @@ const TimeTable = () => {
       ToDate: toDate,
       ShiftID: 1,
       SessionID: 6,
-      Session: "",
+      Session: "2023-24",
       BatchID: sentBatchID,
       LectureID: [
         1, 2, 3, 4, 5, 6, 7, 8

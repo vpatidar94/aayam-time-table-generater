@@ -46,7 +46,7 @@ const CloneTimeTable = () => {
 
     /**************************************** Component Method Section *********************************/
     const appenColorTOTeacherList = () => {
-        //due to this method once the color assigng to the teacher will stick to that teacher only i.e on deleting the teacher from teacher list the color will aslo be deleted i.e will not assign to the next teacher.
+        //due to this method once the color assigned to the teacher will stick to that teacher only i.e on deleting the teacher from teacher list the color will aslo be deleted i.e will not assign to the next teacher.
         const stateTeacherList = [];
         teachers_list.forEach((teacher, i) => {
             teacher.color = COLORS[i];
@@ -220,6 +220,16 @@ const CloneTimeTable = () => {
             delete stateTeacherCounter[teacherId];
         }
         setTeacherCounter(stateTeacherCounter);
+
+        // To make not blink when teacher itself dragged from one place to other in same row
+        const stateLectureTeacherCounter = lectureTeacherCounter;
+        const lectureTeacherKey = lectureId + '_' + teacherId;
+        if (stateLectureTeacherCounter[lectureTeacherKey] > 1) {
+            stateLectureTeacherCounter[lectureTeacherKey] -= 1;
+        } else {
+            delete stateLectureTeacherCounter[lectureTeacherKey];
+        }
+        setLectureTeacherCounter(stateLectureTeacherCounter);
     }
 
     // Called to provide class name if true set classname blink else empty
@@ -252,7 +262,6 @@ const CloneTimeTable = () => {
     const formatDate = (date) => {
         if (!date) {
             return ""; //if not date then return nothing
-
         }
         const dateParts = date.split("/"); // to split the date on behalf oh slash
         // month is 0-based, that's why we need dataParts[1] - 1
@@ -403,8 +412,6 @@ const CloneTimeTable = () => {
                     setShowAlert("");
                 }, 3000);
             };
-
-
         }
     };
 

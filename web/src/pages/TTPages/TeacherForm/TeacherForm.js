@@ -85,7 +85,7 @@ const AddTeacher = ({ showModal, setShowModal, teacherList }) => {
     setFaculties(newTeachersList);
     if (!timeOfAlert) {
       setShowAlert(<UncontrolledAlert color="success" fade={false}>
-        Batches added successfully
+        Teachers added successfully
       </UncontrolledAlert>);
       setTimeout(() => {
         setTimeOfAlert(false);

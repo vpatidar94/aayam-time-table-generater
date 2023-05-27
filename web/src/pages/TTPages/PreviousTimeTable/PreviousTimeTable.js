@@ -33,15 +33,11 @@ const PreviousTimeTable = () => {
         <Card>
           <CardBody>
             <CardTitle tag="h5">Previous Time Table</CardTitle>
-            <CardSubtitle className="mb-2 text-muted" tag="h6">
-              Overview of the projects
-            </CardSubtitle>
             <Table className="no-wrap mt-3 align-middle" responsive borderless>
               <thead>
                 <tr>
                   <th>Table Id</th>
                   <th>Session</th>
-
                   <th>FromDate</th>
                   <th>To Date</th>
                   <th>Action</th>
