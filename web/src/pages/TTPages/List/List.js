@@ -111,6 +111,11 @@ export const teachers_list = [
             Faculty: "NPS",
             subject:"Chemistry"
         },
+        {
+            FacultyID: 3055,
+            Faculty: "SKS",
+            subject:"Maths"
+        },
     ]; 
     
 
