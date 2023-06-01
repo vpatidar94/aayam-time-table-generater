@@ -102,9 +102,9 @@ const TimeTable = () => {
       setTimeout(() => {
         setDuplicateTeacherDetectedInRow(false);
       }, 3000); // Alert duration 
-      
+
     }
-    
+
   }
 
   /**
@@ -157,7 +157,7 @@ const TimeTable = () => {
       delete stateTeacherCounter[teacherId];
     }
     setTeacherCounter(stateTeacherCounter);
-    
+
     // To make not blink when teacher itself dragged from one place to other in same row
     const stateLectureTeacherCounter = lectureTeacherCounter;
     const lectureTeacherKey = lectureId + '_' + teacherId;
@@ -429,7 +429,7 @@ const TimeTable = () => {
                           const key = t.LectureID + '_' + b.BatchID
                           return (
                             <td
-                              draggable={true}
+                              draggable={!!teacherAssignment[key]?.Faculty}
                               onDragOver={allowDrop}
                               onDrop={(e) => handleDrop(e, t, b)}
                               onDragStart={(e) => handleTableCellDragStart(e, t, b)}
