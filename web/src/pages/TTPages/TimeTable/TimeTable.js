@@ -476,8 +476,6 @@ const TimeTable = () => {
                 draggable={true}
                 onDragStart={(e) => dragStart(e, teacher)}
                 onDragEnd={(e) => onDragEnd(e)}
-                onTouchStart={(e) => dragStart(e, teacher)}
-                onTouchMove={(e) => onTouchMove(e)}
               >
                 <h3>{Faculty}</h3>
                 {teacherCounter[FacultyID] > 0 && (
