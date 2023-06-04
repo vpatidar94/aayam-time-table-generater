@@ -34,7 +34,7 @@ export default class UploadApi {
                 message: message,
                 media_url: "https://api.aayamcareerinstitute.co.in/" + url,
                 filename: fileName,
-                instance_id: "6453479F141A2",
+                instance_id: "647B3C9AA8D0A",
                 access_token: "0a3e27126c2c239bdf7f9128943ef9c0"
             }), {
                 method: 'GET',
@@ -59,7 +59,7 @@ export default class UploadApi {
                 message: message,
                 media_url: "https://api.aayamcareerinstitute.co.in/" + url,
                 filename: fileName,
-                instance_id: "6453479F141A2",
+                instance_id: "647B3C9AA8D0A",
                 access_token: "0a3e27126c2c239bdf7f9128943ef9c0"
             }), {
                 method: 'GET',
@@ -83,7 +83,7 @@ export default class UploadApi {
                 message: message,
                 media_url: "https://api.aayamcareerinstitute.co.in/" + url,
                 filename: fileName,
-                instance_id: "6453479F141A2",
+                instance_id: "647B3C9AA8D0A",
                 access_token: "0a3e27126c2c239bdf7f9128943ef9c0"
 
             }), {
