@@ -16,6 +16,7 @@ const TimeTable = () => {
 
   /**************************************** Use Effect Section ************************************/
   useEffect(() => {
+    appenColorTOTeacherList();
   }, []);
 
   /**************************************** State Section *****************************************/
@@ -49,6 +50,16 @@ const TimeTable = () => {
     setDraggedTeacher(teacherDragged);
   };
 
+  const appenColorTOTeacherList = () => {
+    //due to this method once the color assigned to the teacher will stick to that teacher only i.e on deleting the teacher from teacher list the color will aslo be deleted i.e will not assign to the next teacher.
+    const stateTeacherList = [];
+    teachers_list.forEach((teacher, i) => {
+      teacher.color = COLORS[i];
+      stateTeacherList.push(teacher);
+    });
+    setTeacherList([...stateTeacherList]);
+  };
+
   const allowDrop = (ev) => {
     let t = ev.target;
     while (t && (!t.classList || !t.classList.contains("each-block"))) {
@@ -79,13 +90,20 @@ const TimeTable = () => {
     setLectureList([...stateLectureList]);
   };
 
-  const updateTeacherCounterOnDrop = (teacher) => {
+  const updateTeacherCounterOnDrop = (teacher, lectureId) => {
     const stateTeacherCounter = teacherCounter;
     if (!stateTeacherCounter[teacher.FacultyID]) {
-      teacherCounter[teacher.FacultyID] = 1;
-    } else {
-      teacherCounter[teacher.FacultyID] += 1;
+      stateTeacherCounter[teacher.FacultyID] = 1;
+      setTeacherCounter({ ...stateTeacherCounter });
+      return;
     }
+    // to update the counter of teacher when new teacher is droped into the cell of table
+    const key = lectureId + '_' + teacher.FacultyID;
+    if (lectureTeacherCounter && lectureTeacherCounter[key] && lectureTeacherCounter[key] > 1) {
+      return;
+    }
+    stateTeacherCounter[teacher.FacultyID] += 1;
+    setTeacherCounter({ ...stateTeacherCounter });
   }
 
   const checkDuplicateTeacherInRowOnDrop = (lectureId, teacherId) => {
@@ -104,7 +122,6 @@ const TimeTable = () => {
       }, 3000); // Alert duration 
 
     }
-
   }
 
   /**
@@ -130,8 +147,8 @@ const TimeTable = () => {
     teacherAssignment[key] = selectedTeacher;
     setTeacherAssignment({ ...stateTeacherAssignment });
     updateLectureListOnDrop(lecture, batch, selectedTeacher);
-    updateTeacherCounterOnDrop(selectedTeacher);
     checkDuplicateTeacherInRowOnDrop(lecture.LectureID, selectedTeacher.FacultyID);
+    updateTeacherCounterOnDrop(selectedTeacher, lecture.LectureID);
     setDraggedTeacher({});
     setDraggedCellKey(null);
   }
@@ -150,14 +167,6 @@ const TimeTable = () => {
       stateLectureList.splice(index, 1);
       setLectureList([...stateLectureList]);
     }
-    // Decrease one from teacher counter
-    const stateTeacherCounter = teacherCounter;
-    stateTeacherCounter[teacherId] -= 1;
-    if (stateTeacherCounter[teacherId] <= 0) {
-      delete stateTeacherCounter[teacherId];
-    }
-    setTeacherCounter(stateTeacherCounter);
-
     // To make not blink when teacher itself dragged from one place to other in same row
     const stateLectureTeacherCounter = lectureTeacherCounter;
     const lectureTeacherKey = lectureId + '_' + teacherId;
@@ -167,6 +176,21 @@ const TimeTable = () => {
       delete stateLectureTeacherCounter[lectureTeacherKey];
     }
     setLectureTeacherCounter(stateLectureTeacherCounter);
+
+    const keyLtId = lectureId + '_' + teacherId;
+    if (lectureTeacherCounter && lectureTeacherCounter[keyLtId] && lectureTeacherCounter[keyLtId] >= 1) {
+      return;
+    }
+
+    // Decrease one from teacher counter
+    const stateTeacherCounter = teacherCounter;
+    stateTeacherCounter[teacherId] -= 1;
+    if (stateTeacherCounter[teacherId] <= 0) {
+      delete stateTeacherCounter[teacherId];
+    }
+    setTeacherCounter(stateTeacherCounter);
+
+
   }
 
   // Called to provide class name if true set classname blink else empty
@@ -467,7 +491,6 @@ const TimeTable = () => {
         <div className='teacher-container'>
           {teacherList.map((teacher, index) => {
             const { FacultyID, Faculty } = teacher;
-            teacher.color = COLORS[index]
             return (
               <div
                 style={{ backgroundColor: teacher.color }}

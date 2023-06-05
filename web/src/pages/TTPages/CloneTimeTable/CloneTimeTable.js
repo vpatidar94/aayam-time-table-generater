@@ -85,13 +85,28 @@ const CloneTimeTable = () => {
                             stateTeacherAssignment[key] = teacher;
                             setTeacherAssignment({ ...stateTeacherAssignment });
                             updateLectureListOnDrop(lecture, lec?.Batch, teacher);
-                            updateTeacherCounterOnDrop(teacher);
+                            checkDuplicateTeacherInRowOnDrop(lecture.LectureID, teacher.FacultyID);
                         }
                     }
                 }
             });
         }
-    }
+        initTeacherCounter();
+    }   
+
+    const initTeacherCounter = () => {
+        const teacherCounter = {};
+        Object.keys(lectureTeacherCounter).forEach(key => {
+            const teacherLecture = key.split('_');
+            const teacherId = teacherLecture[1];
+            if (teacherCounter[teacherId]) {
+                teacherCounter[teacherId] += 1;
+            } else {
+                teacherCounter[teacherId] = 1;
+            }
+        });
+        setTeacherCounter({ ...teacherCounter });
+    };
 
     const setBatchAndTimeList = (tt) => {
         if (tt) {
@@ -136,14 +151,19 @@ const CloneTimeTable = () => {
         setLectureList([...stateLectureList]);
     };
 
-    const updateTeacherCounterOnDrop = (teacher) => {
-        // to update the counter of teacher when new teacher is droped into the cell of table
+    const updateTeacherCounterOnDrop = (teacher, lectureId) => {
         const stateTeacherCounter = teacherCounter;
         if (!stateTeacherCounter[teacher.FacultyID]) {
             stateTeacherCounter[teacher.FacultyID] = 1;
-        } else {
-            stateTeacherCounter[teacher.FacultyID] += 1;
+            setTeacherCounter({ ...stateTeacherCounter });
+            return;
         }
+        // to update the counter of teacher when new teacher is droped into the cell of table
+        const key = lectureId + '_' + teacher.FacultyID;
+        if (lectureTeacherCounter && lectureTeacherCounter[key] && lectureTeacherCounter[key] > 1) {
+            return;
+        }
+        stateTeacherCounter[teacher.FacultyID] += 1;
         setTeacherCounter({ ...stateTeacherCounter });
     }
 
@@ -152,7 +172,7 @@ const CloneTimeTable = () => {
         const key = lectureId + '_' + teacherId;
         // as each cell of teacher has id as the combination of lectureId i.e time and batchId i.e column and we want to check duplicate in row so we need only lectuereID and teacherID so if counter with this ID >1 it means in same row two same teachers are there.
         const stateLectureTeacherCounter = lectureTeacherCounter;
-        if (!stateLectureTeacherCounter[key]) {
+        if (!stateLectureTeacherCounter[key] || stateLectureTeacherCounter[key] < 1) {
             stateLectureTeacherCounter[key] = 1;
             // i.e if no counter is yet i.e counte is 0 then make it count 1 when teacher is dropped else if already teacher is there i.e counter >0 then add 1 to previous count value
         } else {
@@ -193,8 +213,8 @@ const CloneTimeTable = () => {
         teacherAssignment[key] = selectedTeacher;
         setTeacherAssignment({ ...stateTeacherAssignment });
         updateLectureListOnDrop(lecture, batch, selectedTeacher);
-        updateTeacherCounterOnDrop(selectedTeacher);
         checkDuplicateTeacherInRowOnDrop(lecture.LectureID, selectedTeacher.FacultyID);
+        updateTeacherCounterOnDrop(selectedTeacher, lecture.LectureID);
         setDraggedTeacher({});
         setDraggedCellKey(null);
     }
@@ -213,13 +233,6 @@ const CloneTimeTable = () => {
             stateLectureList.splice(index, 1);
             setLectureList([...stateLectureList]);
         }
-        // Decrease one from teacher counter
-        const stateTeacherCounter = teacherCounter;
-        stateTeacherCounter[teacherId] -= 1;
-        if (stateTeacherCounter[teacherId] <= 0) {
-            delete stateTeacherCounter[teacherId];
-        }
-        setTeacherCounter(stateTeacherCounter);
 
         // To make not blink when teacher itself dragged from one place to other in same row
         const stateLectureTeacherCounter = lectureTeacherCounter;
@@ -230,6 +243,19 @@ const CloneTimeTable = () => {
             delete stateLectureTeacherCounter[lectureTeacherKey];
         }
         setLectureTeacherCounter(stateLectureTeacherCounter);
+
+        const keyLtId = lectureId + '_' + teacherId;
+        if (lectureTeacherCounter && lectureTeacherCounter[keyLtId] && lectureTeacherCounter[keyLtId] >= 1) {
+            return;
+        }
+
+        // Decrease one from teacher counter
+        const stateTeacherCounter = teacherCounter;
+        stateTeacherCounter[teacherId] -= 1;
+        if (stateTeacherCounter[teacherId] <= 0) {
+            delete stateTeacherCounter[teacherId];
+        }
+        setTeacherCounter(stateTeacherCounter);
     }
 
     // Called to provide class name if true set classname blink else empty
@@ -250,13 +276,6 @@ const CloneTimeTable = () => {
 
     const onDragEnd = (e) => {
         setDraggedTeacher({});
-    }
-
-    const onTouchMove = (e) => {
-        const x = e.touches[0].clientX;
-        const y = e.touches[0].clientY;
-        var elem = document.elementFromPoint(x, y);
-        alert('xx xx elem ', elem.id);
     }
 
     const formatDate = (date) => {
@@ -550,7 +569,6 @@ const CloneTimeTable = () => {
                         <div className='teacher-container'>
                             {teacherList.map((teacher, index) => {
                                 const { FacultyID, Faculty } = teacher;
-                                teacher.color = COLORS[index]
                                 return (
                                     <div
                                         style={{ backgroundColor: teacher.color }}
