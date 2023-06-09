@@ -1,73 +1,315 @@
-.bg-container{
-    // background-image: url("../../../assets/images/bg/ttbgimage.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    height:100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.heading-style {
+  padding: 10px 0;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 30px;
 }
 
-.heading-style{
-    // margin-top:0px;
-    // margin-bottom:5px;
-    padding:10px 0;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 30px;
+.F-style {
+  border: solid 2px black;
+  min-width: 80px;
+  max-width: 80px;
+
+  min-height: 30px;
+  max-height: 30px;
+
+  text-align: center;
 }
 
-.F-style{
-    border:solid 2px black;
-    min-width:80px;
-    max-width: 80px;
-    min-height: 30px;
-    max-height:30px;
-    text-align: center;
+.batch-style {
+  background-color: #c4cac9;
+
+  padding-bottom: -12px;
+  width: 100px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
-.batch-style{
-    background-color: #c4cac9;
-
-    padding-bottom:-12px;
-    width:100px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+.for-time {
+  display: flex;
+  flex-direction: row;
 }
 
-.for-time{
-    display:flex;
-    flex-direction: row;
+.time-style {
+  background-color: rgb(225, 210, 210);
+  color: rgb(2, 2, 2);
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 12px;
 }
 
-.time-style{
-    background-color: rgb(225, 210, 210);
-    color:rgb(2, 2, 2);
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size:12px;
 
+.table-style {
+  border: solid 1px black;
 }
 
-.table-style{
-    border:solid 1px black;
-    
+
+.table-container {
+  width: 100% !important;
+  overflow-x: scroll;
 }
 
 .each-block {
-    border: solid 2px black;
-    width: 80px;
-    height: 30px;
+  border: solid 2px black;
+  width: 80px;
+  height: 30px;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  font-weight: 900;
+  font-size: 15px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+
+}
+
+.each-block>div {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-break: break-word;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  line-height: 30px;
+  /* Match the height of the .each-block */
+}
+
+.teacname-cross-style {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.teacher-name {
+  position: relative;
+  width: 92px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.cross-btn-container {
+  position: absolute;
+  right: 0px;
+  bottom: 24px;
+  width: 18px;
+  height: 15px;
+  // border-radius: 50%; 
+  background-color: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  // border:solid 1px rgb(92, 87, 87);
+}
+
+.cross-style {
+  border: none;
+  background-color: transparent;
+  color: transparent;
+  font-size: 120px;
+  // margin-left:-22px;
+  right: 10px;
+
+}
+
+.cross-style:hover {
+  color: rgb(242, 9, 9);
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.delete-style {
+  border: none;
+  background-color: transparent;
+  color: transparent;
+  // font-size:120px;
+  margin-left: -30%;
+  right: 10px;
+}
+
+.remove-icon {
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: none;
+  color: rgb(242, 9, 9);
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.delete-style:hover {
+  color: rgb(242, 9, 9);
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.style-faculty {
+  margin-right: 10px;
+  width: 80px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 900;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  cursor: move;
+  height: 20px;
+}
+
+
+
+.teacher-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.counter-style {
+  display: flex;
+  flex-direction: row;
+
+}
+
+.blink {
+  animation: blinker 1s linear 5;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+
+.teacher-item {
+
+  position: relative;
+  // width: 92px;
+  // height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  // margin: 1px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  padding: 0.5rem 0;
+  width: 8%;
+}
+
+.teacher-item:hover>.remove-icon {
+  display: block;
+}
+
+.counter-item {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  font-size: 10px !important;
+  background-color: rgba(11, 183, 175, 0.8) !important;
+  color: #ffffff !important;
+}
+
+
+.teacher-item span {
+  font-size: 14px;
+}
+
+.teacher-style,
+.counter-style {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.time-table-date-style {
+  padding-top: 30px;
+}
+
+.form-style {
+  margin-top: 40px;
+}
+
+.label-date-allignment {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+/* ... Your existing CSS ... */
+
+/* Media Queries for mobile view */
+@media only screen and (max-width: 767px) {
+
+
+  .heading-style {
+    padding: 10px 0;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 24px;
+  }
+
+  .F-style {
+    border: solid 1px black;
+    min-width: 30px;
+    max-width: 30px;
+
+    min-height: 10px;
+    max-height: 10px;
+
+    text-align: center;
+
+  }
+
+  .batch-style {
+    background-color: #c4cac9;
+
+    padding-bottom: -12px;
+    width: 45px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 7px;
+
+  }
+
+  .time-style {
+    background-color: rgb(225, 210, 210);
+    color: rgb(2, 2, 2);
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 4px;
+    font-weight: 900;
+  }
+
+  .table-style {
+    border: solid 1px black;
+
+  }
+
+  .each-block {
+    border: solid 1px black !important;
+    width: 30px;
+    height: 12px;
+
     text-align: center;
     justify-content: center;
     align-items: center;
     position: relative;
     overflow: hidden;
-    font-weight:900;
-    font-size:15px;
+    font-weight: 900;
+    font-size: 9px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    
+
   }
 
-  .each-block > div {
+  .each-block>div {
     width: 100%;
     height: 100%;
     box-sizing: border-box;
@@ -81,141 +323,112 @@
     padding: 0;
     margin: 0;
     text-align: center;
-    line-height: 30px; /* Match the height of the .each-block */
+    line-height: 30px;
+    /* Match the height of the .each-block */
   }
 
-.teacname-cross-style{
+  .teacname-cross-style {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
     align-items: flex-start;
     gap: 10px;
     margin-top: 20px;
-}
+  }
 
-.teacher-name{
+  .teacher-name {
     position: relative;
-    width: 92px; 
-    height: 40px; 
+    width: 40px;
+    height: 17px;
     display: flex;
     justify-content: center;
     align-items: center;
     // margin: 1px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-}
+  }
 
-.cross-btn-container{
+  .cross-btn-container {
     position: absolute;
-    right:0px;
-    bottom:24px;
-    width: 18px; 
-    height: 15px; 
+    right: 0px;
+    bottom: 8px;
+    width: 10px;
+    height: 5px;
     // border-radius: 50%; 
-    background-color:none; 
+    background-color: none;
     display: flex;
     justify-content: center;
     align-items: center;
-    color:black;
+    color: black;
     // border:solid 1px rgb(92, 87, 87);
-}
-
-.cross-style{
-    border:none;
-    background-color:transparent;
-    color:transparent;
-    font-size:120px;
-    // margin-left:-22px;
-    right:10px;
-    
-}
-.cross-style:hover{
-    color:rgb(242, 9, 9);
-    font-size: 16px;
-    font-weight: 900;
-}
-
-.delete-style{
-  border:none;
-  background-color:transparent;
-  color:transparent;
-  // font-size:120px;
-  margin-left:-30%;
-  right:10px;
-}
-
-.delete-style:hover{
-  color:rgb(242, 9, 9);
-  font-size: 18px;
-  font-weight: 900;
-}
-
-.style-faculty{
-    margin-right:10px;
-    width:80px;
-    text-align: center;
-    font-size:12px;
-    font-weight: 900;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    cursor: move;
-    height:20px;
-}
-
-.teacher-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    align-items: flex-start;
-    gap: 10px;
-    margin-top: 20px;
   }
 
-.counter-style{
-    display: flex;
-    flex-direction: row;
-    
-}
+  // .cross-style {
+  //   border: none;
+  //   background-color: transparent;
+  //   color: transparent;
+  //   font-size: 40px;
+  //   // margin-left:-22px;
+  //   right: 10px;
 
-.blink {
-    animation: blinker 1s linear 5;
-  }
-  
-  @keyframes blinker {
-    50% {
-      opacity: 0;
-    }
+  // }
+
+  // .cross-style:hover {
+  //   color: rgb(242, 9, 9);
+  //   font-size: 9px;
+  //   font-weight: 900;
+  // }
+
+  // .style-faculty {
+  //   margin-right: 10px;
+  //   width: 30px;
+  //   text-align: center;
+  //   font-size: 10px;
+  //   font-weight: 900;
+  //   font-family: Verdana, Geneva, Tahoma, sans-serif;
+  //   cursor: move;
+  //   height: 15px;
+  // }
+
+
+
+  // .teacher-container {
+  //   display: flex;
+  //   flex-wrap: wrap;
+  //   justify-content: flex-start;
+  //   align-items: flex-start;
+  //   gap: 10px;
+  //   margin-top: 20px;
+  // }
+
+  // .counter-style {
+  //   display: flex;
+  //   flex-direction: row;
+
+  // }
+
+  // .blink {
+  //   // animation: blinker 1s linear infinite;
+  // }
+
+  // @keyframes blinker {
+  //   50% {
+  //     opacity: 0;
+  //   }
+  // }
+
+  .counter-item {
+    font-size: 7px !important;
   }
 
-  .teacher-item{
-    position: relative;
-    width: 92px; 
-    height: 40px; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 1px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+
+  .teacher-item span {
+    font-size: 10px;
   }
 
-.counter-item {
-    position: absolute;
-    right:0px;
-    bottom:24px;
-    width: 18px; 
-    height: 15px; 
-    border-radius: 50%; 
-    background-color: transparent; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color:black;
-    border:solid 1px none;
+  .teacher-item {
+    padding: 0.5rem 0;
+    width: 15%;
   }
-
-.teacher-item h3 {
-  font-size: 14px; 
-  margin: 0;
-  padding: 0;
-}
 
   .teacher-style,
   .counter-style {
@@ -223,262 +436,8 @@
     flex-wrap: wrap;
     gap: 10px;
   }
-  
-  .added-style{
-    padding:5px 2px;
-    margin-bottom:-70px;
-    // margin-left:700px;
-    margin-left: auto;
-    z-index: 999;
-  }
 
-  .time-table-date-style{
-    display: flex;
-    flex-direction: row;
-    justify-content: start;
-    margin-bottom: -25px;
-    margin-left:30px;
+  .remove-icon {
+    display: block;
   }
-  
-  .date-label-style{
-    margin-top:7px;
-  }
-
-  .form-style{
-    margin-top:40px;
-  }
-
-  .label-date-allignment{
-    display: flex;
-    flex-direction: row;
-    font-weight: 800;
-    // justify-content: space-between;
-    // margin-bottom:0px;
-    font-size: 24px;
-  }
-  .input-size{
-    height:40px;
-    font-weight: 800;
-    background-color: transparent;
-    border:none;
-    // padding-bottom:7px;
-    font-size: 24px;
-    margin-right:50px;
-    margin-left: 10px;
-    // margin-bottom:px;
-    // margin-left:5px;
-  }
-  /* ... Your existing CSS ... */
-
-/* Media Queries for mobile view */
-@media only screen and (max-width: 767px) {
-    
-    .bg-container{
-        // background-image: url("D:\aayam\web\aayam-time-table-generater\src\assets\images\bg\ttbgimage.jpg");
-        // background-image: url("D:\aayam\web\aayam-time-table-generater\src\assets\images\bg\ttbgimage.jpg");
-        // background-image: url("../../../assets/images/bg/ttbgimage.jpg");
-        background-repeat: no-repeat;
-        background-size: cover;
-        // background-color:#cfd5d8;
-        height:100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-    
-    .heading-style{
-        // margin-top:0px;
-        // margin-bottom:5px;
-        padding:10px 0;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
-        font-size: 24px;
-    }
-    
-    .F-style{
-        border:solid 2px black;
-        min-width:30px;
-        max-width: 30px;
-        min-height: 10px;
-        max-height:10px;
-        text-align: center;
-    }
-    .batch-style{
-        background-color: #c4cac9;
-        padding-bottom:-12px;
-        width:45px;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
-        font-size: 7px;
-    }
-    .time-style{
-        background-color: rgb(225, 210, 210);
-        color:rgb(2, 2, 2);
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
-        font-size:4px;
-        font-weight: 900;
-    }
-    .table-style{
-        border:solid 1px black;
-    }
-    .each-block {
-        border: solid 2px black;
-        width: 30px;
-        height: 12px;
-        text-align: center;
-        justify-content: center;
-        align-items: center;
-        position: relative;
-        overflow: hidden;
-        font-weight:900;
-        font-size:9px;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
-        
-      }
-      .each-block > div {
-        width: 100%;
-        height: 100%;
-        box-sizing: border-box;
-        position: absolute;
-        top: 0;
-        left: 0;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        word-break: break-word;
-        padding: 0;
-        margin: 0;
-        text-align: center;
-        line-height: 30px; /* Match the height of the .each-block */
-      }
-    
-    .teacname-cross-style{
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: flex-start;
-        align-items: flex-start;
-        gap: 10px;
-        margin-top: 20px;
-    }
-    .teacher-name{
-        position: relative;
-        width: 40px; 
-        height: 17px; 
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        // margin: 1px;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
-    }
-    .cross-btn-container{
-        position: absolute;
-        right:0px;
-        bottom:8px;
-        width: 10px; 
-        height: 5px; 
-        // border-radius: 50%; 
-        background-color:none; 
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color:black;
-        // border:solid 1px rgb(92, 87, 87);
-    }
-    
-    .cross-style{
-        border:none;
-        background-color:transparent;
-        color:transparent;
-        font-size:40px;
-        // margin-left:-22px;
-        right:10px;
-        
-    }
-    .cross-style:hover{
-        color:rgb(242, 9, 9);
-        font-size: 9px;
-        font-weight: 900;
-        
-        
-    }
-    .style-faculty{
-        margin-right:10px;
-        width:30px;
-        text-align: center;
-        font-size:10px;
-        font-weight: 900;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
-        cursor: move;
-        height:15px;
-    }
-    
-        
-    
-    .teacher-container {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: flex-start;
-        align-items: flex-start;
-        gap: 10px;
-        margin-top: 20px;
-      }
-    
-    .counter-style{
-        display: flex; 
-        flex-direction: row;
-        
-    }
-    .blink {
-        animation: blinker 1s linear infinite;
-      }
-      
-      @keyframes blinker {
-        50% {
-          opacity: 0;
-        }
-      }
-    
-      .teacher-item{
-        
-        position: relative;
-        width: 35px; 
-        height: 25px; 
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 1px;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
-        
-      }
-    
-    .counter-item {
-        position: absolute;
-        right:0px;
-        bottom:16px;
-        width: 10px; 
-        height: 8px; 
-        border-radius: 50%; 
-        background-color: red; 
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color:black;
-        border:solid 1px rgb(92, 87, 87);
-        font-size:7px;
-       
-      }
-      
-    
-    .teacher-item h3 {
-      font-size: 10px; 
-      margin: 0;
-      padding: 0;
-    }
-    
-    .teacher-style,
-      .counter-style {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-      }
-    }
+}

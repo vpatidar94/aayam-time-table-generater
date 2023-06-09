@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import "./Header.css"
 import {
   Navbar,
@@ -18,6 +18,15 @@ import { ReactComponent as LogoWhite } from "../assets/images/logos/xtremelogowh
 import user1 from "../assets/images/users/user1.jpg";
 
 const Header = () => {
+  const location = useLocation();
+  useEffect(() => {
+    // execute on location change
+    console.log('Location changed!', location.pathname);
+    // if (!isMobile) {
+    //   toggleSideBar();
+    // }
+  }, [location]);
+
   const [isOpen, setIsOpen] = React.useState(false);
   const [isOpenSidebar, setIsOpenSidebar] = React.useState(true);
 
@@ -27,11 +36,17 @@ const Header = () => {
   const Handletoggle = () => {
     setIsOpen(!isOpen);
   };
+
+  const [isMobile, setIsMobile] = React.useState(null);
+
+
   const showMobilemenu = () => {
+    setIsMobile(true);
     document.getElementById("sidebarArea").classList.toggle("showSidebar");
   };
 
   const toggleSideBar = () => {
+    setIsMobile(false);
     const sidebarArea = document.getElementById('sidebarArea');
     const display = window.getComputedStyle(sidebarArea).display;
     sidebarArea.style.display = display == 'block' ? 'none' : 'block';

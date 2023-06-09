@@ -67,6 +67,7 @@ const AddBatch = ({ showModal, setShowModal, batchList }) => {
       }, 3000);
 
     };
+    closeModal();
   }
 
   const closeModal = () => {
@@ -76,7 +77,7 @@ const AddBatch = ({ showModal, setShowModal, batchList }) => {
   /***************************Template to return******************************************************* */
   return (
     <div>
-      <Modal isOpen={showModal} toggle={closeModal} style={{ maxWidth: '320px' }}>
+      <Modal centered={true} isOpen={showModal} toggle={closeModal}>
         <ModalHeader toggle={closeModal}>Select Batches from the list</ModalHeader>
         <ModalBody>
           {showAlert}

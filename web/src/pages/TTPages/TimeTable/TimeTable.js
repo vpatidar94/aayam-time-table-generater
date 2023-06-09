@@ -1,7 +1,7 @@
 import html2canvas from 'html2canvas';
 import React, { useEffect, useRef, useState } from 'react';
 import { RxCross2 } from "react-icons/rx";
-import { Alert, Button, Form, FormGroup, Input, UncontrolledAlert } from 'reactstrap';
+import { Alert, Badge, Button, ButtonGroup, Col, DropdownItem, DropdownMenu, DropdownToggle, Form, FormGroup, Input, Row, UncontrolledAlert, UncontrolledDropdown } from 'reactstrap';
 import TtApi from '../../../api/tt.api.js';
 import UploadApi from '../../../api/upload.api.js';
 import { COLORS } from '../../../const/color.const.js';
@@ -214,13 +214,6 @@ const TimeTable = () => {
     setDraggedTeacher({});
   }
 
-  const onTouchMove = (e) => {
-    console.log(e);
-    const x = e.touches[0].clientX;
-    const y = e.touches[0].clientY;
-    var elem = document.elementFromPoint(x, y);
-    alert('xx xx elem ', elem.id);
-  }
   /*********************************************This below methods are added by jitendra from TimeTable.js***********************************/
   const generateUID = () => {
     // I generate the UID from two parts here 
@@ -371,146 +364,210 @@ const TimeTable = () => {
   return (
     <>
       <div className="bg-container">
-        {showAlert}
-        {
-          duplicateTeacherDetectedInRow ? <Alert color="warning">
-            Two same teachers found in the same row
-          </Alert> : <></>
-        }
-        <h1 className='heading-style'>CLASS SCHEDULE</h1>
-        <div className="button-group added-style">
-          <Button className="btn " color="info" onClick={onAddBatch}>
-            Add Batches
-          </Button>
-          {showAddBatchModal && <AddBatch showModal={showAddBatchModal} setShowModal={setShowAddBatchModal} batchList={batchList} />}
-          <Button className="btn" color="info" onClick={onAddTeacher}>
-            Add Teachers
-          </Button>
-          {showAddTeacherModal && <AddTeacher showModal={showAddTeacherModal} setShowModal={setShowAddTeacherModal} teacherList={teacherList} />}
-          <Button className="btn" color="info" onClick={saveTable} disabled={fromDate === ''}>
-            Save
-          </Button>
-          {/* disabled={fromDate===""} means the save button will be enabled only when there is some entry in formDate input */}
-          <Button className="btn" color="info" onClick={convertToImage}>
-            Post
-          </Button>
-          <Button className="btn" color="info" onClick={clearAll}>
-            Clear ALL
-          </Button>
-        </div>
-        <div>
-          <div ref={divRef}>
-            <br />
-            <Form >
-              <div className='time-table-date-style'>
-                <FormGroup className="label-date-allignment">
-                  <p className="date-label-style">From<span style={{ color: "red" }}>*</span>:</p>
-                  <Input
-                    id="fromDate"
-                    name="date"
-                    type="date"
-                    defaultValue={fromDate}
-                    onChange={(e) => { onChangeFromDate(e) }}
-                    className='input-size'
-                    min={new Date().toISOString().split('T')[0]}
-                  />
-                </FormGroup>
-                <FormGroup className="label-date-allignment">
-                  <p className="date-label-style">To:</p>
-                  <Input
-                    id="toDate"
-                    name="date"
-                    type="date"
-                    defaultValue={toDate}
-                    onChange={(e) => { onChangeToDate(e) }}
-                    className='input-size'
-                    min={new Date().toISOString().split('T')[0]}
-                  />
-                </FormGroup>
+        <Row>
+          <Col>
+            {showAlert}
+            {
+              duplicateTeacherDetectedInRow ? <Alert color="warning">
+                Two same teachers found in the same row
+              </Alert> : <></>
+            }
+          </Col>
+        </Row>
+
+        {/* <Row>
+          <Col>
+            <h1 className='heading-style'>CLASS SCHEDULE</h1>
+          </Col>
+        </Row> */}
+
+        <Row>
+          <Col>
+            <Form>
+              <div>
+                <Row>
+                  <div className="col-sm-12 col-md-3 label-date-allignment">
+                    <span className="date-label-style">From<span style={{ color: "red" }}>*</span>:&nbsp;&nbsp;</span>
+                    <Input
+                      id="fromDate"
+                      name="date"
+                      type="date"
+                      defaultValue={fromDate}
+                      onChange={(e) => { onChangeFromDate(e) }}
+                      className='input-size'
+                      min={new Date().toISOString().split('T')[0]}
+                      placeholder='From Date'
+                    />
+                  </div>
+                  <div className="col-sm-12 col-md-3 label-date-allignment">
+                    <span className="date-label-style">To:&nbsp;&nbsp;</span>
+                    <Input
+                      id="toDate"
+                      name="date"
+                      type="date"
+                      defaultValue={toDate}
+                      onChange={(e) => { onChangeToDate(e) }}
+                      className='input-size'
+                      min={new Date().toISOString().split('T')[0]}
+                    />
+                  </div>
+                  <div className="d-lg-none">
+                    <br></br>
+                    <div className="button-group">
+                      <Button className="btn" color="info" onClick={saveTable} disabled={fromDate === ''}>
+                        Save
+                      </Button>
+                      <Button className="btn" color="info" onClick={convertToImage}>
+                        Post
+                      </Button>
+                      <ButtonGroup >
+                        <UncontrolledDropdown>
+                          <DropdownToggle color="info" caret>
+                            More Actions
+                          </DropdownToggle>
+                          <DropdownMenu>
+                            <DropdownItem onClick={onAddBatch}>
+                              Add Batches
+                            </DropdownItem>
+                            <DropdownItem divider />
+                            <DropdownItem onClick={onAddTeacher}>
+                              Add Teachers
+                            </DropdownItem>
+                            <DropdownItem divider />
+                            <DropdownItem onClick={clearAll}>
+                              Clear ALL
+                            </DropdownItem>
+                          </DropdownMenu>
+                        </UncontrolledDropdown>
+                      </ButtonGroup>
+                    </div>
+                    <br></br>
+                  </div>
+                  <div className="d-none d-md-block col-md-6">
+                    <div className="button-group">
+                      <Button className="btn " color="info" onClick={onAddBatch}>
+                        Add Batches
+                      </Button>
+                      <Button className="btn" color="info" onClick={onAddTeacher}>
+                        Add Teachers
+                      </Button>
+                      <Button className="btn" color="info" onClick={saveTable} disabled={fromDate === ''}>
+                        Save
+                      </Button>
+                      <Button className="btn" color="info" onClick={convertToImage}>
+                        Post
+                      </Button>
+                      <Button className="btn" color="info" onClick={clearAll}>
+                        Clear ALL
+                      </Button>
+                    </div>
+                  </div>
+                </Row>
               </div>
             </Form>
-            <table className='table-style'>
-              <tbody>
-                <div className="for-time">
-                  <tr>
-                    <td className='F-style time-style'>Time</td>
-                    {batchList.map((each) => {
-                      return (
-                        <td className='F-style batch-style' key={each.BatchID}>{each.Batch}
-                          <button className="delete-style" onClick={() => onDeleteBatch(each.BatchID)}><RxCross2 /></button>
-                        </td>
-                      )
-                    })}
-                  </tr>
-                </div>
-                <tr >
-                  {time.map((t) => {
-                    return (
+          </Col>
+        </Row>
 
-                      <div >
-                        <td className='F-style time-style'>{t.Time_From}-{t.Time_To}</td>
-                        {batchList.map((b) => {
-                          const key = t.LectureID + '_' + b.BatchID
+        <Row>
+          <Col>
+            <div>
+              {showAddBatchModal && <AddBatch showModal={showAddBatchModal} setShowModal={setShowAddBatchModal} batchList={batchList} />}
+              {showAddTeacherModal && <AddTeacher showModal={showAddTeacherModal} setShowModal={setShowAddTeacherModal} teacherList={teacherList} />}
+              <div ref={divRef} className='table-container'>
+                <table className='table-style'>
+                  <tbody>
+                    <div className="for-time">
+                      <tr>
+                        <td className='F-style time-style'>Time</td>
+                        {batchList.map((each) => {
                           return (
-                            <td
-                              draggable={!!teacherAssignment[key]?.Faculty}
-                              onDragOver={allowDrop}
-                              onDrop={(e) => handleDrop(e, t, b)}
-                              onDragStart={(e) => handleTableCellDragStart(e, t, b)}
-                              key={key}
-                              id={key}
-                              className={`each-block ${isTeacherDuplicateInLecture(t.LectureID, teacherAssignment[key]?.FacultyID ?? null) ? "blink" : ""}`}
-                              style={{ backgroundColor: teacherAssignment[key]?.color }}
-                            >
-                              <div className={`teacname-cross-style ${teacherAssignment[key]?.className} `}>
-                                <div className="teacher-name" >
-                                  {teacherAssignment[key]?.Faculty}
-                                </div>
-                                <div className="cross-btn-container">
-                                  {teacherAssignment[key]?.Faculty ? (
-                                    <button
-                                      className="cross-style"
-                                      onClick={() => removeTeacher(t.LectureID, b.BatchID, teacherAssignment[key].FacultyID)}
-                                    >
-                                      <RxCross2 />
-                                    </button>
-                                  ) : <></>}
-                                </div>
-                              </div>
+                            <td className='F-style batch-style' key={each.BatchID}>{each.Batch}
+                              <button className="delete-style" onClick={() => onDeleteBatch(each.BatchID)}><RxCross2 /></button>
                             </td>
                           )
                         })}
-                      </div>
-                    )
-                  })}
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div className='teacher-container'>
-          {teacherList.map((teacher, index) => {
-            const { FacultyID, Faculty } = teacher;
-            return (
-              <div
-                style={{ backgroundColor: teacher.color }}
-                key={FacultyID}
-                className="teacher-item"
-                draggable={true}
-                onDragStart={(e) => dragStart(e, teacher)}
-                onDragEnd={(e) => onDragEnd(e)}
-              >
-                <h3>{Faculty}</h3>
-                {teacherCounter[FacultyID] > 0 && (
-                  <span className={`counter-item `} draggable={false}>
-                    {teacherCounter[FacultyID]}
-                  </span>
-                )}
-                <button className="delete-style" onClick={() => onDeleteTeacher(teacher.FacultyID)}><RxCross2 /></button>
+                      </tr>
+                    </div>
+                    <tr >
+                      {time.map((t) => {
+                        return (
+
+                          <div >
+                            <td className='F-style time-style'>{t.Time_From}-{t.Time_To}</td>
+                            {batchList.map((b) => {
+                              const key = t.LectureID + '_' + b.BatchID
+                              return (
+                                <td
+                                  draggable={!!teacherAssignment[key]?.Faculty}
+                                  onDragOver={allowDrop}
+                                  onDrop={(e) => handleDrop(e, t, b)}
+                                  onDragStart={(e) => handleTableCellDragStart(e, t, b)}
+                                  key={key}
+                                  id={key}
+                                  className={`each-block ${isTeacherDuplicateInLecture(t.LectureID, teacherAssignment[key]?.FacultyID ?? null) ? "blink" : ""}`}
+                                  style={{ backgroundColor: teacherAssignment[key]?.color }}
+                                >
+                                  <div className={`teacname-cross-style ${teacherAssignment[key]?.className} `}>
+                                    <div className="teacher-name" >
+                                      {teacherAssignment[key]?.Faculty}
+                                    </div>
+                                    <div className="cross-btn-container">
+                                      {teacherAssignment[key]?.Faculty ? (
+                                        <button
+                                          className="cross-style"
+                                          onClick={() => removeTeacher(t.LectureID, b.BatchID, teacherAssignment[key].FacultyID)}
+                                        >
+                                          <RxCross2 />
+                                        </button>
+                                      ) : <></>}
+                                    </div>
+                                  </div>
+                                </td>
+                              )
+                            })}
+                          </div>
+                        )
+                      })}
+                    </tr>
+                  </tbody>
+                </table>
               </div>
-            );
-          })}
-        </div>
+            </div>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col>
+            <div className='teacher-container'>
+              {teacherList.map((teacher, index) => {
+                const { FacultyID, Faculty } = teacher;
+                return (
+                  <div
+                    style={{ backgroundColor: teacher.color }}
+                    key={FacultyID}
+                    className="teacher-item"
+                    draggable={true}
+                    onDragStart={(e) => dragStart(e, teacher)}
+                    onDragEnd={(e) => onDragEnd(e)}
+                  >
+                    <span>{Faculty}</span>
+                    {teacherCounter[FacultyID] > 0 && (
+                      <Badge className="counter-item">
+                        {teacherCounter[FacultyID]}
+                      </Badge>
+                    )}
+                    <span onClick={() => onDeleteTeacher(teacher.FacultyID)} className="remove-icon" color='danger'>
+                      <RxCross2/>
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </Col>
+        </Row>
+
+
+
       </div>
     </>
   )

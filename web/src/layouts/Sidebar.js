@@ -127,6 +127,7 @@ const Sidebar = () => {
           {navigation.map((navi, index) => (
             <NavItem key={index} className="sidenav-bg">
               <Link
+                onClick={() => showMobilemenu()}
                 to={navi.href}
                 className={
                   location.pathname === navi.href

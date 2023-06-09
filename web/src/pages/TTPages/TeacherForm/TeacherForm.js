@@ -92,6 +92,7 @@ const AddTeacher = ({ showModal, setShowModal, teacherList }) => {
         setShowAlert("");
       }, 3000);
     };
+    closeModal();
   };
 
   const closeModal = () => {
@@ -101,7 +102,7 @@ const AddTeacher = ({ showModal, setShowModal, teacherList }) => {
   /**********************************************Template to return******************************** */
   return (
     <div>
-      <Modal isOpen={showModal} toggle={closeModal} style={{ maxWidth: '320px' }}>
+      <Modal isOpen={showModal} toggle={closeModal} centered={true}>
         <ModalHeader toggle={closeModal}>Select Teachers from the list</ModalHeader>
         <ModalBody>
           {showAlert}
