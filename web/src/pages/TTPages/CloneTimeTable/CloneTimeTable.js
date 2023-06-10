@@ -42,6 +42,7 @@ const CloneTimeTable = () => {
     const [batchList, setBatchList] = useState([]);
     const [teacherList, setTeacherList] = useState([]);
     const [loaded, setLoaded] = useState(false);
+    // const [numberList, setNumberList] = useState([917898118503]);
     const divRef = useRef(null); // used to send image as the code under this will be sent as image see the return(render)
 
     /**************************************** Component Method Section *********************************/
