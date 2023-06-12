@@ -301,6 +301,7 @@ const CloneTimeTable = () => {
 
     const convertToImage = async () => {
         // alert("Time table image sent successfully")
+        divRef.current.style.width = "max-content";
         const canvas = await html2canvas(divRef.current); //data converted to image through html2canvas
         const imgData = canvas.toDataURL();
         /*converting page64 url got as imgData into file Object by using blob below*/
@@ -315,6 +316,7 @@ const CloneTimeTable = () => {
         const file = new File([blob], imageName + ".jpg");
         const fileName = imageName + ".jpg";
         const result = await new UploadApi().uplaodFile(file);
+        divRef.current.style.width = "100%";
         if (result === "Success") {
             const data = await new UploadApi().getUploadedFile();
             if (data.Object?.length > 0) {
