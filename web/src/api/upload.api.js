@@ -52,6 +52,7 @@ export default class UploadApi {
             GlobalEmitterService.emit(true);
             //https://ziper.io/api/sendgroupmsg.php?group_id=84987694574-1618740914@g.us&type=media&message=test%20message&media_url=https://i.pravatar.cc&filename=file_test.jpg&instance_id=6453479F141A2&access_token=0a3e27126c2c239bdf7f9128943ef9c0
             const res = await fetch("https://ziper.io/api/sendgroupmsg.php" + '?' + new URLSearchParams({
+                // group_id: "919977116612-1595572006@g.us",
                 group_id: "919977116612-1595572006@g.us",
                 type: "media",
                 message: message,
@@ -81,7 +82,8 @@ export default class UploadApi {
                 message: message,
                 media_url: "https://api.aayamcareerinstitute.co.in/" + url,
                 filename: fileName,
-                instance_id: "647B3C9AA8D0A",
+                instance_id: "647B3C9AA8D0A", 
+
                 access_token: "0a3e27126c2c239bdf7f9128943ef9c0"
 
             }), {

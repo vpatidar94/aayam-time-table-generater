@@ -42,7 +42,8 @@ const CloneTimeTable = () => {
     const [batchList, setBatchList] = useState([]);
     const [teacherList, setTeacherList] = useState([]);
     const [loaded, setLoaded] = useState(false);
-    // const [numberList, setNumberList] = useState([917898118503]);
+    // const [numberList, setNumberList] = useState([917898118503, 918871688429]);
+    const [numberList, setNumberList] = useState([917898118503, 918349215747,919826362001,918349215747,917314058393,917869597239,919977116612,918085390900,918302184021,918358810742,919893640561,919713519598,919713030834,919827274005,919691938832,917043127836,919977711607,917298519996,919713191848,918871841238,917007794323,919669889020,918770153381,919770432150]);
     const divRef = useRef(null); // used to send image as the code under this will be sent as image see the return(render)
 
     /**************************************** Component Method Section *********************************/
@@ -321,19 +322,21 @@ const CloneTimeTable = () => {
             const data = await new UploadApi().getUploadedFile();
             if (data.Object?.length > 0) {
                 const fileDetail = data.Object.reverse().find(obj => { return obj.Title?.indexOf(imageName) >= 0 });
-                // for (let i = 0; i < numberList.length; i++) {       THIS IS USED WHEN GETWATTSAPPAPI WILL USED SO DONT DELETE THIS LINES
-                try {
-                    // const cell = numberList[i];
-                    /*CHECK THE DETAILS OF THIS GETWATTSAPPAPI IN UPLOAD.API.JS FILE IN API FOLDER*/
-                    // await new UploadApi().getWattsappApi(fileDetail.LongURL, "time table", cell, fileName);
-                    await new UploadApi().getWattsappGroupApiOthers(fileDetail.LongURL, "time table", fileName);
-                    // await new UploadApi().getWattsappGroupApiTeachers(fileDetail.LongURL, "time table", fileName);
-                } catch (e) {
-                    // continue;
-                }
-                try {
-                    await new UploadApi().getWattsappGroupApiTeachers(fileDetail.LongURL, "time table", fileName);
-                } catch (e) {
+                for (let i = 0; i < numberList.length; i++) {
+                    try {
+                        const cell = numberList[i];
+                        /*CHECK THE DETAILS OF THIS GETWATTSAPPAPI IN UPLOAD.API.JS FILE IN API FOLDER*/
+                        await new UploadApi().getWattsappApi(fileDetail.LongURL, "time table", cell, fileName);
+                        // await new UploadApi().getWattsappGroupApiOthers(fileDetail.LongURL, "time table", fileName);
+                        // await new UploadApi().getWattsappGroupApiTeachers(fileDetail.LongURL, "time table", fileName);
+                        continue;
+                    } catch (e) {
+                        continue;
+                    }
+                    // try {
+                    //     await new UploadApi().getWattsappGroupApiTeachers(fileDetail.LongURL, "time table", fileName);
+                    // } catch (e) {
+                    // }
                 }
             }
         }
@@ -394,7 +397,10 @@ const CloneTimeTable = () => {
     //to save the time table on clicking the save button
     const saveTable = async () => {
         const sentBatchID = batchList.map(item => item.BatchID);
-        await new TtApi().removeTtById(tt.TimeTableID);
+        if (fromDate === tt.FromDate) {
+            await new TtApi().removeTtById(tt.TimeTableID);
+        }
+        console.log("xxxx", tt.TimeTableID);
         const body = {
             TimeTableID: 0,
             Description: "time table save",

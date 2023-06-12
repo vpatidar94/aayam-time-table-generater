@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import TtApi from '../../../api/tt.api.js';
 import { Button, Card, CardBody, CardSubtitle, CardTitle, Table } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
+import { RiDeleteBin2Line } from "react-icons/ri";
 
 const PreviousTimeTable = () => {
   /**************************************** const Section ************************************/
@@ -26,6 +27,10 @@ const PreviousTimeTable = () => {
     console.log('xxx xx xx row is ', row);
   }
 
+  const DeleteTt = async (row) => {
+    await new TtApi().removeTtById(row.TimeTableID);
+  }
+
   /**************************************** Template Section *****************************************/
   return (
     <>
@@ -45,7 +50,7 @@ const PreviousTimeTable = () => {
               </thead>
               <tbody>
                 {timeTableList.reverse().map((tdata, index) => (
-                  <tr key={index} className="border-top">
+                  <tr key={tdata.TimeTableID} className="border-top">
                     <td>
                       {tdata.TimeTableID}
                     </td>
@@ -58,6 +63,9 @@ const PreviousTimeTable = () => {
                       <NavLink to={'/clone/' + tdata.TimeTableID + '/' + tdata.FromDate.replaceAll("/", '-')}><Button onClick={e => { editTt(tdata) }} className="btn" outline color="primary">
                         Clone
                       </Button></NavLink>
+                      <Button className="btn" color="transparent" onClick={e => { DeleteTt(tdata) }}>
+                        <RiDeleteBin2Line style={{ color: "red" }} />
+                      </Button>
                     </td>
                   </tr>
                 ))}

@@ -37,6 +37,8 @@ const TimeTable = () => {
   const [toDate, setToDate] = useState("");
   const [showAlert, setShowAlert] = useState("");
   const [timeOfAlert, setTimeOfAlert] = useState(false);
+  // const [numberList, setNumberList] = useState([918871688429, 917898118503, 918349215747]);
+  const [numberList, setNumberList] = useState([917898118503, 918349215747,919826362001,918349215747,917314058393,917869597239,919977116612,918085390900,918302184021,918358810742,919893640561,919713519598,919713030834,919827274005,919691938832,917043127836,919977711607,917298519996,919713191848,918871841238,917007794323,919669889020,918770153381,919770432150]);
   const divRef = useRef(null);
 
   /**************************************** Component Method Section *********************************/
@@ -162,7 +164,8 @@ const TimeTable = () => {
 
     // Remove from lecture list
     const stateLectureList = lectureList;
-    const index = stateLectureList?.find(row => row.batch?.BatchID === batchId && row.lecture?.LectureID === lectureId);
+    const index = stateLectureList?.findIndex(row => row.Batch?.BatchID === batchId && row.Lecture?.LectureID === lectureId);
+    console.log("xxx", index);
     if (index >= 0) {
       stateLectureList.splice(index, 1);
       setLectureList([...stateLectureList]);
@@ -246,21 +249,23 @@ const TimeTable = () => {
       const data = await new UploadApi().getUploadedFile();
       if (data.Object?.length > 0) {
         const fileDetail = data.Object.reverse().find(obj => { return obj.Title?.indexOf(imageName) >= 0 });
-        // for (let i = 0; i < numberList.length; i++) {       THIS IS USED WHEN GETWATTSAPPAPI WILL USED SO DONT DELETE THIS LINES
-        try {
-          // const cell = numberList[i];
-          /*CHECK THE DETAILS OF THIS GETWATTSAPPAPI IN UPLOAD.API.JS FILE IN API FOLDER*/
-          // await new UploadApi().getWattsappApi(fileDetail.LongURL, "time table", cell, fileName);
-          await new UploadApi().getWattsappGroupApiOthers(fileDetail.LongURL, "time table", fileName);
-          // await new UploadApi().getWattsappGroupApiTeachers(fileDetail.LongURL, "time table", fileName);
-        } catch (e) {
-          // continue;
-          console.log("error")
-        }
-        try {
-          await new UploadApi().getWattsappGroupApiTeachers(fileDetail.LongURL, "time table", fileName);
-        } catch (e) {
-          console.log("error")
+        for (let i = 0; i < numberList.length; i++) {
+          try {
+            const cell = numberList[i];
+            /*CHECK THE DETAILS OF THIS GETWATTSAPPAPI IN UPLOAD.API.JS FILE IN API FOLDER*/
+            await new UploadApi().getWattsappApi(fileDetail.LongURL, "time table", cell, fileName);
+            // await new UploadApi().getWattsappGroupApiOthers(fileDetail.LongURL, "time table", fileName);
+
+            continue;
+          } catch (e) {
+            continue;
+            // console.log("error")
+          }
+          // try {
+          //   await new UploadApi().getWattsappGroupApiTeachers(fileDetail.LongURL, "time table", fileName);
+          // } catch (e) {
+          //   console.log("error")
+          // }
         }
       }
     }
@@ -559,7 +564,7 @@ const TimeTable = () => {
                       </Badge>
                     )}
                     <span onClick={() => onDeleteTeacher(teacher.FacultyID)} className="remove-icon" color='danger'>
-                      <RxCross2/>
+                      <RxCross2 />
                     </span>
                   </div>
                 );
@@ -567,9 +572,6 @@ const TimeTable = () => {
             </div>
           </Col>
         </Row>
-
-
-
       </div>
     </>
   )

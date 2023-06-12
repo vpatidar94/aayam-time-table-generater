@@ -4,7 +4,7 @@ import { URL } from '../const/url';
 export default class TtApi {
     getTtList = async () => {
         try {
-            GlobalEmitterService.emit(true);
+            GlobalEmitterService.emit(true);           // GlobalEmitterService.emit is made true for adding spinner untill api is completed
             const res = await fetch(URL.GET_ALL_TT, {
                 method: 'GET',
             });
