@@ -12,11 +12,11 @@ export const teachers_list = [
             subject:"Chemistry"
         },
 
-        {
-            FacultyID: 2029,
-            Faculty: "MRS",
-            subject:"Chemistry"
-        },
+        // {
+        //     FacultyID: 2029,
+        //     Faculty: "MRS",
+        //     subject:"Chemistry"
+        // },
 
         {
             FacultyID: 3051,
@@ -116,6 +116,19 @@ export const teachers_list = [
             Faculty: "SKS",
             subject:"Maths"
         },
+        // newly added faculty on 12/08/23
+        {
+            FacultyID: 3056,
+            Faculty: "AMK",
+            subject: "Biology"
+        },
+        {
+            FacultyID: 3057,
+            Faculty: "PKS",
+            subject: "Chemistry"
+        }
+        
+
     ]; 
     
 

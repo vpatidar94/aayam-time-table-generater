@@ -25,7 +25,7 @@ export default class UploadApi {
     getWattsappApi = async (url, message, cell, fileName) => {
         try {
             GlobalEmitterService.emit(true);
-            // https://ziper.io/api/send.php?number=917898118503&type=media&message=test%20message&media_url=https://api.aayamcareerinstitute.co.in//Uploads/Files/File_3431223213168.pdf&filename=file_test.jpg&instance_id=6453479F141A2&access_token=0a3e27126c2c239bdf7f9128943ef9c0
+            //  https://ziper.io/api/send.php?number=917898118503&type=media&message=test%20message&media_url=https://api.aayamcareerinstitute.co.in//Uploads/Files/File_3431223213168.pdf&filename=file_test.jpg&instance_id=647B3C9AA8D0A&access_token=0a3e27126c2c239bdf7f9128943ef9c0
             const res = await fetch("https://ziper.io/api/send.php" + '?' + new URLSearchParams({
                 number: cell,
                 type: "media",
