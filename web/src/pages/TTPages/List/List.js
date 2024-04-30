@@ -112,7 +112,7 @@ export const teachers_list = [
             subject:"Chemistry"
         },
         {
-            FacultyID: 3055,
+            FacultyID: 3059,
             Faculty: "SKS",
             subject:"Maths"
         },
@@ -123,8 +123,8 @@ export const teachers_list = [
             subject: "Biology"
         },
         {
-            FacultyID: 3057,
-            Faculty: "PKS",
+            FacultyID: 3058,
+            Faculty: "DPS",
             subject: "Chemistry"
         }
         

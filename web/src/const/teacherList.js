@@ -106,7 +106,7 @@ export const teachers_list = [
         // "subject":"Chemistry"
     },
     {
-        "FacultyID": 3055,
+        "FacultyID": 3059,
         "Faculty": "SKS",
         // "subject":"Chemistry"
     },
