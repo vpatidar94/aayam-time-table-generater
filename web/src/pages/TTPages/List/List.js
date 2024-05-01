@@ -114,7 +114,7 @@ export const teachers_list = [
         {
             FacultyID: 3059,
             Faculty: "SKS",
-            subject:"Maths"
+            subject:"Biology"
         },
         // newly added faculty on 12/08/23
         {
