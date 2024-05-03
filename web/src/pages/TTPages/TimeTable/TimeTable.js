@@ -42,6 +42,9 @@ const TimeTable = () => {
   
   const divRef = useRef(null);
 
+
+  
+
   /**************************************** Component Method Section *********************************/
   /**
    * 
@@ -368,6 +371,24 @@ const TimeTable = () => {
     setTeacherAssignment({ stateTeacherAssignment });
   }
 
+
+  //newly added to add double click feature 03/05/24 start
+
+  const handleDoubleClick = (e, teacher) => {
+    e.preventDefault();
+    setDraggedTeacher(teacher);
+  };
+
+  const handleCellDoubleClick = (e, lecture, batch) => {
+    e.preventDefault();
+    if (draggedTeacher) {
+      handleDrop(e, lecture, batch);
+    }
+  };
+
+  //newly added to add double click feature 03/05/24 start
+
+
   /**************************************** Template Section *****************************************/
   return (
     <>
@@ -506,6 +527,7 @@ const TimeTable = () => {
                               const key = t.LectureID + '_' + b.BatchID
                               return (
                                 <td
+                                onDoubleClick={(e) => handleCellDoubleClick(e, t, b)} // this line is newly added 03/05/24 to add double click feature
                                   draggable={!!teacherAssignment[key]?.Faculty}
                                   onDragOver={allowDrop}
                                   onDrop={(e) => handleDrop(e, t, b)}
@@ -557,6 +579,7 @@ const TimeTable = () => {
                     draggable={true}
                     onDragStart={(e) => dragStart(e, teacher)}
                     onDragEnd={(e) => onDragEnd(e)}
+                    onDoubleClick={(e) => handleDoubleClick(e, teacher)} // this line is newly added 03/05/24 to add double click feature
                   >
                     <span>{Faculty}</span>
                     {teacherCounter[FacultyID] > 0 && (
