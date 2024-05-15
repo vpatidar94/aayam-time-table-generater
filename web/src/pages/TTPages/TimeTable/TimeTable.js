@@ -377,7 +377,8 @@ const TimeTable = () => {
   const handleDoubleClick = (e, teacher) => {
     e.preventDefault();
     setDraggedTeacher(teacher);
-    console.log("double cliked")
+    console.log("double cliked");
+    
   };
 
   const handleCellDoubleClick = (e, lecture, batch) => {
